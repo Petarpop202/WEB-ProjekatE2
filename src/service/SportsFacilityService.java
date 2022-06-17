@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import beans.SportsFacility;
 import dao.SportsFacilityDAO;
 
-@Path("")
+@Path("/sports")
 public class SportsFacilityService {
 
 	@Context
