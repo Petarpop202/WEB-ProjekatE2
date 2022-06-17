@@ -2,19 +2,18 @@
  * 
  */
 		$(document).ready(function () {
-					$.ajax({
-						url : "rest/sports/",
-						type: "GET",
-						success: function(data, textStatus, jqXHR)
-						{
-							for (let s of data) {
-								ispis(s);
+					$("#dugme").click(function (event){
+						event.preventDefault();
+						$.ajax({
+							url : "rest/sports/",
+							type: "GET",
+							success: function(data)
+							{
+								for (let s of data) {
+									ispis(s);
+								}
 							}
-						},
-						error: function (jqXHR, textStatus, errorThrown)
-						{
-
-						}
+						});
 					});
 				})
 		
