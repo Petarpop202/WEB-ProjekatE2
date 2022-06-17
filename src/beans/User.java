@@ -1,7 +1,7 @@
 package beans;
 
 public class User {
-	enum RoleEnum {
+	public enum RoleEnum {
 		  ADMIN,
 		  MANAGER,
 		  COACH,

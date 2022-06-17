@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<script src="../js/jquery-3.6.0.min.js"></script>
+<script src="../js/Registration.js"></script>
+<title>Insert title here</title>
+</head>
+<body>
+
+<form class="cpa-form" id="forma" method="POST">
+            <table>
+                <tr>
+                    <td>ime:</td>
+                    <td><input type="text" id="name" name="name" /></td>
+                </tr>
+                <tr>
+                    <td>prezime:</td>
+                    <td><input type="text" id="surname" name="surname"/></td>                 
+                </tr>
+                <tr>
+                    <td>korisnicko ime:</td>
+                    <td><input type="text" id="username" name="username"/></td>
+                </tr>
+                <tr>
+                    <td>lozinka:</td>
+                    <td><input type="text" id="password" name="password"/></td>
+                </tr>
+                <tr>
+                    <td>
+                         <!--id=datum-->
+                     <input type="text" class="datepickeri form-control" id="datum" name="trip-start"
+                       placeholder="Datum rođenja"
+                        min="1900-01-01" max="2003-12-31" onfocus="(this.type='date')">
+                     </td>
+                </tr>
+                <tr>
+                     <td> 
+                     <select class="form-select" name="gender">
+                        <!-- proveriti ovo kako se pristupa ovome u js-u-->
+                          <option value="Pol" selected>Pol</option>
+                          <option value=True>Muški</option>
+                          <option value="False">Ženski</option>
+                     </select>
+                     </td>
+                </tr>
+                <tr>
+                    <!-- <td colspan="2" align="center"><input type="submit" value="registruj"/></td> -->
+                </tr>
+            </table>
+            <button type="submit">Registruj</button>
+        </form>
+
+</body>
+</html>
