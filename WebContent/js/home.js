@@ -4,8 +4,9 @@
 		$(document).ready(function () {
 					$("#dugme").click(function (event){
 						event.preventDefault();
-						$.get({
+						$.ajax({
 							url : "rest/sports/",
+							type: "GET",
 							success: function(data)
 							{
 								for (let s of data) {
@@ -18,7 +19,7 @@
 		
 		function ispis(korisnik){
 			let tr = $('<tr></tr>');
-			let ime = $('<td>' + korisnik.firstName + '</td>');
+			let ime = $('<td>' + korisnik.Name + '</td>');
 		
 			tr.append(ime)
 		

@@ -1,5 +1,4 @@
 @charset "ISO-8859-1";
-@import 'bootstrap/dist/css/bootstrap.min.css';
 
 .navbar-collapse{
     justify-content: flex-end;
