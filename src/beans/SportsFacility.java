@@ -1,13 +1,13 @@
 package beans;
 
 public class SportsFacility {
-	enum TypeEnum{
+	public enum TypeEnum{
 		GYM,
 		POOL,
 		SPORTSCENTER,
 		DANCESTUDIO
 	}
-	enum ContentEnum{
+	public enum ContentEnum{
 		GROUP,
 		PERSONAL, 
 		SAUNA
