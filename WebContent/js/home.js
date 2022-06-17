@@ -4,9 +4,8 @@
 		$(document).ready(function () {
 					$("#dugme").click(function (event){
 						event.preventDefault();
-						$.ajax({
+						$.get({
 							url : "rest/sports/",
-							type: "GET",
 							success: function(data)
 							{
 								for (let s of data) {

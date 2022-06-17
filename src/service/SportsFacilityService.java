@@ -16,9 +16,9 @@ import javax.ws.rs.core.Response;
 import beans.SportsFacility;
 import dao.SportsFacilityDAO;
 
-//@Path("/sports")
+@Path("/sports")
 public class SportsFacilityService {
-/*
+
 	@Context
 	ServletContext ctx;
 	
@@ -37,5 +37,5 @@ public class SportsFacilityService {
 	public Response getFacilities(@Context HttpServletRequest zahtev) {
 		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
 				return Response.ok(dao.findAll()).build();
-	}*/
+	}
 }
