@@ -21,7 +21,7 @@ public class CustomersDAO {
 	private HashMap<String, Customer> korisnici;
 	
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
-	 "kurcina velika"};
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv"};
 
 	
 	public CustomersDAO() {
@@ -35,7 +35,7 @@ public class CustomersDAO {
 		}
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(putanja, korisnik);
-		upisKorisnikaUFajl(putanje[0], korisnik);
+		upisKorisnikaUFajl(putanje[1], korisnik);
 		return korisnik;
 	}
 	
@@ -74,7 +74,7 @@ public class CustomersDAO {
 		{
 
 		    // Value.ToString() allows for Value being DBNull, but will also convert int, double, etc.
-		    return points == null ? "" : points.toString();
+		    return points == null ? "0" : points.toString();
 
 		    // If this is not what you want then this form may suit you better, handles 'Null' and DBNull otherwise tries a straight cast
 		    // which will throw if Value isn't actually a string object.

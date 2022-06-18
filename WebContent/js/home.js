@@ -42,17 +42,17 @@
 						url: "rest/registration",
 						contentType: "application/json",
 						data: JSON.stringify({
-							Username: username,
-							Password: password,
-							Name: name,
-							Surname: surname,
-							Gender: gender,
-							Date: date,
+							username: username,
+							password: password,
+							name: name,
+							surname: surname,
+							gender: gender,
+							date: date,
 						}),
 						success: function(odgovor) {
-							alert("Korisnik " + odgovor.Username + " je registrovan!")
+							alert("Korisnik " + odgovor.username + " je registrovan!")
 							
-							let urlLogin = "../rest/prijava?username=" + odgovor.korisnickoIme + "&password=" + odgovor.lozinka
+							//let urlLogin = "../rest/prijava?username=" + odgovor.korisnickoIme + "&password=" + odgovor.lozinka
 							/*
 							$.post({
 								   url: urlLogin,
