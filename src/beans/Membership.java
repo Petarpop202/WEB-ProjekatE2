@@ -6,7 +6,6 @@ public class Membership {
 		MONTH,
 		DAY
 	}
-	private String Id;
 	private TypeEnum Type;
 	private String PayDate;
 	private String MemberDate;
@@ -17,10 +16,9 @@ public class Membership {
 	
 	
 	
-	public Membership(String id, TypeEnum type, String payDate, String memberDate, Double price,
+	public Membership(TypeEnum type, String payDate, String memberDate, Double price,
 			beans.Customer customer, Boolean status, Integer termins) {
 		super();
-		Id = id;
 		Type = type;
 		PayDate = payDate;
 		MemberDate = memberDate;
@@ -32,12 +30,6 @@ public class Membership {
 	public Membership() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	public String getId() {
-		return Id;
-	}
-	public void setId(String id) {
-		Id = id;
 	}
 	public TypeEnum getType() {
 		return Type;
