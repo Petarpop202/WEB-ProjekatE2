@@ -38,7 +38,7 @@ private HashMap<String, Location> locations;
 			reader = new BufferedReader(new FileReader(file));
 			String linija = "";
 			while ((linija = reader.readLine()) != null) {
-				String[] parametri = linija.split(",");
+				String[] parametri = linija.split("|");
 				String Name= parametri[0];
 				SportsFacility.TypeEnum Type = getType(parametri[1]);
 				SportsFacility.ContentEnum Content = getContent(parametri[2]);
@@ -93,7 +93,7 @@ private HashMap<String, Location> locations;
 			reader = new BufferedReader(new FileReader(file));
 			String linija = "";
 			while ((linija = reader.readLine()) != null) {
-				String[] parametri = linija.split(",");
+				String[] parametri = linija.split("|");
 				Double Length= Double.parseDouble(parametri[0]);
 				Double Width = Double.parseDouble(parametri[1]);
 				String Address = parametri[2];

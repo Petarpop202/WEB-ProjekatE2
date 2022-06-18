@@ -1,7 +1,7 @@
 package beans;
 
 public class CustomerType {
-	enum TypeEnum{
+	public enum TypeEnum{
 		GOLD,
 		SILVER,
 		BRONZE

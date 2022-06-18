@@ -1,6 +1,8 @@
 /**
  * 
  */
+ 
+ 
 		$(document).ready(function () {
 					$("#dugme").click(function (event){
 						event.preventDefault();
