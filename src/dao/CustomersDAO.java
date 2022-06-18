@@ -14,7 +14,7 @@ public class CustomersDAO {
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
-		putanja += "csv\\korisnici.csv";
+		putanja += "data\\Customers.csv";
 		if (korisnici.containsKey(korisnik.getUsername())) {
 			return null;
 		}

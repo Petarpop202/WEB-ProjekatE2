@@ -26,6 +26,7 @@ private HashMap<String, Location> locations;
 	
 	public SportsFacilityDAO(String path) {
 		facilities = new HashMap<String, SportsFacility>();
+		locations = new HashMap<String, Location>();
 		getAllLocations(path);
 		getAllSportFacilities(path);
 	}
