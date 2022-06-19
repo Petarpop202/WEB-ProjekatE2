@@ -39,9 +39,9 @@ public class SportsFacilitySearchService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response pretraziKorisnike(@QueryParam("name") String name, @QueryParam("type") String type,
 													@QueryParam("location") String location, 
-													@QueryParam("rate") String rate) throws ParseException, IOException{
+													@QueryParam("rate") String rate, @QueryParam("opt") String opt) throws ParseException, IOException{
 		SportsFacilityDAO korisnikDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
-		Collection<SportsFacility> korisnici = korisnikDAO.getSearchFacility(name, type, location, rate);
+		Collection<SportsFacility> korisnici = korisnikDAO.getSearchFacility(name, type, location, rate, opt);
 		if (korisnici == null) {
 			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
 		}

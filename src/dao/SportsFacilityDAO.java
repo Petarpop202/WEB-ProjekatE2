@@ -80,6 +80,19 @@ private HashMap<String, Location> locations;
 		return null;
 	}
 	
+	private SportsFacility.TypeEnum getTypeSr(String status) {
+		if (status.equals("Teretana")) {
+			return SportsFacility.TypeEnum.GYM;
+		}else if (status.equals("Bazen")) {
+			return SportsFacility.TypeEnum.POOL;
+		}else if (status.equals("Sportski centar")) {
+			return SportsFacility.TypeEnum.SPORTSCENTER;
+		}else if (status.equals("Plesni studio")) {
+			return SportsFacility.TypeEnum.DANCESTUDIO;
+		}
+		return null;
+	}
+	
 	private SportsFacility.ContentEnum getContent(String status) {
 		if (status.equals("GROUP")) {
 			return SportsFacility.ContentEnum.GROUP;
@@ -132,12 +145,12 @@ private HashMap<String, Location> locations;
 		return sports;
 	}
 	
-public Collection<SportsFacility> getSearchFacility(String name, String type, String location, String rate) throws  IOException{
+public Collection<SportsFacility> getSearchFacility(String name, String type, String location, String rate, String opt) throws  IOException{
 		//GetAll();
 	
 		Collection<SportsFacility> allfacilities = GetAll();
 		Collection<SportsFacility> suitableFacilities = GetAll();
-		
+		if(opt.equals("Naziv"))
 		if(!name.trim().isEmpty()) {
 			suitableFacilities.clear();
 			for (SportsFacility facility : findAll())
@@ -147,30 +160,32 @@ public Collection<SportsFacility> getSearchFacility(String name, String type, St
 			allfacilities.clear();
 			allfacilities.addAll(suitableFacilities);
 		}
-		/*
+		
+		if(opt.equals("Lokacija"))
 		if(!location.trim().isEmpty()) {
 			suitableFacilities.clear();
-			for (Restaurant restaurant : allRestaurants)
-				if(restaurant.getLocation().toString().toLowerCase().contains(searchParameters.getLocation().toLowerCase().trim()))
-					suitableRestaurants.add(restaurant);
+			for (SportsFacility facility : findAll())
+				if(facility.getLocation().getAddress().toString().toLowerCase().contains(location.toLowerCase().trim()))
+					suitableFacilities.add(facility);
 				
-			allRestaurants.clear();
-			allRestaurants.addAll(suitableRestaurants);
+			allfacilities.clear();
+			allfacilities.addAll(suitableFacilities);
 		}
 		
-		if(!searchParameters.getType().trim().isEmpty()) {
-			suitableRestaurants.clear();
-			for (Restaurant restaurant : allRestaurants) {
-				String typeRest = restaurant.getType().toString();
-				if(typeRest.toLowerCase().contains(searchParameters.getType().toLowerCase().trim())) {
-					suitableRestaurants.add(restaurant);
+		if(opt.equals("Tip"))
+		if(!type.trim().isEmpty()) {
+			suitableFacilities.clear();
+			for (SportsFacility facility : findAll()) {
+				SportsFacility.TypeEnum typeSport = getTypeSr(type);
+				if(typeSport == facility.getType()) {
+					suitableFacilities.add(facility);
 				}
 			}
 			
-		    allRestaurants.clear();
-			allRestaurants.addAll(suitableRestaurants);
+			allfacilities.clear();
+			allfacilities.addAll(suitableFacilities);
 		}
-		
+		/*
 		if(!searchParameters.getGrade().trim().isEmpty()) {
 			int gradeFilter = Integer.parseInt(searchParameters.getGrade());
 			double minGrade = (gradeFilter == 1) ? 1. : gradeFilter - 0.5;

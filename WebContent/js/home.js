@@ -175,9 +175,10 @@
 				let location = $('input[name="searchBox"]').val();
 				let type = document.getElementById("types").value;
 				let rate = document.getElementById("rate").value;
+				let opt = document.getElementById("options").value;
 				let url;
 				
-					url = "rest/searchFacility?name=" + name + "&type=" + type + "&location=" + location + "&rate=" + rate;
+					url = "rest/searchFacility?name=" + name + "&type=" + type + "&location=" + location + "&rate=" + rate + "&opt=" + opt;
 
 						$.get({
 							url: url,
