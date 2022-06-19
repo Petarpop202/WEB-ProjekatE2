@@ -25,7 +25,7 @@ public class CustomersDAO {
 	
 	public CustomersDAO() {
 		korisnici = new HashMap<String, Customer>();
-		getAllCustomers(putanje[0]);
+		getAllCustomers(putanje[1]);
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
@@ -35,7 +35,7 @@ public class CustomersDAO {
 		}
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(putanja, korisnik);
-		upisKorisnikaUFajl(putanje[0], korisnik);
+		upisKorisnikaUFajl(putanje[1], korisnik);
 		return korisnik;
 	}
 	

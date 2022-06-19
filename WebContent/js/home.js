@@ -140,47 +140,6 @@
 			$("#register").click(function (event) {
 				event.preventDefault();
 				validateCheck(document);
-				/*	
-					$.post({
-						url: "rest/registration",
-						contentType: "application/json",
-						data: JSON.stringify({
-							username: username,
-							password: password,
-							name: name,
-							surname: surname,
-							gender: gender,
-							date: date,
-						}),
-						success: function(odgovor) {
-							alert("Korisnik " + odgovor.username + " je registrovan!")
-							
-							//let urlLogin = "../rest/prijava?username=" + odgovor.korisnickoIme + "&password=" + odgovor.lozinka
-							/*
-							$.post({
-								   url: urlLogin,
-								contentType: "application/json",
-								success: function(odgovor) {
-									sessionStorage.setItem("jwt", odgovor.jwt);
-									window.location.assign("http://localhost:8088/wp-projekat/html/sopstveni_profil.html");
-								},
-								error: function(odgovor) {
-										alert(odgovor.responseText);
-								}
-							});
-							
-		
-							
-						},
-						error: function(odgovor) {
-							if (odgovor.status == 400) {
-								alert("Korisnik sa zadatim korisnickim imenom vec postoji!");
-							}else {
-								alert("Greska pri registraciji!");
-							}
-						}
-					});
-					*/
 				
 			});
 		})
@@ -209,3 +168,32 @@
 			});
 		
 		});
+
+		$(document).ready(function(){
+			$("#searchBtn").click(function(event){
+				let name = $('input[name="searchBox"]').val();
+				let location = $('input[name="searchBox"]').val();
+				let type = document.getElementById("types").value;
+				let rate = document.getElementById("rate").value;
+				let url;
+				
+					url = "rest/searchFacility?name=" + name + "&type=" + type + "&location=" + location + "&rate=" + rate;
+
+						$.get({
+							url: url,
+							contentType:"application/json",
+							dataType:"json", 
+							success:function(korisnici){
+								let i = "";
+								for (let s of korisnici) {
+									i = i + '<div class="col-sm mt-5 d-flex justify-content-center"><div class="card" style="width: 18rem;"><img src="img/'+ s.picture +'.jpg" class="card-img-top" alt="..."><div class="card-body p-4 rounded-bottom" ><h5 class="card-title font-weight-bold">'+ s.name +'</h5><p class="card-text">'+ s.location.address +'</p><a href="#" class="btn btn-primary">Pregledaj</a></div></div></div>';
+								}
+								ispis(i);
+							},
+							error:function(){
+								alert("Greska!");
+							}
+						});
+				event.preventDefault();
+			});
+		})

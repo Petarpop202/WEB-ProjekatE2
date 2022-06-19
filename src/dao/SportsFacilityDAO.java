@@ -3,9 +3,12 @@ package dao;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import beans.Location;
 import beans.SportsFacility;
@@ -62,6 +65,8 @@ private HashMap<String, Location> locations;
 		}
 	}
 	
+	
+	
 	private SportsFacility.TypeEnum getType(String status) {
 		if (status.equals("GYM")) {
 			return SportsFacility.TypeEnum.GYM;
@@ -117,6 +122,71 @@ private HashMap<String, Location> locations;
 			return locations.get(Address);
 		}
 		return null;
+	}
+	
+	private Collection<SportsFacility> GetAll(){
+		Collection<SportsFacility> sports = new ArrayList<SportsFacility>();
+		for(SportsFacility s : findAll()) {
+		sports.add(s);
+		}
+		return sports;
+	}
+	
+public Collection<SportsFacility> getSearchFacility(String name, String type, String location, String rate) throws  IOException{
+		//GetAll();
+	
+		Collection<SportsFacility> allfacilities = GetAll();
+		Collection<SportsFacility> suitableFacilities = GetAll();
+		
+		if(!name.trim().isEmpty()) {
+			suitableFacilities.clear();
+			for (SportsFacility facility : findAll())
+				if(facility.getName().toLowerCase().contains(name.toLowerCase()))
+					suitableFacilities.add(facility);
+				
+			allfacilities.clear();
+			allfacilities.addAll(suitableFacilities);
+		}
+		/*
+		if(!location.trim().isEmpty()) {
+			suitableFacilities.clear();
+			for (Restaurant restaurant : allRestaurants)
+				if(restaurant.getLocation().toString().toLowerCase().contains(searchParameters.getLocation().toLowerCase().trim()))
+					suitableRestaurants.add(restaurant);
+				
+			allRestaurants.clear();
+			allRestaurants.addAll(suitableRestaurants);
+		}
+		
+		if(!searchParameters.getType().trim().isEmpty()) {
+			suitableRestaurants.clear();
+			for (Restaurant restaurant : allRestaurants) {
+				String typeRest = restaurant.getType().toString();
+				if(typeRest.toLowerCase().contains(searchParameters.getType().toLowerCase().trim())) {
+					suitableRestaurants.add(restaurant);
+				}
+			}
+			
+		    allRestaurants.clear();
+			allRestaurants.addAll(suitableRestaurants);
+		}
+		
+		if(!searchParameters.getGrade().trim().isEmpty()) {
+			int gradeFilter = Integer.parseInt(searchParameters.getGrade());
+			double minGrade = (gradeFilter == 1) ? 1. : gradeFilter - 0.5;
+			double maxGrade = (gradeFilter == 5) ? 5. : gradeFilter + 0.5;
+			
+			
+			suitableRestaurants.clear();
+			for (Restaurant restaurant : allRestaurants) 
+				if(restaurant.getGrade() > minGrade && restaurant.getGrade() < maxGrade) 
+					suitableRestaurants.add(restaurant);
+			
+			allRestaurants.clear();
+			allRestaurants.addAll(suitableRestaurants);
+		}*/
+					
+		return suitableFacilities;
 	}
 	
 }
