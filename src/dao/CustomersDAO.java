@@ -15,7 +15,6 @@ import beans.Customer;
 import beans.CustomerType;
 import beans.SportsFacility;
 import beans.User;
-
 public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
@@ -26,6 +25,7 @@ public class CustomersDAO {
 	
 	public CustomersDAO() {
 		korisnici = new HashMap<String, Customer>();
+		getAllCustomers(putanje[1]);
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
@@ -39,28 +39,53 @@ public class CustomersDAO {
 		return korisnik;
 	}
 	
-		private void upisKorisnikaUFajl(String putanja, Customer korisnik) throws IOException {
+	private void getAllCustomers(String putanja) {
+		BufferedReader citac = null;
+		try {
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				Customer korisnik = new Customer(parametri[2], parametri[3], parametri[0], 
+						parametri[1], pol, parametri[5]);
+				korisnici.put(parametri[2], korisnik);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
+	
+	private void upisKorisnikaUFajl(String putanja, Customer korisnik) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
 		upis.append(korisnik.getName());
-		upis.append("|");
+		upis.append(",");
 		upis.append(korisnik.getSurname());
-		upis.append("|");
+		upis.append(",");
 		upis.append(korisnik.getUsername());
-		upis.append("|");
+		upis.append(",");
 		upis.append(korisnik.getPassword());
-		upis.append("|");
+		upis.append(",");
 		upis.append(korisnik.getGender().toString());
-		upis.append("|");
+		upis.append(",");
 		upis.append(korisnik.getDate());
-		upis.append("|");
+		upis.append(",");
 		upis.append(getRoleTypeToString(korisnik.getRole()));
-		upis.append("|");
+		upis.append(",");
 		upis.append((CharSequence) korisnik.getMembership());
-		upis.append("|");
+		upis.append(",");
 		upis.append((CharSequence) korisnik.getSportFacilities());
-		upis.append("|");
+		upis.append(",");
 		upis.append(NullToString(korisnik.getPoints()));
-		upis.append("|");
+		upis.append(",");
 		upis.append(getCustomerTypeToString(CustomerType.TypeEnum.BRONZE));
 		upis.append("\n");
 		upis.flush();
@@ -108,7 +133,12 @@ public class CustomersDAO {
 		return null;
 	}
 	
-	
+	public Customer dobaviKorisnika(String korisnickoIme) {
+		if (korisnici.containsKey(korisnickoIme)) {
+			return korisnici.get(korisnickoIme);
+		}
+		return null;
+	}
 	
 	
 	
