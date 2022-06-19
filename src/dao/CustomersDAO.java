@@ -48,9 +48,9 @@ public class CustomersDAO {
 			while((linija = citac.readLine()) != null) {
 				String[] parametri = linija.split(",");
 				Boolean pol = Boolean.parseBoolean(parametri[4]);
-				Customer korisnik = new Customer(parametri[0], parametri[1], parametri[2], 
-						parametri[3], pol, parametri[6]);
-				korisnici.put(parametri[0], korisnik);
+				Customer korisnik = new Customer(parametri[2], parametri[3], parametri[0], 
+						parametri[1], pol, parametri[5]);
+				korisnici.put(parametri[2], korisnik);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

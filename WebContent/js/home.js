@@ -2,8 +2,6 @@
  * 
  */
 		$(document).ready(function () {
-					$("#dugme").click(function (event){
-						event.preventDefault();
 						$.ajax({
 							url : "rest/sports/",
 							type: "GET",
@@ -16,7 +14,6 @@
 								ispis(i);
 							}
 						});
-					});
 				})
 		
 		function ispis(i){
@@ -84,11 +81,11 @@
 			$("#loginBtn").click(function (event) {
 				event.preventDefault();
 		
-				let username = $('input[name="username"]').val();
-				let password = $('input[name="password"]').val();
+				let username = $('input[name="usernamel"]').val();
+				let password = $('input[name="passwordl"]').val();
 					
 					$.post({
-						url: "rest/prijava?username=" + username + "&password=" + password,
+						url: "rest/login?username=" + username + "&password=" + password,
 						contentType: "application/json",
 						success: function(odgovor) {
 							//sessionStorage.setItem("jwt", odgovor.jwt);
