@@ -15,7 +15,6 @@ import beans.Customer;
 import beans.CustomerType;
 import beans.SportsFacility;
 import beans.User;
-
 public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
@@ -26,6 +25,7 @@ public class CustomersDAO {
 	
 	public CustomersDAO() {
 		korisnici = new HashMap<String, Customer>();
+		getAllCustomers(putanje[1]);
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
@@ -39,7 +39,32 @@ public class CustomersDAO {
 		return korisnik;
 	}
 	
-		private void upisKorisnikaUFajl(String putanja, Customer korisnik) throws IOException {
+	private void getAllCustomers(String putanja) {
+		BufferedReader citac = null;
+		try {
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				Customer korisnik = new Customer(parametri[0], parametri[1], parametri[2], 
+						parametri[3], pol, parametri[6]);
+				korisnici.put(parametri[0], korisnik);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
+	
+	private void upisKorisnikaUFajl(String putanja, Customer korisnik) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
 		upis.append(korisnik.getName());
 		upis.append("|");
@@ -108,7 +133,12 @@ public class CustomersDAO {
 		return null;
 	}
 	
-	
+	public Customer dobaviKorisnika(String korisnickoIme) {
+		if (korisnici.containsKey(korisnickoIme)) {
+			return korisnici.get(korisnickoIme);
+		}
+		return null;
+	}
 	
 	
 	

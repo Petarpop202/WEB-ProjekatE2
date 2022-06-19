@@ -1,8 +1,6 @@
 /**
  * 
  */
- 
- 
 		$(document).ready(function () {
 					$("#dugme").click(function (event){
 						event.preventDefault();
@@ -80,3 +78,29 @@
 				
 			});
 		})
+
+		$(document).ready(function() {
+
+			$("#loginBtn").click(function (event) {
+				event.preventDefault();
+		
+				let username = $('input[name="username"]').val();
+				let password = $('input[name="password"]').val();
+					
+					$.post({
+						url: "rest/prijava?username=" + username + "&password=" + password,
+						contentType: "application/json",
+						success: function(odgovor) {
+							//sessionStorage.setItem("jwt", odgovor.jwt);
+							alert("Uspesna prijave");
+						},
+						error: function(odgovor) {
+							alert("Greska prijave");
+						}
+					});			
+					
+				
+		
+			});
+		
+		});
