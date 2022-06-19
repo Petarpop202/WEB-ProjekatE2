@@ -46,8 +46,8 @@ public class SportsFacility {
 		Rate = rate;
 		WorkTime = workTime;
 		if(Status)
-			StatusStr = "Aktivna";
-		else StatusStr = "Neaktivna";
+			StatusStr = "Radi";
+		else StatusStr = "Ne radi";
 	}
 	
 	public String getTypeStr() {
