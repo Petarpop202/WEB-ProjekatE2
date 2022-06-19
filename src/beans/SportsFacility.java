@@ -21,7 +21,7 @@ public class SportsFacility {
 	private Double Rate;
 	private String WorkTime;
 	private String StatusStr;
-	
+	private String TypeStr;
 	
 	
 	public SportsFacility() {
@@ -31,7 +31,14 @@ public class SportsFacility {
 			String picture, Double rate, String workTime) {
 		super();
 		Name = name;
-		Type = type;
+		if(type == TypeEnum.GYM) {
+			TypeStr = "Teretana";
+		} else if(type == TypeEnum.DANCESTUDIO) {
+			TypeStr = "Plesni studio";
+		} else if(type == TypeEnum.POOL) {
+			TypeStr = "Bazen";
+		} else TypeStr = "Sportski centar";
+		
 		Content = content;
 		Status = status;
 		Location = location;
@@ -42,6 +49,14 @@ public class SportsFacility {
 			StatusStr = "Aktivna";
 		else StatusStr = "Neaktivna";
 	}
+	
+	public String getTypeStr() {
+		return TypeStr;
+	}
+	public void setTypeStr(String typeStr) {
+		TypeStr = typeStr;
+	}
+	
 	
 	public String getStatusStr() {
 		return StatusStr;

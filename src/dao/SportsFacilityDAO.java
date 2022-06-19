@@ -12,6 +12,7 @@ import java.util.List;
 
 import beans.Location;
 import beans.SportsFacility;
+import beans.User;
 
 
 public class SportsFacilityDAO {
@@ -185,21 +186,23 @@ public Collection<SportsFacility> getSearchFacility(String name, String type, St
 			allfacilities.clear();
 			allfacilities.addAll(suitableFacilities);
 		}
-		/*
-		if(!searchParameters.getGrade().trim().isEmpty()) {
-			int gradeFilter = Integer.parseInt(searchParameters.getGrade());
-			double minGrade = (gradeFilter == 1) ? 1. : gradeFilter - 0.5;
-			double maxGrade = (gradeFilter == 5) ? 5. : gradeFilter + 0.5;
+		
+		int gradeFilter = Integer.parseInt(rate);
+		double minGrade = (gradeFilter == 1) ? 1. : gradeFilter - 0.5;
+		double maxGrade = (gradeFilter == 5) ? 5. : gradeFilter + 0.5;
+		
+		if(opt.equals("Ocena"))
+		if(!type.trim().isEmpty()) {
+			suitableFacilities.clear();
+			for (SportsFacility facility : findAll()) {
+				if(facility.getRate() > minGrade && facility.getRate() < maxGrade) 
+					suitableFacilities.add(facility);
+			}
 			
-			
-			suitableRestaurants.clear();
-			for (Restaurant restaurant : allRestaurants) 
-				if(restaurant.getGrade() > minGrade && restaurant.getGrade() < maxGrade) 
-					suitableRestaurants.add(restaurant);
-			
-			allRestaurants.clear();
-			allRestaurants.addAll(suitableRestaurants);
-		}*/
+			allfacilities.clear();
+			allfacilities.addAll(suitableFacilities);
+		}
+		
 					
 		return suitableFacilities;
 	}
