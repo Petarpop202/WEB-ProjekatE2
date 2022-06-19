@@ -20,6 +20,7 @@ public class SportsFacility {
 	private String Picture;
 	private Double Rate;
 	private String WorkTime;
+	private String StatusStr;
 	
 	
 	
@@ -37,6 +38,16 @@ public class SportsFacility {
 		Picture = picture;
 		Rate = rate;
 		WorkTime = workTime;
+		if(Status)
+			StatusStr = "Aktivna";
+		else StatusStr = "Neaktivna";
+	}
+	
+	public String getStatusStr() {
+		return StatusStr;
+	}
+	public void setStatusStr(String statusStr) {
+		StatusStr = statusStr;
 	}
 	public String getName() {
 		return Name;

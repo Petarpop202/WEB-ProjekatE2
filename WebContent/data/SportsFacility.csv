@@ -1,5 +1,5 @@
-Lagator,GYM,GROUP,TRUE,Novi Sad,Slika1,4.2,12:30
-Kengur,SPORTSCENTER,SAUNA,FALSE,Kobasica,Slika2,3.8,18:00
-Pionir,SPORTSCENTER,PERSONAL,TRUE,Beograd,Slika2,3.2,13:00
-Arena,SPORTSCENTER,GROUP,FALSE,Novi Sad,Slika1,1.2,14:00
-Spens,GYM,SAUNA,TRUE,Kobasica,aaa,4,13:30
+Lagator,GYM,GROUP,True,Bulevar Oslobodjenja 23 Novi Sad,Slika1,4.2,12:30
+Kengur,SPORTSCENTER,SAUNA,False,Kobasica,Slika2,3.8,18:00
+Pionir,SPORTSCENTER,PERSONAL,True,Beograd,Slika2,3.2,13:00
+Arena,SPORTSCENTER,GROUP,False,Novi Sad,Slika1,1.2,14:00
+Spens,GYM,SAUNA,True,Kobasica,aaa,4,13:30
