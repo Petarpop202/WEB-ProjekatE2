@@ -59,17 +59,41 @@
 			<div class="container pt-3 pb-3">
 						<div class="input-group mb-3">
 							<div class="input-group-prepend">
-							<button class="btn btn-outline-secondary dropdown-toggle text-white" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opcije</button>
-							<div class="dropdown-menu">
-								<a class="dropdown-item" href="#">Naziv</a>
-								<a class="dropdown-item" href="#">Tip</a>
-								<a class="dropdown-item" href="#">Lokacija</a>
-								<a class="dropdown-item" href="#">Prosecna ocena</a>
-							</div>
+							
+							<label class="mr-3 mt-2">Opcije za pretragu:</label>
+							  <select id="options"  class="btn btn-outline-secondary dropdown-toggle text-white mr-3" aria-label=".form-select-lg example" >
+							  <option selected>Naziv</option>
+							  <option value="Tip">Tip</option>
+							  <option value="Lokacija">Lokacija</option>
+							  <option value="Ocena">Ocena</option>
+							</select>
+							
+							
 						</div>
-				<input type="text" class="form-control" placeholder="Pretraga">
+						
+							<input type="text"  id="searchh" class="form-control" placeholder="Pretraga">
+							
+							<select id="types"  class="btn btn-outline-secondary dropdown-toggle text-white ml-3"  aria-label=".form-select-lg example">
+							  <option selected>Teretana</option>
+							  <option value="1">Plesni studio</option>
+							  <option value="2">Bazen</option>
+							  <option value="3">Sportski centar</option>
+							</select>
+							
+							<select id="rate"  class="btn btn-outline-secondary dropdown-toggle text-white ml-3" aria-label=".form-select-lg example" >
+							  <option value="1">1</option>
+							  <option value="2">2</option>
+							  <option value="3">3</option>
+							  <option value="4">4</option>
+							  <option selected>5</option>
+							</select>
+
+							<button class="btn btn-outline-primary ml-3 text-white">Pretrazi</button>
+				
+				
 			  </div>
 			</div>
+			
 
 
 			<div class="container pt-3">
@@ -92,50 +116,54 @@
 					<div class="modal-body mx-3">
 						<div class="md-form mb-5 text-primary">
 						<i class="fas fa-user prefix grey-text"></i>
-						<input type="text" id="name" name="name" class="form-control validate">
 						<label data-error="wrong" data-success="right" for="name">Ime</label>
-						<label id="eri" style="color: red;" hidden>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Pogresan format imena!</label>
+						<input type="text" id="name" name="name" class="form-control validate">
+						
+						<label class="text-lg-right" id="eri" style="color: red;" hidden>Pogresan format imena!</label>
 						</div>
 
 						<div class="md-form mb-5 text-primary">
 						<i class="fas fa-envelope prefix grey-text"></i>
-						<input type="text" id="surname" name="surname" class="form-control validate">
 						<label data-error="wrong" data-success="right" for="surname">Prezime</label>
-						<label id="erp" style="color: red;" hidden>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Pogresan format prezimena!</label>
+						<input type="text" id="surname" name="surname" class="form-control validate">
+						
+						<label id="erp" style="color: red;" hidden>Pogresan format prezimena!</label>
 						</div>
 
 						<div class="md-form mb-5 text-primary">
 						<i class="fas fa-envelope prefix grey-text"></i>
+						<label data-error="wrong" data-success="right" for="date">Datum rodjenja</label>
 						<input type="text" class="datepickeri form-control" id="datum" name="date"
 						min="1900-01-01" max="2003-12-31" onfocus="(this.type='date')">
-						<label data-error="wrong" data-success="right" for="date">Datum rodjenja</label>
-						<label id="erd" style="color: red;" hidden>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Izaberite datum</label>
+						<label id="erd" style="color: red;" hidden>Izaberite datum</label>
 						</div>
 
 						<div class="md-form mb-5 text-primary">
 							<i class="fas fa-envelope prefix grey-text"></i>
+							<div>
+							<label data-error="wrong" data-success="right" for="username">Pol</label>
+							</div>
 							<select class="form-select" name="gender">
 							   <!-- proveriti ovo kako se pristupa ovome u js-u-->
 								 <option value=True selected>Muški</option>
 								 <option value="False">Ženski</option>
 							</select>
-							<div>
-							<label data-error="wrong" data-success="right" for="username">Pol</label>
-							</div>
 						</div>
 
 						<div class="md-form mb-5 text-primary">
 							<i class="fas fa-envelope prefix grey-text"></i>
-							<input type="text" id="username" name="username" class="form-control validate">
 							<label data-error="wrong" data-success="right" for="username">Korisnicko ime</label>
-							<label id="erk" style="color: red;" hidden>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Pogresan format!</label>
+							<input type="text" id="username" name="username" class="form-control validate">
+							
+							<label id="erk" style="color: red;" hidden>Pogresan format!</label>
 							</div>
 
 						<div class="md-form mb-4 text-primary">
 						<i class="fas fa-lock prefix grey-text"></i>
-						<input type="password" id="pass" name="password" class="form-control validate">
 						<label data-error="wrong" data-success="right" for="password">Lozinka</label>
-						<label id="erl" style="color: red;" hidden>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Pogresan format lozinke!</label>
+						<input type="password" id="pass" name="password" class="form-control validate">
+						
+						<label id="erl" style="color: red;" hidden>Pogresan format lozinke!</label>
 						</div>
 						
 						<div>
@@ -143,7 +171,7 @@
 						</div>
 					</div>
 					<div class="modal-footer d-flex justify-content-center">
-						<button type="submit" id="register" class="btn btn-deep-orange">Registruj se</button>
+						<button type="submit" id="register"  class="btn btn-deep-orange">Registruj se</button>
 					</div>
 					</div>
 				</div>

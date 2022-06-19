@@ -1,6 +1,22 @@
 /**
  * 
  */
+	function inputChange(){
+		let option = document.getElementById("options");
+		if(option.value == "Naziv"){
+			document.getElementById("types").setAttribute("hidden", "true");
+			document.getElementById("serachh").style.display="none";
+			
+			document.getElementById("rate").setAttribute("hidden", "true");
+		} else if(option.value == "Tip"){
+			document.getElementById("types").removeAttribute("hidden");
+			document.getElementById("serachh").style.display="block";
+			
+			document.getElementById("rate").setAttribute("hidden", "true");
+		}
+
+
+	}
 
 		$(document).ready(function () {
 						$.ajax({
