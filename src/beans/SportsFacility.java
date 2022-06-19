@@ -38,7 +38,7 @@ public class SportsFacility {
 		} else if(type == TypeEnum.POOL) {
 			TypeStr = "Bazen";
 		} else TypeStr = "Sportski centar";
-		
+		Type = type;
 		Content = content;
 		Status = status;
 		Location = location;

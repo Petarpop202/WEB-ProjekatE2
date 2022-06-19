@@ -35,6 +35,7 @@ private HashMap<String, Location> locations;
 		getAllSportFacilities(path);
 	}
 	
+
 	private void getAllSportFacilities(String path) {
 		BufferedReader reader = null;
 		try {
@@ -138,15 +139,22 @@ private HashMap<String, Location> locations;
 		return null;
 	}
 	
-	private Collection<SportsFacility> GetAll(){
+	public Collection<SportsFacility> GetAll(){
 		Collection<SportsFacility> sports = new ArrayList<SportsFacility>();
 		for(SportsFacility s : findAll()) {
-		sports.add(s);
+			if(s.getStatus()) {
+				sports.add(s);
+			}
+		}
+		for(SportsFacility s : findAll()) {
+			if(!s.getStatus()) {
+				sports.add(s);
+			}
 		}
 		return sports;
 	}
 	
-public Collection<SportsFacility> getSearchFacility(String name, String type, String location, String rate, String opt) throws  IOException{
+	public Collection<SportsFacility> getSearchFacility(String name, String type, String location, String rate, String opt) throws  IOException{
 		//GetAll();
 	
 		Collection<SportsFacility> allfacilities = GetAll();

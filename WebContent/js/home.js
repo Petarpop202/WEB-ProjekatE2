@@ -33,8 +33,13 @@
 							success: function(data)
 							{
 								let i = "";
+								let color = "";
 								for (let s of data) {
-									i = i + '<div class="col-sm mt-5 d-flex justify-content-center"><div class="card" style="width: 18rem;"><img src="img/'+ s.picture +'.jpg" class="card-img-top" alt="..."><div class="card-body p-4 rounded-bottom" ><h5 class="card-title font-weight-bold">'+ s.name +'</h5><p class="card-text">'+ s.location.address +'</p><p class="card-text">'+ s.statusStr  + '&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp;' + s.typeStr +'</p><div class="float-start"><a href="#" class="btn btn-primary">Pregledaj</a><p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ocena:&nbsp;' + s.rate +'</p></div></div></div></div>';
+									if(s.status)
+										color = "green";
+									else
+										color = "red";
+									i = i + '<div class="col-sm mt-5 d-flex justify-content-center"><div class="card border-success" style="width: 18rem;"><img src="img/'+ s.picture +'.jpg" class="card-img-top" alt="..."><div class="card-body p-4 rounded-bottom" ><h5 class="card-title font-weight-bold">'+ s.name +'&nbsp;&nbsp;&nbsp;&nbsp;'+s.typeStr+'</h5><p class="card-text">'+ s.location.address +'</p><p class="card-text">'+ s.statusStr  + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + s.workTime +'</p><div class="float-start"><a href="#" class="btn btn-primary">Pregledaj</a><p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ocena:&nbsp;' + s.rate +'</p></div></div></div></div>';
 								}
 								ispis(i);
 							}
@@ -114,22 +119,7 @@
 						}),
 						success: function(odgovor) {
 							alert("Korisnik " + odgovor.username + " je registrovan!")
-							
-							//let urlLogin = "../rest/prijava?username=" + odgovor.korisnickoIme + "&password=" + odgovor.lozinka
-							/*
-							$.post({
-								   url: urlLogin,
-								contentType: "application/json",
-								success: function(odgovor) {
-									sessionStorage.setItem("jwt", odgovor.jwt);
-									window.location.assign("http://localhost:8088/wp-projekat/html/sopstveni_profil.html");
-								},
-								error: function(odgovor) {
-										alert(odgovor.responseText);
-								}
-							});
-							*/
-		
+								
 							
 						},
 						error: function(odgovor) {
@@ -195,7 +185,7 @@
 							success:function(korisnici){
 								let i = "";
 								for (let s of korisnici) {
-									i = i + '<div class="col-sm mt-5 d-flex justify-content-center"><div class="card" style="width: 18rem;"><img src="img/'+ s.picture +'.jpg" class="card-img-top" alt="..."><div class="card-body p-4 rounded-bottom" ><h5 class="card-title font-weight-bold">'+ s.name +'</h5><p class="card-text">'+ s.location.address +'</p><p class="card-text">'+ s.statusStr  + '&nbsp;&nbsp;&nbsp; - &nbsp;&nbsp;&nbsp;' + s.typeStr +'</p><div class="float-start"><a href="#" class="btn btn-primary">Pregledaj</a><p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ocena:&nbsp;' + s.rate +'</p></div></div></div></div>';
+									i = i + '<div class="col-sm mt-5 d-flex justify-content-center"><div class="card" style="width: 18rem;"><img src="img/'+ s.picture +'.jpg" class="card-img-top" alt="..."><div class="card-body p-4 rounded-bottom" ><h5 class="card-title font-weight-bold">'+ s.name +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h7>'+s.typeStr+'</h7></h5><p class="card-text">'+ s.location.address +'</p><p class="card-text">'+ s.statusStr  + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + s.workTime +'</p><div class="float-start"><a href="#" class="btn btn-primary">Pregledaj</a><p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ocena:&nbsp;' + s.rate +'</p></div></div></div></div>';
 								}
 								ispis(i);
 							},

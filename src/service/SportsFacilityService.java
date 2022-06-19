@@ -36,6 +36,6 @@ public class SportsFacilityService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFacilities(@Context HttpServletRequest zahtev) {
 		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
-				return Response.ok(dao.findAll()).build();
+				return Response.ok(dao.GetAll()).build();
 	}
 }
