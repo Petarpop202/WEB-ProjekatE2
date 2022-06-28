@@ -119,7 +119,7 @@
 						}),
 						success: function(odgovor) {
 							alert("Korisnik " + odgovor.username + " je registrovan!")
-								
+							
 							
 						},
 						error: function(odgovor) {
@@ -154,6 +154,7 @@
 						contentType: "application/json",
 						success: function(odgovor) {
 							alert("Uspesna prijava");
+							window.location.assign("http://localhost:8080/FitnessCentar/html/customer_home_page.html");
 						},
 						error: function(odgovor) {
 							document.getElementById("er").removeAttribute("hidden");

@@ -10,6 +10,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import JWTController.JWTSession;
 import beans.Customer;
 import dao.CustomersDAO;
 
@@ -25,6 +26,9 @@ public class LogInService {
 		if (kontekst.getAttribute("CustomersDAO") == null) {
 			kontekst.setAttribute("CustomersDAO", new CustomersDAO());
 		}
+		if (kontekst.getAttribute("JWTSession") == null) {
+			kontekst.setAttribute("JWTSession", new JWTSession());
+		}
 	}
 	
 	@POST
@@ -32,11 +36,13 @@ public class LogInService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(@QueryParam("username") String username, @QueryParam("password") String password) {
 		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
 		Customer korisnik = korisnikDAO.dobaviKorisnika(username);
 		if (korisnik == null) {
 			return Response.status(401).entity("Uneli ste pogresno korisnicko ime!").build();
 		}
 		if (password.equals(korisnik.getPassword())) {
+			jwtKontroler.kreiranjeJWT(korisnik);
 			return Response.ok(korisnik).build();
 		}
 		return Response.status(401).entity("Uneli ste pogresnu lozinku!").build();

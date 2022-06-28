@@ -14,6 +14,7 @@ public class User {
 	private Boolean Gender;
 	private String Date;
 	private RoleEnum Role;
+	private String jwt;
 	
 	public User() {
 		super();
@@ -72,6 +73,13 @@ public class User {
 	public void setRole(RoleEnum role) {
 		Role = role;
 	}
+	public String getJwt() {
+		return jwt;
+	}
+	public void setJwt(String jwt) {
+		this.jwt = jwt;
+	}
+	
 	
 	
 }
