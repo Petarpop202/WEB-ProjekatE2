@@ -215,4 +215,12 @@ private HashMap<String, Location> locations;
 		return suitableFacilities;
 	}
 	
+	
+	public SportsFacility getFacility(String name) {
+        if (facilities.containsKey(name)) {
+            return facilities.get(name);
+        }
+        return null;
+    }
+	
 }
