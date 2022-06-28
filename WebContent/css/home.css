@@ -13,6 +13,14 @@
     border: none;
 }
 
+.checked {
+    color: orange;
+  }
+
+.rating-color{
+    color:#fbc634 !important;
+}
+
 .card-body{
     background: rgb(36, 36, 36);
 }
@@ -21,3 +29,25 @@
     object-fit: top;
     aspect-ratio: 1/.7;
 }
+
+.comment__container.opened {
+    display: block;
+  }
+
+  .comment__card {
+    padding: 20px;
+    margin: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 0.5rem;
+    min-width: 100%;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  }
+
+  .comment__card-footer {
+    display: flex;
+    font-size: 0.85rem;
+    opacity: 0.6;
+    gap: 30px;
+    justify-content: flex-end;
+    align-items: center;
+  }

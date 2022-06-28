@@ -9,6 +9,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -38,4 +39,13 @@ public class SportsFacilityService {
 		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
 				return Response.ok(dao.GetAll()).build();
 	}
+	
+	@GET
+    @Path("/get")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFacility(@Context HttpServletRequest zahtev,  @QueryParam("name") String name) {
+        SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+        SportsFacility sports = dao.getFacility(name);
+                return Response.ok(sports).build();
+    }
 }
