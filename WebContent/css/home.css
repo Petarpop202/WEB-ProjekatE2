@@ -13,6 +13,10 @@
     border: none;
 }
 
+.rating-color{
+    color:#fbc634 !important;
+}
+
 .card-body{
     background: rgb(36, 36, 36);
 }
