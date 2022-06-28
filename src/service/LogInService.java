@@ -2,6 +2,8 @@ package service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -46,5 +48,19 @@ public class LogInService {
 			return Response.ok(korisnik).build();
 		}
 		return Response.status(401).entity("Uneli ste pogresnu lozinku!").build();
+	}
+	
+	@GET
+	@Path("/logout")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odjava(@Context HttpServletRequest zahtev) {
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		Customer korisnik = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		if (korisnik != null) {
+			korisnik.setJwt("");
+			return Response.ok(korisnik).build();
+		}
+		return Response.status(400).entity("Niste ulogovani").build();
 	}
 }

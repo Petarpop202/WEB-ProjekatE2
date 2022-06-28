@@ -153,6 +153,7 @@
 						url: "rest/login?username=" + username + "&password=" + password,
 						contentType: "application/json",
 						success: function(odgovor) {
+							sessionStorage.setItem("jwt", odgovor.jwt);
 							alert("Uspesna prijava");
 							window.location.assign("http://localhost:8080/FitnessCentar/html/customer_home_page.html");
 						},

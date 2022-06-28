@@ -21,7 +21,7 @@ public class JWTSession {
 		String jws = Jwts.builder().setSubject(korisnik.getUsername()).setExpiration(new Date(new Date().getTime() + 30 * 6000*10L)).setIssuedAt(new Date()).signWith(key).compact();
 		korisnik.setJwt(jws);
 	}
-	User proveriJWT(HttpServletRequest zahtev, CustomersDAO korisnikDAO) {
+	public Customer proveriJWT(HttpServletRequest zahtev, CustomersDAO korisnikDAO) {
 		String auth = zahtev.getHeader("Authorization");
 		if ((auth != null) && (auth.contains("Bearer "))) {
 			String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
