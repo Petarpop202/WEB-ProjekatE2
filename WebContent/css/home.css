@@ -13,6 +13,11 @@
     border: none;
 }
 
+.map {
+  height: 400px;
+  width: 100%;
+}
+
 .checked {
     color: orange;
   }
