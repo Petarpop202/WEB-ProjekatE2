@@ -34,6 +34,7 @@ private HashMap<String, Training> trainings;
 	public SportsFacilityDAO() {
 		facilities = new HashMap<String, SportsFacility>();
 		locations = new HashMap<String, Location>();
+		trainings = new HashMap<String, Training>();
 	}
 	
 	public SportsFacilityDAO(String path) {
@@ -172,7 +173,7 @@ private HashMap<String, Training> trainings;
 		}
 	}
 	
-	private Collection<Training> getFacilityTrainings(String name){
+	public Collection<Training> getFacilityTrainings(String name){
 		Collection<Training> trainingsFacility = new ArrayList<Training>();
 		for(Training t : findAllTrainings()) {
 			if(t.getFacility().getName().equals(name))
