@@ -10,17 +10,25 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import beans.Coach;
 import beans.Location;
 import beans.SportsFacility;
+import beans.Training;
+import beans.Training.TypeEnum;
 import beans.User;
 
 
 public class SportsFacilityDAO {
 private HashMap<String, SportsFacility> facilities;
 private HashMap<String, Location> locations;
+private HashMap<String, Training> trainings;
 	
 	public Collection<SportsFacility> findAll() {
 		return facilities.values();
+	}
+	
+	public Collection<Training> findAllTrainings(){
+		return trainings.values();
 	}
 
 	public SportsFacilityDAO() {
@@ -31,8 +39,10 @@ private HashMap<String, Location> locations;
 	public SportsFacilityDAO(String path) {
 		facilities = new HashMap<String, SportsFacility>();
 		locations = new HashMap<String, Location>();
+		trainings = new HashMap<String, Training>();
 		getAllLocations(path);
 		getAllSportFacilities(path);
+		getAllTrainings(path);
 	}
 	
 
@@ -132,6 +142,57 @@ private HashMap<String, Location> locations;
 		}
 	}
 	
+	private void getAllTrainings(String path) {
+		BufferedReader reader = null;
+		try {
+			File file = new File(path + "data\\Trainings.csv");
+			reader = new BufferedReader(new FileReader(file));
+			String linija = "";
+			while ((linija = reader.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				String Name= parametri[0];
+				Training.TypeEnum Type = getTrainingType(parametri[1]);
+				SportsFacility Facility = getFacility(parametri[2]);
+				String duration = parametri[3];
+				Coach Trainer = new Coach();
+				String Description = parametri[4];
+				String Picture = parametri[5];
+				Training t = new Training(Name,Type,Facility,duration,Trainer,Description,Picture);
+				trainings.put(Name, t);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( reader != null ) {
+				try {
+					reader.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
+	
+	private Collection<Training> getFacilityTrainings(String name){
+		Collection<Training> trainingsFacility = new ArrayList<Training>();
+		for(Training t : findAllTrainings()) {
+			if(t.getFacility().getName().equals(name))
+				trainingsFacility.add(t);
+		}
+		return trainingsFacility;
+	}
+	
+	
+	private Training.TypeEnum getTrainingType(String status) {
+		if (status.equals("GROUP")) {
+			return Training.TypeEnum.GROUP;
+		}else if (status.equals("PERSONAL")) {
+			return Training.TypeEnum.PERSONAL;
+		}else if (status.equals("GYM")) {
+			return Training.TypeEnum.GYM;
+		}
+		return null;
+	}
+
 	public Location getLocation(String Address) {
 		if (locations.containsKey(Address)) {
 			return locations.get(Address);
