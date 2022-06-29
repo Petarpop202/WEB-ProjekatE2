@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import beans.SportsFacility;
+import beans.Training;
 import dao.SportsFacilityDAO;
 
 @Path("/sports")
@@ -48,4 +49,13 @@ public class SportsFacilityService {
         SportsFacility sports = dao.getFacility(name);
                 return Response.ok(sports).build();
     }
+	
+	@GET
+	@Path("/trainings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTrainings(@Context HttpServletRequest zahtev, @QueryParam("name") String name) {
+		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		Collection<Training> trainings = dao.getFacilityTrainings(name);
+				return Response.ok(trainings).build();
+	}
 }
