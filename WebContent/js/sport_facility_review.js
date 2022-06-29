@@ -43,8 +43,8 @@
 function reviewTr(treninzi){
 
     let i = "";
-    for(let t in treninzi){
-        i = i + ' <tr><td>'+ t.name+'</td><td>'+t.facility.name+'</td><td>'+t.description+'</td><td><button type="button" class="btn btn-secondary">Prijavi se</button></td></tr>'
+    for(let t of treninzi){
+        i = i + ' <tr><td>'+ t.name+'</td><td>'+t.facility.name+'</td><td>'+t.description+'</td><td><button type="button" class="btn btn-secondary">Prijavi se</button></td></tr>';
     }
 
     let t = document.getElementById("tabletr");
