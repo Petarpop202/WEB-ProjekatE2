@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
 import beans.Customer;
+import beans.User;
 import dao.CustomersDAO;
 
 
@@ -56,7 +57,7 @@ public class LogInService {
 	public Response odjava(@Context HttpServletRequest zahtev) {
 		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
 		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
-		Customer korisnik = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		User korisnik = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
 		if (korisnik != null) {
 			korisnik.setJwt("");
 			return Response.ok(korisnik).build();

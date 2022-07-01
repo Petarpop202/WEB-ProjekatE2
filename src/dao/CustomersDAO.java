@@ -20,22 +20,27 @@ public class CustomersDAO {
 	private HashMap<String, Customer> korisnici;
 	
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
-	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv"};
+	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Users.csv"};
 
 	
 	public CustomersDAO() {
 		korisnici = new HashMap<String, Customer>();
-		getAllCustomers(putanje[1]);
+		getAllCustomers(putanje[2]);
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
-		putanja += "\\data\\Customers.csv";
+		String put1 = putanja + "\\data\\Customers.csv";
+		String put2 = putanja + "\\data\\Users.csv";
 		if (korisnici.containsKey(korisnik.getUsername())) {
 			return null;
 		}
 		korisnici.put(korisnik.getUsername(), korisnik);
-		upisKorisnikaUFajl(putanja, korisnik);
-		upisKorisnikaUFajl(putanje[1], korisnik);
+		upisKorisnikaUFajl(put1, korisnik);
+		upisKorisnikaUFajl(putanje[2], korisnik);
+		upisUUsers(put2, korisnik);
+		upisUUsers(putanje[3], korisnik);
 		return korisnik;
 	}
 	
@@ -78,7 +83,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(korisnik.getDate());
 		upis.append(",");
-		upis.append(getRoleTypeToString(korisnik.getRole()));
+		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
 		upis.append(",");
 		upis.append((CharSequence) korisnik.getMembership());
 		upis.append(",");
@@ -92,9 +97,26 @@ public class CustomersDAO {
 		upis.close();
 	}
 	
-		
-		
-
+	private void upisUUsers(String putanja, Customer korisnik) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(korisnik.getName());
+		upis.append(",");
+		upis.append(korisnik.getSurname());
+		upis.append(",");
+		upis.append(korisnik.getUsername());
+		upis.append(",");
+		upis.append(korisnik.getPassword());
+		upis.append(",");
+		upis.append(korisnik.getGender().toString());
+		upis.append(",");
+		upis.append(korisnik.getDate());
+		upis.append(",");
+		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+	}
+	
 		private static String NullToString(Double points)
 		{
 

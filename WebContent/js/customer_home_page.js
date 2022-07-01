@@ -92,5 +92,9 @@
 			});
 
 		}
+
+		function profile(){
+			location.assign("profile_page.html");
+		}
 		
 		

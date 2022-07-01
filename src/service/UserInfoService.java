@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
 import beans.Customer;
+import beans.User;
 import dao.CustomersDAO;
 
 @Path("/info")
@@ -37,7 +38,7 @@ public class UserInfoService {
 	public Response dobaviKorisnika(@Context HttpServletRequest request) {
 		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
 		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
-		Customer ulogovani = jwtKontroler.proveriJWT(request, korisnikDAO);
+		User ulogovani = jwtKontroler.proveriJWT(request, korisnikDAO);
 		if (ulogovani == null) {
 			return Response.status(401).entity("Sesija vam je istekla!").build();
 		} else {
