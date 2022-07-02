@@ -17,18 +17,18 @@ public class JWTSession {
 	
 	static Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-	public void kreiranjeJWT(Customer korisnik) {
+	public void kreiranjeJWT(User korisnik) {
 		String jws = Jwts.builder().setSubject(korisnik.getUsername()).setExpiration(new Date(new Date().getTime() + 30 * 6000*10L)).setIssuedAt(new Date()).signWith(key).compact();
 		korisnik.setJwt(jws);
 	}
-	public Customer proveriJWT(HttpServletRequest zahtev, CustomersDAO korisnikDAO) {
+	public User proveriJWT(HttpServletRequest zahtev, CustomersDAO korisnikDAO) {
 		String auth = zahtev.getHeader("Authorization");
 		if ((auth != null) && (auth.contains("Bearer "))) {
 			String jwt = auth.substring(auth.indexOf("Bearer ") + 7);
 			try {
 			    Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
 			    String korisnickoIme = claims.getBody().getSubject();
-				Customer korisnik = korisnikDAO.dobaviKorisnika(korisnickoIme);
+				User korisnik = korisnikDAO.dobaviKorisnika(korisnickoIme);
 				return korisnik;
 			} catch (Exception e) {
 				return null;
