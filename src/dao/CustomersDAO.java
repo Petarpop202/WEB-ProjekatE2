@@ -162,6 +162,52 @@ public class CustomersDAO {
 		return null;
 	}
 	
+	public User izmenaPodataka(User korisnik, String putanja) throws IOException {
+		User k = korisnici.get(korisnik.getUsername());
+		if (!korisnik.getName().equals(k.getName())) {
+			k.setName(korisnik.getName());
+		}
+		if (!korisnik.getSurname().equals(k.getSurname())) {
+			k.setSurname(korisnik.getSurname());
+		}
+		if (!korisnik.getGender().equals(k.getGender())) {
+			k.setGender(korisnik.getGender());
+		}
+		if (!korisnik.getDate().equals(k.getDate())) {
+			k.setDate(korisnik.getDate());
+		}
+		if (!korisnik.getPassword().equals(k.getPassword()) && !korisnik.getPassword().equals("")) {
+			k.setPassword(korisnik.getPassword());
+		}
+		putanja += "data\\Users.csv";
+		
+		writeAllUsers(putanja);
+		writeAllUsers(putanje[3]);
+		return k;
+	}
+	
+	private void writeAllUsers(String putanja) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja));
+		for(User korisnik : korisnici.values()) {
+		upis.append(korisnik.getName());
+		upis.append(",");
+		upis.append(korisnik.getSurname());
+		upis.append(",");
+		upis.append(korisnik.getUsername());
+		upis.append(",");
+		upis.append(korisnik.getPassword());
+		upis.append(",");
+		upis.append(korisnik.getGender().toString());
+		upis.append(",");
+		upis.append(korisnik.getDate());
+		upis.append(",");
+		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
+	
 	
 	
 }

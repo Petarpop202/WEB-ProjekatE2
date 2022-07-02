@@ -2,6 +2,7 @@
  * 
  */
 		$(document).ready(function () {
+
 						$.ajax({
 							url : "../rest/info/getUser",
 							headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
@@ -17,6 +18,7 @@
 								setDate(data);
 								setUsername(data);
 								setRole(data); 
+								loadEditPage(data);
 							}
 						});
 				})
@@ -78,6 +80,51 @@
 					})
 			});
 
+		}
+
+		function loadEditPage(data){
+			let n = document.getElementById("modalRegisterForm");
+			n.innerHTML = '<div class="modal-dialog" role="document"><div class="modal-content bg-dark text-white"><div class="modal-header text-center"><h4 class="modal-title w-100 font-weight-bold text-primary">Izmena naloga</h4><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div><div class="modal-body mx-3"><div class="md-form mb-5 text-primary"><i class="fas fa-user prefix grey-text"></i><label data-error="wrong" data-success="right" for="name">Ime</label><input type="text" value="'+data.name+'" id="name" name="name" class="form-control validate"></div><div class="md-form mb-5 text-primary"><i class="fas fa-envelope prefix grey-text"></i><label data-error="wrong" data-success="right" for="surname">Prezime</label><input type="text" id="surname" value="'+data.surname+'" name="surname" class="form-control validate"></div><div class="md-form mb-5 text-primary"><i class="fas fa-envelope prefix grey-text"></i><label data-error="wrong" data-success="right" for="date">Datum rodjenja</label><input type="text" value="'+data.date+'" class="datepickeri form-control" id="datum" name="date"min="1900-01-01" max="2003-12-31" onfocus="(this.type="date")"></div><div class="md-form mb-5 text-primary"><i class="fas fa-envelope prefix grey-text"></i><div><label data-error="wrong" data-success="right" for="username">Pol</label></div><select class="form-select" name="gender"><option value=True selected>Muški</option><option value="False">Ženski</option></select></div><div class="md-form mb-5 text-primary"><i class="fas fa-envelope prefix grey-text"></i><label data-error="wrong" data-success="right" for="username">Korisnicko ime</label><input type="text" value="'+data.username+'" name="username" class="form-control validate" disabled></div><div class="md-form mb-4 text-primary"><i class="fas fa-lock prefix grey-text"></i><label data-error="wrong" data-success="right" for="password">Lozinka</label><input type="password" id="pass" value="'+data.password+'" name="password" class="form-control validate"></div></div><div class="modal-footer d-flex justify-content-center"><button type="submit" id="edit" name="edit" onclick="EditStart()" class="btn btn-deep-orange text-white">Izmeni</button></div></div>';
+		}
+
+		function EditStart(){
+				let username = $('input[name="username"]').val();
+				let password = $('input[name="password"]').val();
+				let name = $('input[name="name"]').val();
+				let surname = $('input[name="surname"]').val();
+				let gender = $('select[name="gender"]').find(":selected").val();
+				let date = $('input#datum').val();
+
+
+				$.ajax({
+					type: "PUT",
+					url: "../rest/edit",
+					headers: {
+						'Authorization':'Bearer ' + sessionStorage.getItem('jwt')
+					},
+					contentType:"application/json",
+					dataType:"json",
+					data: JSON.stringify({
+						username: username,
+						name: name,
+						surname: surname,
+						gender: gender,
+						date: date,
+						password: password,
+					}),
+					success: function(odgovor) {
+						alert("Uspesno izmenjeni licni podaci!")
+						window.location.assign("http://localhost:8080/FitnessCentar/html/profile_page.html");
+					},
+					error: function(odgovor) {
+						alert(odgovor.responseText);
+						if(odgovor.status == 401) {
+							sessionStorage.removeItem("jwt");
+							history.back();
+						}
+					}
+				});
+				
 		}
 
 
