@@ -22,12 +22,14 @@ public class CustomersDAO {
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
-	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Users.csv"};
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
+	 "C:\\Users\\david\\OneDrive\\Desktop\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
+	 "C:\\Users\\david\\OneDrive\\Desktop\\WEB-ProjekatE2\\WebContent\\data\\Users.csv"};
 
 	
 	public CustomersDAO() {
 		korisnici = new HashMap<String, Customer>();
-		getAllCustomers(putanje[2]);
+		getAllCustomers(putanje[4]);
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
@@ -38,9 +40,9 @@ public class CustomersDAO {
 		}
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[2], korisnik);
+		upisKorisnikaUFajl(putanje[4], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[3], korisnik);
+		upisUUsers(putanje[5], korisnik);
 		return korisnik;
 	}
 	
@@ -55,7 +57,7 @@ public class CustomersDAO {
 				Boolean pol = Boolean.parseBoolean(parametri[4]);
 				Customer korisnik = new Customer(parametri[2], parametri[3], parametri[0], 
 						parametri[1], pol, parametri[5]);
-				korisnici.put(parametri[2], korisnik);
+				korisnici.put(parametri[4], korisnik);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -182,7 +184,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[3]);
+		writeAllUsers(putanje[5]);
 		return k;
 	}
 	
