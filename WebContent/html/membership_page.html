@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="../css/home.css"/>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	
+
+	<title>Dobrodosli</title>
+</head>
+		<body class="pt-3 bg-dark text-white">
+			<div class="container">
+				
+				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+					<a class="navbar-brand font-weight-bold text-primary" href="../index.html">FitnessCentar</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+					  <span class="navbar-toggler-icon"></span>
+					</button>
+					<div class="collapse navbar-collapse" id="navbarNavDropdown">
+					  <ul class="navbar-nav">
+						<li class="nav-item active">
+						  <a class="nav-link" href="customer_home_page.html">Pocetna<span class="sr-only">(current)</span></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="" data-toggle="modal">Profil</a>
+						  </li>
+						<li class="nav-item">
+						  <a class="nav-link" href="" data-toggle="modal" onclick="logout()">Odjavi se</a>
+						</li>
+
+					  </ul>
+					</div>
+				  </nav>
+			</div>
+
+            <div class="containter-fluid custombg mt-5">
+				<div class="container pt-5 pb-5" id = "nameMain">
+                    <h3 class="fs-1">Trenutna clanarina:</h3>
+                    <div class="card bg-dark text-white mr-3" style="width: 18rem;">
+                        <img src="../img/bronze.jpg" class="card-img" alt="...">
+                        <div class="card-img-overlay">
+                          <h5 class="card-title">Dnevna</h5>
+                          <p class="card-text">Ovo je neki opis koji treba smisliti da pise nesto dobro i nesto pametno.</p>
+                          <p class="card-text">Status: Aktivna</p>
+                        </div>
+                      </div>
+					
+				</div>
+			</div>
+
+            <div class="card-group m-3">
+            <div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
+                <img src="../img/bronze.jpg" class="card-img" alt="...">
+                <div class="card-img-overlay">
+                <h4 class="card-title text-center">Dnvena</h4>
+                <h5 class="text-center">Cena: 500</h5>
+                  <p class="card-text">Kupovinom ove clanarine ostvarujete mogucnost neogranicenog broja ulazaka u objekat za 1 dan.</p>
+
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipForm">Pregledaj</a>
+                </div>
+              </div>
+
+              <div class="card bg-dark text-white mr-3 text-center style="width: 18rem;">
+                <img src="../img/bronze.jpg" class="card-img" alt="...">
+                <div class="card-img-overlay">
+                    <h4 class="card-title text-center">Mesecna</h4>
+                    <h5 class="text-center">Cena: 3000</h5>
+                  <p class="card-text">Kupovinom ove clanarine ostvarujete mogucnost neogranicenog broja ulazaka u objekat za 1 mesec.</p>
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipForm">Pregledaj</a>
+                </div>
+              </div>
+
+              <div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
+                <img src="../img/bronze.jpg" class="card-img" alt="...">
+                <div class="card-img-overlay">
+                  <h4 class="card-title text-center">Godisnja</h4>
+                  <h5 class="text-center">Cena: 20000</h5>
+                  <p class="card-text">Kupovinom ove clanarine ostvarujete mogucnost neogranicenog broja ulazaka u objekat za 1 godinu.</p>
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipForm">Pregledaj</a>
+                </div>
+              </div>
+
+              </div>
+
+
+
+              <div class="modal fade" id="modalMembershipForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content bg-dark text-white">
+                  <div class="modal-header text-center">
+                      <h4 class="modal-title w-100 font-weight-bold text-primary">Mesecna</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body mx-3">
+
+                    <div class="text-normal">
+                        <h6>Broj termina: 40</h6>
+                        <h6>Datum isteka: 12.3.2023.</h6>
+                    
+
+
+                        <h6 for="kod">Promo kod:</h6>
+                        <input type="text" id="kod" name="kod" size="50"><br>
+
+
+                      <h6>Cena: 4000</h6>
+                    </h6>
+                </div>
+                  </div>
+                  <div class="modal-footer d-flex justify-content-center">
+                      <button type="submit" id="buyButton" class="btn btn-default text-white">Kupi</button>
+                  </div>
+                  </div>
+              </div>
+              </div>
+
+
+
+
+
+
+
+
+			<script src="../js/jquery-3.6.0.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+			<script src="../js/profile_page.js"></script>
+		</body>
+</html>
