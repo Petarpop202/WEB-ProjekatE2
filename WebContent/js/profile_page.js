@@ -138,10 +138,14 @@
 					success: function(data)
 					{
 						let n = document.getElementById("mem");	
-						n.innerHTML = '<div class="col-sm-6 mb-3"><div class="card h-100"><div class="card-body"><h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">status</i>CLANARINA</h6><small>Vazi do : '+data.memberDate+'</small><div class="progress mb-3" style="height: 5px"><div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div></div></div></div></div>';
+						n.innerHTML = '<div class="col-sm-6 mb-3"><div class="card h-100"><div class="card-body"><h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">status</i>CLANARINA</h6><small>Vazi do : '+data.memberDate+'</small><div class="progress mb-3" style="height: 5px"><div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div></div><button onclick="openMember()">Pregledaj</button></div></div></div>';
 					}
 				});
 			}
+		}
+		
+		function openMember(){
+			window.location.assign("http://localhost:8080/FitnessCentar/html/membership_page.html");
 		}
 
 

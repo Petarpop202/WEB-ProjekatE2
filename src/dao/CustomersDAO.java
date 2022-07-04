@@ -14,24 +14,26 @@ import java.util.HashMap;
 import beans.Customer;
 import beans.CustomerType;
 import beans.Membership;
+import beans.Membership.TypeEnum;
 import beans.SportsFacility;
 import beans.User;
 public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
-	private HashMap<Customer, Membership> memberships;
+	private HashMap<String, Membership> memberships;
 	
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv",
 	 "C:\\Users\\david\\OneDrive\\Desktop\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "C:\\Users\\david\\OneDrive\\Desktop\\WEB-ProjekatE2\\WebContent\\data\\Users.csv"};
 
 	
 	public CustomersDAO(String path) {
 		korisnici = new HashMap<String, Customer>();
-		memberships = new HashMap<Customer, Membership>();
+		memberships = new HashMap<String, Membership>();
 		getAllCustomers(putanje[2]);
 		path += "\\data\\Memberships.csv";
 		getAllMemberships(path);
@@ -45,9 +47,9 @@ public class CustomersDAO {
 		}
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[4], korisnik);
+		upisKorisnikaUFajl(putanje[2], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[5], korisnik);
+		upisUUsers(putanje[3], korisnik);
 		return korisnik;
 	}
 	
@@ -66,8 +68,9 @@ public class CustomersDAO {
 				Customer Customer = dobaviKorisnika(parametri[4]);
 				Boolean Status = Boolean.parseBoolean(parametri[5]);
 				Integer termins = Integer.parseInt(parametri[6]);
+
 				Membership m = new Membership(Type,PayDate,MemberDate,Price,Customer,Status,termins);
-				memberships.put(Customer, m);
+				memberships.put(Customer.getUsername(), m);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -80,6 +83,16 @@ public class CustomersDAO {
 			}
 			
 		}
+	}
+	
+	private CustomerType getCustomerType(String t) {
+		if(t == "BRONZE") {
+			return new CustomerType(CustomerType.TypeEnum.BRONZE,0.0,50.0);
+		}
+		else if(t == "SILVER") {
+			return new CustomerType(CustomerType.TypeEnum.SILVER,15.0,100.0);
+		}
+		else return new CustomerType(CustomerType.TypeEnum.GOLD,30.0,10000.0);
 	}
 	
 	private Membership.TypeEnum getType(String status) {
@@ -102,9 +115,16 @@ public class CustomersDAO {
 			while((linija = citac.readLine()) != null) {
 				String[] parametri = linija.split(",");
 				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				Integer points = Integer.parseInt(parametri[7]);
+				if(points >= 100)
+					parametri[8] = "GOLD";
+				else if (points >= 50 && points < 100)
+					parametri[8] = "SILVER";
+				else parametri[8] = "BRONZE";
+				CustomerType cType = getCustomerType(parametri[8]);
 				Customer korisnik = new Customer(parametri[2], parametri[3], parametri[0], 
-						parametri[1], pol, parametri[5]);
-				korisnici.put(parametri[4], korisnik);
+						parametri[1], pol, parametri[5],points,cType);
+				korisnici.put(parametri[2], korisnik);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,20 +154,42 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
 		upis.append(",");
-		upis.append((CharSequence) korisnik.getMembership());
-		upis.append(",");
-		upis.append((CharSequence) korisnik.getSportFacilities());
-		upis.append(",");
 		upis.append(NullToString(korisnik.getPoints()));
 		upis.append(",");
-		upis.append(getCustomerTypeToString(CustomerType.TypeEnum.BRONZE));
+		upis.append(getCustomerTypeToString(korisnik.getType().getType()));
 		upis.append("\n");
 		upis.flush();
 		upis.close();
 	}
 	
+	private void upisSvihKorisnikaUFajl(String putanja) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja));
+		for(Customer korisnik : korisnici.values()) {
+		upis.append(korisnik.getName());
+		upis.append(",");
+		upis.append(korisnik.getSurname());
+		upis.append(",");
+		upis.append(korisnik.getUsername());
+		upis.append(",");
+		upis.append(korisnik.getPassword());
+		upis.append(",");
+		upis.append(korisnik.getGender().toString());
+		upis.append(",");
+		upis.append(korisnik.getDate());
+		upis.append(",");
+		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append(",");
+		upis.append(NullToString(korisnik.getPoints()));
+		upis.append(",");
+		upis.append(getCustomerTypeToString(korisnik.getType().getType()));
+		upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
+	
 	private void upisUUsers(String putanja, Customer korisnik) throws IOException {
-		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		Writer upis = new BufferedWriter(new FileWriter(putanja,true));
 		upis.append(korisnik.getName());
 		upis.append(",");
 		upis.append(korisnik.getSurname());
@@ -166,17 +208,9 @@ public class CustomersDAO {
 		upis.close();
 	}
 	
-		private static String NullToString(Double points)
+		private static String NullToString(Integer points)
 		{
-
-		    // Value.ToString() allows for Value being DBNull, but will also convert int, double, etc.
 		    return points == null ? "0" : points.toString();
-
-		    // If this is not what you want then this form may suit you better, handles 'Null' and DBNull otherwise tries a straight cast
-		    // which will throw if Value isn't actually a string object.
-		    //return Value == null || Value == DBNull.Value ? "" : (string)Value;
-
-
 		}
 	
 	
@@ -231,10 +265,40 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[5]);
+		writeAllUsers(putanje[3]);
 		return k;
 	}
 	
+	private void writeAllMemberships(String putanja) throws IOException{
+		Writer upis = new BufferedWriter(new FileWriter(putanja));
+		for(Membership member : memberships.values()) {
+			upis.append(getTypeToString(member.getType()));
+			upis.append(",");
+			upis.append(member.getPayDate());
+			upis.append(",");
+			upis.append(member.getMemberDate());
+			upis.append(",");
+			upis.append(member.getPrice().toString());
+			upis.append(",");
+			upis.append(member.getCustomer().getUsername());
+			upis.append(",");
+			upis.append(member.getStatus().toString());
+			upis.append(",");
+			upis.append(member.getTermins().toString());
+			upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
+	
+	private String getTypeToString(TypeEnum type) {
+		if(type == TypeEnum.DAY)
+			return "DAY";
+		else if(type == TypeEnum.MONTH)
+			return "MONTH";
+		else return "YEAR";
+	}
+
 	private void writeAllUsers(String putanja) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja));
 		for(User korisnik : korisnici.values()) {
@@ -250,7 +314,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(korisnik.getDate());
 		upis.append(",");
-		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append(getRoleTypeToString(korisnik.getRole()));
 		upis.append("\n");
 		}
 		upis.flush();
@@ -258,9 +322,41 @@ public class CustomersDAO {
 	}
 	
 	public Membership getMembership(User u) {
-		if(memberships.containsKey(u))
-			return memberships.get(u);
+		if(memberships.containsKey(u.getUsername()))
+			return memberships.get(u.getUsername());
 		return null;
+	}
+
+	public Membership dodajMembership(Membership member, String putanja) throws IOException {
+		String put1 = putanja + "\\data\\Memberships.csv";
+		String put2 = putanja + "\\data\\Customers.csv";
+		//member.getCustomer().setMembership(member);
+		
+		if(member.getTypeStr().equals("Dnevna")) {
+			member.setType(TypeEnum.DAY);
+			member.getCustomer().setType(getCustomerType("BRONZE"));
+		}
+		else if(member.getTypeStr().equals("Mesecna")) {
+			member.setType(TypeEnum.MONTH);
+			member.getCustomer().setType(getCustomerType("SILVER"));
+			member.getCustomer().setPoints(50);
+		}
+		else {
+			member.setType(TypeEnum.YEAR);
+			member.getCustomer().setType(getCustomerType("GOLD"));
+			member.getCustomer().setPoints(100);
+		}
+		if (memberships.containsKey(member.getCustomer().getUsername())) {
+			memberships.remove(member.getCustomer().getUsername());
+		}
+		korisnici.remove(member.getCustomer().getUsername());
+		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
+		memberships.put(member.getCustomer().getUsername(), member);
+		writeAllMemberships(put1);
+		writeAllMemberships(putanje[4]);
+		upisSvihKorisnikaUFajl(put2);
+		upisSvihKorisnikaUFajl(putanje[2]);
+		return member;
 	}
 	
 	

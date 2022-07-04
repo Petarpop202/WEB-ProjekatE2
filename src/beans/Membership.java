@@ -13,11 +13,12 @@ public class Membership {
 	private Customer Customer;
 	private Boolean Status;
 	private Integer Termins;
+	private String TypeStr;
 	
 	
 	
 	public Membership(TypeEnum type, String payDate, String memberDate, Double price,
-			beans.Customer customer, Boolean status, Integer termins) {
+			Customer customer, Boolean status, Integer termins) {
 		super();
 		Type = type;
 		PayDate = payDate;
@@ -26,6 +27,23 @@ public class Membership {
 		Customer = customer;
 		Status = status;
 		Termins = termins;
+		if(Type == TypeEnum.DAY)
+			TypeStr = "Dnevna";
+		else if (Type == TypeEnum.MONTH)
+			TypeStr = "Mesecna";
+		else TypeStr = "Godisnja";
+	}
+	
+	public Membership(String typeStr, String payDate, String memberDate, Double price,
+			Customer customer, Boolean status, Integer termins) {
+		super();
+		PayDate = payDate;
+		MemberDate = memberDate;
+		Price = price;
+		Customer = customer;
+		Status = status;
+		Termins = termins;
+		TypeStr = typeStr;
 	}
 	public Membership() {
 		super();
@@ -72,6 +90,12 @@ public class Membership {
 	}
 	public void setTermins(Integer termins) {
 		Termins = termins;
+	}
+	public String getTypeStr() {
+		return TypeStr;
+	}
+	public void setTypeStr(String typeStr) {
+		TypeStr = typeStr;
 	}
 	
 	

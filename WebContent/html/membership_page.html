@@ -19,7 +19,7 @@
 			<div class="container">
 				
 				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-					<a class="navbar-brand font-weight-bold text-primary" href="../index.html">FitnessCentar</a>
+					<a class="navbar-brand font-weight-bold text-primary" href="customer_home_page.html">FitnessCentar</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 					  <span class="navbar-toggler-icon"></span>
 					</button>
@@ -29,8 +29,11 @@
 						  <a class="nav-link" href="customer_home_page.html">Pocetna<span class="sr-only">(current)</span></a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="" data-toggle="modal">Profil</a>
+							<a class="nav-link" href="profile_page.html">Profil<span class="sr-only">(current)</span></a>
 						  </li>
+            <li class="nav-item">
+              <a class="nav-link" href="membership_page.html">Clanarina<span class="sr-only">(current)</span></a>
+              </li>
 						<li class="nav-item">
 						  <a class="nav-link" href="" data-toggle="modal" onclick="logout()">Odjavi se</a>
 						</li>
@@ -42,48 +45,40 @@
 
             <div class="containter-fluid custombg mt-5">
 				<div class="container pt-5 pb-5" id = "nameMain">
-                    <h3 class="fs-1">Trenutna clanarina:</h3>
-                    <div class="card bg-dark text-white mr-3" style="width: 18rem;">
-                        <img src="../img/bronze.jpg" class="card-img" alt="...">
-                        <div class="card-img-overlay">
-                          <h5 class="card-title">Dnevna</h5>
-                          <p class="card-text">Ovo je neki opis koji treba smisliti da pise nesto dobro i nesto pametno.</p>
-                          <p class="card-text">Status: Aktivna</p>
-                        </div>
-                      </div>
+                   
 					
 				</div>
 			</div>
 
-            <div class="card-group m-3">
+            <div class="card-group m-3" style="height: 150px;">
             <div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
-                <img src="../img/bronze.jpg" class="card-img" alt="...">
+                <img src="../img/bronze.jpg" class="card-img" style="height: 250px;" alt="...">
                 <div class="card-img-overlay">
                 <h4 class="card-title text-center">Dnvena</h4>
-                <h5 class="text-center">Cena: 500</h5>
+                <h5 class="text-center">Cena: 700 din</h5>
                   <p class="card-text">Kupovinom ove clanarine ostvarujete mogucnost neogranicenog broja ulazaka u objekat za 1 dan.</p>
 
-                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipForm">Pregledaj</a>
-                </div>
-              </div>
-
-              <div class="card bg-dark text-white mr-3 text-center style="width: 18rem;">
-                <img src="../img/bronze.jpg" class="card-img" alt="...">
-                <div class="card-img-overlay">
-                    <h4 class="card-title text-center">Mesecna</h4>
-                    <h5 class="text-center">Cena: 3000</h5>
-                  <p class="card-text">Kupovinom ove clanarine ostvarujete mogucnost neogranicenog broja ulazaka u objekat za 1 mesec.</p>
-                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipForm">Pregledaj</a>
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipFormDay">Kupi</a>
                 </div>
               </div>
 
               <div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
-                <img src="../img/bronze.jpg" class="card-img" alt="...">
+                <img src="../img/silver.jpg" class="card-img" style="height: 250px;" alt="...">
+                <div class="card-img-overlay">
+                    <h4 class="card-title text-center">Mesecna</h4>
+                    <h5 class="text-center">Cena: 3000 din</h5>
+                  <p class="card-text">Kupovinom ove clanarine ostvarujete mogucnost neogranicenog broja ulazaka u objekat za 1 mesec.</p>
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipFormMonth">Kupi</a>
+                </div>
+              </div>
+
+              <div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
+                <img src="../img/gold.jpg" class="card-img" style="height: 250px;" alt="...">
                 <div class="card-img-overlay">
                   <h4 class="card-title text-center">Godisnja</h4>
-                  <h5 class="text-center">Cena: 20000</h5>
+                  <h5 class="text-center">Cena: 20000 din</h5>
                   <p class="card-text">Kupovinom ove clanarine ostvarujete mogucnost neogranicenog broja ulazaka u objekat za 1 godinu.</p>
-                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipForm">Pregledaj</a>
+                  <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipFormYear">Kupi</a>
                 </div>
               </div>
 
@@ -91,7 +86,7 @@
 
 
 
-              <div class="modal fade" id="modalMembershipForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+              <div class="modal fade" id="modalMembershipFormMonth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
               aria-hidden="true">
               <div class="modal-dialog" role="document">
                   <div class="modal-content bg-dark text-white">
@@ -104,11 +99,8 @@
                   <div class="modal-body mx-3">
 
                     <div class="text-normal">
-                        <h6>Broj termina: 40</h6>
-                        <h6>Datum isteka: 12.3.2023.</h6>
-                    
-
-
+                        <h6>Broj termina: 20</h6>
+                        <h6 id="month"></h6>
                         <h6 for="kod">Promo kod:</h6>
                         <input type="text" id="kod" name="kod" size="50"><br>
 
@@ -118,7 +110,68 @@
                 </div>
                   </div>
                   <div class="modal-footer d-flex justify-content-center">
-                      <button type="submit" id="buyButton" class="btn btn-default text-white">Kupi</button>
+                      <button type="submit" id="buyButton" class="btn btn-default text-white" onclick="buyMonth()">Kupi</button>
+                  </div>
+                  </div>
+              </div>
+              </div>
+
+              <div class="modal fade" id="modalMembershipFormDay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content bg-dark text-white">
+                  <div class="modal-header text-center">
+                      <h4 class="modal-title w-100 font-weight-bold text-primary">Dnevna</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body mx-3">
+
+                    <div class="text-normal">
+                        <h6>Broj termina: neogranicen</h6>
+                        <h6 id="day"></h6>
+                        <h6 for="kod">Promo kod:</h6>
+                        <input type="text" id="kod" name="kod" size="50"><br>
+
+
+                      <h6>Cena: 4000</h6>
+                    </h6>
+                </div>
+                  </div>
+                  <div class="modal-footer d-flex justify-content-center">
+                      <button type="submit" id="buyButton" class="btn btn-default text-white" onclick="buyDay()">Kupi</button>
+                  </div>
+                  </div>
+              </div>
+              </div>
+
+
+              <div class="modal fade" id="modalMembershipFormYear" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content bg-dark text-white">
+                  <div class="modal-header text-center">
+                      <h4 class="modal-title w-100 font-weight-bold text-primary">Godisnja</h4>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body mx-3">
+
+                    <div class="text-normal">
+                        <h6>Broj termina: neogranicen</h6>
+                        <h6 id="year"></h6>
+                        <h6 for="kod">Promo kod:</h6>
+                        <input type="text" id="kod" name="kod" size="50"><br>
+
+
+                      <h6>Cena: 4000</h6>
+                    </h6>
+                </div>
+                  </div>
+                  <div class="modal-footer d-flex justify-content-center">
+                      <button type="submit" id="buyButton" class="btn btn-default text-white" onclick="buyYear()">Kupi</button>
                   </div>
                   </div>
               </div>
@@ -134,6 +187,6 @@
 			<script src="../js/jquery-3.6.0.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-			<script src="../js/profile_page.js"></script>
+			<script src="../js/membership_page.js"></script>
 		</body>
 </html>
