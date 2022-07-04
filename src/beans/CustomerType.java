@@ -12,7 +12,6 @@ public class CustomerType {
 	
 	public CustomerType() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public CustomerType(TypeEnum type, Double discount, Double points) {
 		super();

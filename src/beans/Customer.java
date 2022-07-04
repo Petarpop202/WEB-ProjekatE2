@@ -2,23 +2,25 @@ package beans;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Customer extends User{
 	private Membership Membership;
 	private List<SportsFacility> SportFacilities;
-	private Double Points;
+	private Integer Points;
 	private CustomerType Type;
 	
 	public Customer() {
 		super();
 	}
-	public Customer(String username, String password, String name, String surname, Boolean gender, String date ) {
+	public Customer(String username, String password, String name, String surname, Boolean gender, String date ,Integer points, CustomerType type) {
 		super(username, password, name, surname, gender, date, User.RoleEnum.CUSTOMER);
 		Membership = new Membership();
-		Points = (double) 0;
-		Type = new CustomerType();
+		Points = points;
+		Type = type;
 	}
 	
-	public Customer(Membership membership, List<SportsFacility> sportFacilities, Double points, CustomerType type) {
+	public Customer(Membership membership, List<SportsFacility> sportFacilities, Integer points, CustomerType type) {
 		super();
 		Membership = membership;
 		SportFacilities = sportFacilities;
@@ -44,10 +46,10 @@ public class Customer extends User{
 	public void setSportFacilities(List<SportsFacility> sportFacilities) {
 		SportFacilities = sportFacilities;
 	}
-	public Double getPoints() {
+	public Integer getPoints() {
 		return Points;
 	}
-	public void setPoints(Double points) {
+	public void setPoints(Integer points) {
 		Points = points;
 	}
 	
