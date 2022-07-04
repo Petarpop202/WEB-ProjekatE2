@@ -23,7 +23,7 @@ public class EditProfileService {
 	public void init() {
 		if (kontekst.getAttribute("CustomersDAO") == null) {
 	    	String putanja = kontekst.getRealPath("");
-			kontekst.setAttribute("CustomersDAO", new CustomersDAO());
+			kontekst.setAttribute("CustomersDAO", new CustomersDAO(putanja));
 		}
 		if (kontekst.getAttribute("JWTSession") == null) {
 			kontekst.setAttribute("JWTSession", new JWTSession());

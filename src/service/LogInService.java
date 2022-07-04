@@ -27,7 +27,8 @@ public class LogInService {
 	@PostConstruct
 	public void init() {
 		if (kontekst.getAttribute("CustomersDAO") == null) {
-			kontekst.setAttribute("CustomersDAO", new CustomersDAO());
+			String putanja = kontekst.getRealPath("");
+			kontekst.setAttribute("CustomersDAO", new CustomersDAO(putanja));
 		}
 		if (kontekst.getAttribute("JWTSession") == null) {
 			kontekst.setAttribute("JWTSession", new JWTSession());

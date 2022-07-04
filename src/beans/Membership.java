@@ -1,7 +1,7 @@
 package beans;
 
 public class Membership {
-	enum TypeEnum{
+	public enum TypeEnum{
 		YEAR,
 		MONTH,
 		DAY

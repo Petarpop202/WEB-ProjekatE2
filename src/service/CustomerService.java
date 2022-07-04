@@ -2,7 +2,9 @@ package service;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -10,7 +12,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import JWTController.JWTSession;
 import beans.Customer;
+import beans.Membership;
+import beans.User;
 import dao.CustomersDAO;
 
 
@@ -25,7 +30,7 @@ public class CustomerService {
 	public void init() {
 		if (kontekst.getAttribute("CustomersDAO") == null) {
 	    	String putanja = kontekst.getRealPath("");
-			kontekst.setAttribute("CustomersDAO", new CustomersDAO());
+			kontekst.setAttribute("CustomersDAO", new CustomersDAO(putanja));
 		}
 	}
 	
@@ -46,4 +51,6 @@ public class CustomerService {
 			return Response.status(500).entity("Greska pri registraciji!").build();
 		}
 	}
+	
+	
 }

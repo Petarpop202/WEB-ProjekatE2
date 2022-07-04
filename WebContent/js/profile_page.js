@@ -19,6 +19,7 @@
 								setUsername(data);
 								setRole(data); 
 								loadEditPage(data);
+								loadMembership(data);
 							}
 						});
 				})
@@ -60,7 +61,7 @@
 				s = "Kupac";
 			}
 			else s = "Admin";
-			n.innerHTML = '<div class="col-sm-3"><p class="mb-0">Nalog</p></div><div class="col-sm-9"><p class="text-muted mb-0">'+s+'</p></div>';
+			n.innerHTML = '<div class="col-sm-3"><p class="mb-0">Nalog</p></div><div class="col-sm-9"><p class="text-muted mb-0">'+s+'</p></div><div class="row gutters-sm" id="mem"></div>';
 		}
 
 		function logout(){
@@ -125,6 +126,22 @@
 					}
 				});
 				
+		}
+
+		function loadMembership(kor){
+			if(kor.role == "CUSTOMER"){
+				$.ajax({
+					url : "../rest/info/getMember",
+					headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+					contentType:"application/json",
+					type: "GET",
+					success: function(data)
+					{
+						let n = document.getElementById("mem");	
+						n.innerHTML = '<div class="col-sm-6 mb-3"><div class="card h-100"><div class="card-body"><h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">status</i>CLANARINA</h6><small>Vazi do : '+data.memberDate+'</small><div class="progress mb-3" style="height: 5px"><div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div></div></div></div></div>';
+					}
+				});
+			}
 		}
 
 

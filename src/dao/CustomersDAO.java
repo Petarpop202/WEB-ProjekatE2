@@ -13,11 +13,13 @@ import java.util.HashMap;
 
 import beans.Customer;
 import beans.CustomerType;
+import beans.Membership;
 import beans.SportsFacility;
 import beans.User;
 public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
+	private HashMap<Customer, Membership> memberships;
 	
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
@@ -27,9 +29,12 @@ public class CustomersDAO {
 	 "C:\\Users\\david\\OneDrive\\Desktop\\WEB-ProjekatE2\\WebContent\\data\\Users.csv"};
 
 	
-	public CustomersDAO() {
+	public CustomersDAO(String path) {
 		korisnici = new HashMap<String, Customer>();
-		getAllCustomers(putanje[4]);
+		memberships = new HashMap<Customer, Membership>();
+		getAllCustomers(putanje[2]);
+		path += "\\data\\Memberships.csv";
+		getAllMemberships(path);
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
@@ -44,6 +49,48 @@ public class CustomersDAO {
 		upisUUsers(put2, korisnik);
 		upisUUsers(putanje[5], korisnik);
 		return korisnik;
+	}
+	
+	private void getAllMemberships(String putanja) {
+		BufferedReader citac = null;
+		try {
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Membership.TypeEnum Type = getType(parametri[0]);
+				String PayDate = parametri[1];
+				String MemberDate = parametri[2];
+				Double Price = Double.parseDouble(parametri[3]);
+				Customer Customer = dobaviKorisnika(parametri[4]);
+				Boolean Status = Boolean.parseBoolean(parametri[5]);
+				Integer termins = Integer.parseInt(parametri[6]);
+				Membership m = new Membership(Type,PayDate,MemberDate,Price,Customer,Status,termins);
+				memberships.put(Customer, m);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+			
+		}
+	}
+	
+	private Membership.TypeEnum getType(String status) {
+		if (status.equals("YEAR")) {
+			return Membership.TypeEnum.YEAR;
+		}else if (status.equals("MONTH")) {
+			return Membership.TypeEnum.MONTH;
+		}else if (status.equals("DAY")) {
+			return Membership.TypeEnum.DAY;
+		}
+		return null;
 	}
 	
 	private void getAllCustomers(String putanja) {
@@ -210,6 +257,11 @@ public class CustomersDAO {
 		upis.close();
 	}
 	
+	public Membership getMembership(User u) {
+		if(memberships.containsKey(u))
+			return memberships.get(u);
+		return null;
+	}
 	
 	
 }
