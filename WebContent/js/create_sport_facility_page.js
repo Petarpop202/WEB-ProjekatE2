@@ -2,15 +2,19 @@ function create(document){
         let name = $('input[name="name"]').val();
         let type = document.getElementById("type").value;
         let address = $('input[name="address"]').val();
+        let manager = document.getElementById("manager").value;
         var input = document.getElementById("picture");
         var file = input.value.split("\\");
-        var picture = file[file.length-1];
+        var one = file[file.length-1];
+        var pic = one.split(".");
+        var picture = pic[0];
         alert(picture);
+        
         
 
 
             $.post({
-                url: "../rest/sports/create?name=" + name + "&type="+ type + "&address=" + address + "&picture=" + picture,
+                url: "../rest/sports/create?name=" + name + "&type="+ type + "&address=" + address + "&picture=" + picture + "&manager=" + manager,
                 contentType: "application/json",
 
                 success: function(odgovor) {

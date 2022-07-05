@@ -133,6 +133,22 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 		return null;
 	}
 	
+	
+	private String getTypeToString(SportsFacility.TypeEnum status) {
+		if (status == SportsFacility.TypeEnum.GYM) {
+			return "GYM";
+		}else if (status == SportsFacility.TypeEnum.POOL) {
+			return "POOL";
+		}else if (status == SportsFacility.TypeEnum.DANCESTUDIO) {
+			return "DANCESTUDIO";
+		}else if (status == SportsFacility.TypeEnum.SPORTSCENTER) {
+			return "SPORTSCENTER";
+		}
+		return null;
+	}
+	
+	
+	
 	private SportsFacility.TypeEnum getTypeSr(String status) {
 		if (status.equals("Teretana")) {
 			return SportsFacility.TypeEnum.GYM;
@@ -340,35 +356,62 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
 		upis.append(facility.getName());
 		upis.append(",");
-		upis.append(facility.getTypeStr());
+		upis.append(getTypeToString(facility.getType()));
 		upis.append(",");
 		upis.append("nista");
 		upis.append(",");
-		upis.append("nista");
+		upis.append("True");
 		upis.append(",");
 		upis.append(facility.getLocation().getAddress());
-		upis.append("\n");
+		upis.append(",");
 		upis.append(facility.getPicture());
 		upis.append(",");
-		upis.append("nista");
+		upis.append("0");
 		upis.append(",");
-		upis.append("nista");
-		upis.append(",");
+		upis.append("09:00-21:00");
+		upis.append("\n");
 		upis.flush();
 		upis.close();
 	}
+	
+	private void upisLokacijeUFajl(String putanja, Location location) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(location.getWidth().toString());
+		upis.append(",");
+		upis.append(location.getLength().toString());
+		upis.append(",");
+		upis.append(location.getAddress());
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+	}
+	
 
-	public SportsFacility dodajObjekat(String name, String type, String address, String manager, String picture,String putanja) {
-		String put = putanja + "\\data\\SportsFacility.csv";
+	public SportsFacility dodajObjekat(String name, String type, String address, String manager, String picture,String putanja) throws IOException {
+		String put1 = putanja + "\\data\\SportsFacility.csv";
+		String put2 = putanja + "\\data\\Locations.csv";
 		SportsFacility.TypeEnum t = getTypeSr(type);
 		Location l = new Location(5.0,5.0,address);
+		String pic [] = picture.split(".");
 		SportsFacility sf = new SportsFacility(name,t,l,picture);
+		sf.setStatus(true);
+		Manager m = getManager(manager);
+		m.setFacility(sf);
 		if (facilities.containsKey(name)) {
 			return null;
 		}
 		facilities.put(name, sf);
-		//upisObjektaUFajl(put, sf);
+		locations.put(l.getAddress(), l);
+		upisLokacijeUFajl(put2, l);
+		upisObjektaUFajl(put1, sf);
+		upisObjektaUFajl(putanje[0], sf);
 		return sf;
+	}
+	
+	private Manager getManager(String username) {
+		if(managers.containsKey(username))
+			return managers.get(username);
+		return null;
 	}
 	
 }

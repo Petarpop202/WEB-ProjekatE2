@@ -32,11 +32,9 @@ public class SportsFacilityService {
 	@PostConstruct
 	public void init() {
 		System.out.println("USO");
-		if (ctx.getAttribute("SportsFacilityDAO") == null) {
-	    	String contextPath = ctx.getRealPath("");
+			    	String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("SportsFacilityDAO", new SportsFacilityDAO(contextPath));
 		}
-	}
 
 	@GET
 	@Path("/")
