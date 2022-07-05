@@ -22,6 +22,7 @@ public class SportsFacility {
 	private String WorkTime;
 	private String StatusStr;
 	private String TypeStr;
+
 	
 	
 	public SportsFacility() {
@@ -49,6 +50,24 @@ public class SportsFacility {
 			StatusStr = "Radi";
 		else StatusStr = "Ne radi";
 	}
+	
+	public SportsFacility(String name, TypeEnum type, Location location,String picture) {
+		super();
+		Name = name;
+		if(type == TypeEnum.GYM) {
+			TypeStr = "Teretana";
+		} else if(type == TypeEnum.DANCESTUDIO) {
+			TypeStr = "Plesni studio";
+		} else if(type == TypeEnum.POOL) {
+			TypeStr = "Bazen";
+		} else TypeStr = "Sportski centar";
+		Type = type;
+		Location = location;
+		Picture = picture;
+	}
+	
+	
+	
 	
 	public String getTypeStr() {
 		return TypeStr;

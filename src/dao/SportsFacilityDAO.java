@@ -1,9 +1,12 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -11,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import beans.Coach;
+import beans.Customer;
 import beans.Location;
 import beans.Manager;
 import beans.SportsFacility;
@@ -25,6 +29,11 @@ private HashMap<String, Location> locations;
 private HashMap<String, Training> trainings;
 public HashMap<String, Manager> managers;
 	
+
+
+private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv"};
+	
+
 	public Collection<SportsFacility> findAll() {
 		return facilities.values();
 	}
@@ -315,5 +324,51 @@ public HashMap<String, Manager> managers;
         }
         return null;
     }
+
+	public SportsFacility dodajObjekat(SportsFacility facility, String putanja) throws IOException {
+		String put = putanja + "\\data\\SportsFacility.csv";
+		if (facilities.containsKey(facility.getName())) {
+			return null;
+		}
+		facilities.put(facility.getName(), facility);
+		upisObjektaUFajl(put, facility);
+		upisObjektaUFajl(putanje[0], facility);
+		return facility;
+	}
+	
+	private void upisObjektaUFajl(String putanja, SportsFacility facility) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(facility.getName());
+		upis.append(",");
+		upis.append(facility.getTypeStr());
+		upis.append(",");
+		upis.append("nista");
+		upis.append(",");
+		upis.append("nista");
+		upis.append(",");
+		upis.append(facility.getLocation().getAddress());
+		upis.append("\n");
+		upis.append(facility.getPicture());
+		upis.append(",");
+		upis.append("nista");
+		upis.append(",");
+		upis.append("nista");
+		upis.append(",");
+		upis.flush();
+		upis.close();
+	}
+
+	public SportsFacility dodajObjekat(String name, String type, String address, String manager, String picture,String putanja) {
+		String put = putanja + "\\data\\SportsFacility.csv";
+		SportsFacility.TypeEnum t = getTypeSr(type);
+		Location l = new Location(5.0,5.0,address);
+		SportsFacility sf = new SportsFacility(name,t,l,picture);
+		if (facilities.containsKey(name)) {
+			return null;
+		}
+		facilities.put(name, sf);
+		//upisObjektaUFajl(put, sf);
+		return sf;
+	}
 	
 }

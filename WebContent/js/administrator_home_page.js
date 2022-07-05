@@ -96,5 +96,9 @@
 		function profile(){
 			location.assign("profile_page.html");
 		}
+
+		function createSportFacility(){
+			location.assign("create_sport_facility_page.html");
+		}
 		
 		
