@@ -12,6 +12,7 @@ import java.util.List;
 
 import beans.Coach;
 import beans.Location;
+import beans.Manager;
 import beans.SportsFacility;
 import beans.Training;
 import beans.Training.TypeEnum;
@@ -22,6 +23,7 @@ public class SportsFacilityDAO {
 private HashMap<String, SportsFacility> facilities;
 private HashMap<String, Location> locations;
 private HashMap<String, Training> trainings;
+public HashMap<String, Manager> managers;
 	
 	public Collection<SportsFacility> findAll() {
 		return facilities.values();
@@ -35,15 +37,44 @@ private HashMap<String, Training> trainings;
 		facilities = new HashMap<String, SportsFacility>();
 		locations = new HashMap<String, Location>();
 		trainings = new HashMap<String, Training>();
+		managers = new HashMap<String, Manager>();
 	}
 	
 	public SportsFacilityDAO(String path) {
 		facilities = new HashMap<String, SportsFacility>();
 		locations = new HashMap<String, Location>();
 		trainings = new HashMap<String, Training>();
+		managers = new HashMap<String, Manager>();
 		getAllLocations(path);
 		getAllSportFacilities(path);
 		getAllTrainings(path);
+		getAllManagers(path);
+	}
+	
+	private void getAllManagers(String putanja) {
+		BufferedReader citac = null;
+		try {
+			putanja += "\\data\\Managers.csv";
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				Manager korisnik = new Manager(parametri[2], parametri[3], parametri[0], 
+						parametri[1], pol, parametri[5],User.RoleEnum.MANAGER,false,getFacility(parametri[8]));
+				managers.put(parametri[2],korisnik);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+		}
 	}
 	
 

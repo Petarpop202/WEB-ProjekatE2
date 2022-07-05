@@ -13,8 +13,8 @@ public class Customer extends User{
 	public Customer() {
 		super();
 	}
-	public Customer(String username, String password, String name, String surname, Boolean gender, String date ,Integer points, CustomerType type) {
-		super(username, password, name, surname, gender, date, User.RoleEnum.CUSTOMER);
+	public Customer(String username, String password, String name, String surname, Boolean gender, String date ,Integer points, CustomerType type, Boolean deleted) {
+		super(username, password, name, surname, gender, date, User.RoleEnum.CUSTOMER,deleted);
 		Membership = new Membership();
 		Points = points;
 		Type = type;

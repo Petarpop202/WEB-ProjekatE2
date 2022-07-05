@@ -17,6 +17,7 @@ import beans.Customer;
 import beans.Membership;
 import beans.User;
 import dao.CustomersDAO;
+import dao.SportsFacilityDAO;
 
 @Path("/info")
 public class UserInfoService {
@@ -47,6 +48,14 @@ public class UserInfoService {
 		} else {
 			return Response.ok(ulogovani).build();
 		}
+	}
+	
+	@GET
+	@Path("/getUsers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUsers(@Context HttpServletRequest zahtev) {
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+				return Response.ok(korisnikDAO.getAllUsers()).build();
 	}
 	
 	@GET
@@ -81,4 +90,6 @@ public class UserInfoService {
 			return Response.status(500).entity("Greska pri kupovini!").build();
 		}
 	}
+	
+	
 }
