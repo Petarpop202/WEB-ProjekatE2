@@ -42,12 +42,19 @@ public class LogInService {
 		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
 		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
 		Customer korisnik = korisnikDAO.dobaviKorisnika(username);
-		if (korisnik == null) {
+		User admin = korisnikDAO.adminProfile(username);
+		if (korisnik == null && admin == null) {
 			return Response.status(401).entity("Uneli ste pogresno korisnicko ime!").build();
 		}
-		if (password.equals(korisnik.getPassword())) {
-			jwtKontroler.kreiranjeJWT(korisnik);
-			return Response.ok(korisnik).build();
+		if (korisnik != null)
+			if(password.equals(korisnik.getPassword())){
+				jwtKontroler.kreiranjeJWT(korisnik);
+				return Response.ok(korisnik).build();
+		}
+		if (admin != null) 
+		 	if(password.equals(admin.getPassword())){
+		 		jwtKontroler.kreiranjeJWT(admin);
+		 		return Response.ok(admin).build();
 		}
 		return Response.status(401).entity("Uneli ste pogresnu lozinku!").build();
 	}

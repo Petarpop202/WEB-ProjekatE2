@@ -155,7 +155,10 @@
 						success: function(odgovor) {
 							sessionStorage.setItem("jwt", odgovor.jwt);
 							alert("Uspesna prijava");
+							if(odgovor.role == "CUSTOMER")
 							window.location.assign("http://localhost:8080/FitnessCentar/html/customer_home_page.html");
+							else 
+							window.location.assign("http://localhost:8080/FitnessCentar/html/administrator_home_page.html");
 						},
 						error: function(odgovor) {
 							document.getElementById("er").removeAttribute("hidden");

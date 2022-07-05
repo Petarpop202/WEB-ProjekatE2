@@ -29,6 +29,8 @@ public class JWTSession {
 			    Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt);
 			    String korisnickoIme = claims.getBody().getSubject();
 				User korisnik = korisnikDAO.dobaviKorisnika(korisnickoIme);
+				if(korisnik == null)
+					korisnik = korisnikDAO.adminProfile(korisnickoIme);
 				return korisnik;
 			} catch (Exception e) {
 				return null;
