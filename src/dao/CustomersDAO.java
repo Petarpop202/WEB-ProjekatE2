@@ -7,12 +7,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.sql.Date;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import beans.Customer;
 import beans.CustomerType;
+import beans.Manager;
 import beans.Membership;
 import beans.Membership.TypeEnum;
 import beans.SportsFacility;
@@ -21,6 +22,7 @@ public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
 	private HashMap<String, Membership> memberships;
+	private HashMap<String, Manager> managers; 
 	private User admininstrator;
 	
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
@@ -37,8 +39,10 @@ public class CustomersDAO {
 		admininstrator = new User();
 		korisnici = new HashMap<String, Customer>();
 		memberships = new HashMap<String, Membership>();
+		managers = new HashMap<String, Manager>();
 		getAdmin(path);
 		getAllCustomers(putanje[0]);
+		getAllManagers(path);
 		path += "\\data\\Memberships.csv";
 		getAllMemberships(path);
 		
@@ -128,7 +132,7 @@ public class CustomersDAO {
 				else parametri[8] = "BRONZE";
 				CustomerType cType = getCustomerType(parametri[8]);
 				Customer korisnik = new Customer(parametri[2], parametri[3], parametri[0], 
-						parametri[1], pol, parametri[5],points,cType);
+						parametri[1], pol, parametri[5],points,cType,Boolean.parseBoolean(parametri[9]));
 				korisnici.put(parametri[2], korisnik);
 			}
 		} catch (Exception e) {
@@ -154,7 +158,7 @@ public class CustomersDAO {
 				String[] parametri = linija.split(",");
 				Boolean pol = Boolean.parseBoolean(parametri[4]);
 				User korisnik = new User(parametri[2], parametri[3], parametri[0], 
-						parametri[1], pol, parametri[5],getStringToRole(parametri[6]));
+						parametri[1], pol, parametri[5],getStringToRole(parametri[6]),false);
 				if(getStringToRole(parametri[6]) ==  User.RoleEnum.ADMIN) {
 					admininstrator = korisnik;
 					break;
@@ -191,6 +195,8 @@ public class CustomersDAO {
 		upis.append(NullToString(korisnik.getPoints()));
 		upis.append(",");
 		upis.append(getCustomerTypeToString(korisnik.getType().getType()));
+		upis.append(",");
+		upis.append(korisnik.getDeleted().toString());
 		upis.append("\n");
 		upis.flush();
 		upis.close();
@@ -216,6 +222,8 @@ public class CustomersDAO {
 		upis.append(NullToString(korisnik.getPoints()));
 		upis.append(",");
 		upis.append(getCustomerTypeToString(korisnik.getType().getType()));
+		upis.append(",");
+		upis.append(korisnik.getDeleted().toString());
 		upis.append("\n");
 		}
 		upis.flush();
@@ -237,6 +245,8 @@ public class CustomersDAO {
 		upis.append(korisnik.getDate());
 		upis.append(",");
 		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append(",");
+		upis.append(korisnik.getDeleted().toString());
 		upis.append("\n");
 		upis.flush();
 		upis.close();
@@ -347,25 +357,71 @@ public class CustomersDAO {
 			return "MONTH";
 		else return "YEAR";
 	}
+	
+	private void getAllManagers(String putanja) {
+		BufferedReader citac = null;
+		try {
+			putanja += "\\data\\Managers.csv";
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				Manager korisnik = new Manager(parametri[2], parametri[3], parametri[0], 
+						parametri[1], pol, parametri[5],User.RoleEnum.MANAGER,false,new SportsFacility());
+				managers.put(parametri[2],korisnik);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
 
 	private void writeAllUsers(String putanja) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja));
 		for(User korisnik : korisnici.values()) {
-		upis.append(korisnik.getName());
-		upis.append(",");
-		upis.append(korisnik.getSurname());
-		upis.append(",");
-		upis.append(korisnik.getUsername());
-		upis.append(",");
-		upis.append(korisnik.getPassword());
-		upis.append(",");
-		upis.append(korisnik.getGender().toString());
-		upis.append(",");
-		upis.append(korisnik.getDate());
-		upis.append(",");
-		upis.append(getRoleTypeToString(korisnik.getRole()));
-		upis.append("\n");
+			upis.append(korisnik.getName());
+			upis.append(",");
+			upis.append(korisnik.getSurname());
+			upis.append(",");
+			upis.append(korisnik.getUsername());
+			upis.append(",");
+			upis.append(korisnik.getPassword());
+			upis.append(",");
+			upis.append(korisnik.getGender().toString());
+			upis.append(",");
+			upis.append(korisnik.getDate());
+			upis.append(",");
+			upis.append(getRoleTypeToString(korisnik.getRole()));
+			upis.append(",");
+			upis.append(korisnik.getDeleted().toString());
+			upis.append("\n");
 		}
+		for(User korisnik : managers.values()) {
+			upis.append(korisnik.getName());
+			upis.append(",");
+			upis.append(korisnik.getSurname());
+			upis.append(",");
+			upis.append(korisnik.getUsername());
+			upis.append(",");
+			upis.append(korisnik.getPassword());
+			upis.append(",");
+			upis.append(korisnik.getGender().toString());
+			upis.append(",");
+			upis.append(korisnik.getDate());
+			upis.append(",");
+			upis.append(getRoleTypeToString(korisnik.getRole()));
+			upis.append(",");
+			upis.append(korisnik.getDeleted().toString());
+			upis.append("\n");
+			}
 		User korisnik = admininstrator;
 		upis.append(korisnik.getName());
 		upis.append(",");
@@ -380,6 +436,8 @@ public class CustomersDAO {
 		upis.append(korisnik.getDate());
 		upis.append(",");
 		upis.append(getRoleTypeToString(korisnik.getRole()));
+		upis.append(",");
+		upis.append(korisnik.getDeleted().toString());
 		upis.append("\n");
 		upis.flush();
 		upis.close();
@@ -427,6 +485,40 @@ public class CustomersDAO {
 		if(username.equals("admin"))
 			return admininstrator;
 		return null;
+	}
+	
+	public Collection<User> getAllUsers() {
+		Collection<User> users = new ArrayList<User>();
+		for(Customer c : korisnici.values()) {
+			if(!c.getDeleted())
+				users.add(c);
+		}
+		for(Manager m : managers.values()) {
+			if(!m.getDeleted())
+				users.add(m);
+		}
+		users.add(admininstrator);
+		return users;
+		
+	}
+
+	public User deleteUser(String username, String path) {
+		User u = korisnici.get(username);
+		if(u != null) {
+			String put1 = path + "\\data\\Customers.csv";
+			u.setDeleted(true);
+			try {
+				upisSvihKorisnikaUFajl(put1);
+				upisSvihKorisnikaUFajl(putanje[2]);
+				String put2 = path + "\\data\\Users.csv";
+				writeAllUsers(put2);
+				writeAllUsers(putanje[3]);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return u;
 	}
 	
 	

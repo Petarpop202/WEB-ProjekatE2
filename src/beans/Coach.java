@@ -11,8 +11,8 @@ public class Coach extends User {
 	}
 
 	public Coach(String username, String password, String name, String surname, Boolean gender, String date,
-			RoleEnum role) {
-		super(username, password, name, surname, gender, date, role);
+			RoleEnum role, Boolean deleted) {
+		super(username, password, name, surname, gender, date, role,deleted);
 	}
 
 	public Coach(List<TrainingHistory> trainingHistory) {
