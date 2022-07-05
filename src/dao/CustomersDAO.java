@@ -21,6 +21,7 @@ public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
 	private HashMap<String, Membership> memberships;
+	private User admininstrator;
 	
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
@@ -32,11 +33,14 @@ public class CustomersDAO {
 
 	
 	public CustomersDAO(String path) {
+		admininstrator = new User();
 		korisnici = new HashMap<String, Customer>();
 		memberships = new HashMap<String, Membership>();
+		getAdmin(path);
 		getAllCustomers(putanje[2]);
 		path += "\\data\\Memberships.csv";
 		getAllMemberships(path);
+		
 	}
 	
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
@@ -125,6 +129,35 @@ public class CustomersDAO {
 				Customer korisnik = new Customer(parametri[2], parametri[3], parametri[0], 
 						parametri[1], pol, parametri[5],points,cType);
 				korisnici.put(parametri[2], korisnik);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
+	
+	private void getAdmin(String putanja) {
+		BufferedReader citac = null;
+		try {
+			putanja += "\\data\\Users.csv";
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				User korisnik = new User(parametri[2], parametri[3], parametri[0], 
+						parametri[1], pol, parametri[5],getStringToRole(parametri[6]));
+				if(getStringToRole(parametri[6]) ==  User.RoleEnum.ADMIN) {
+					admininstrator = korisnik;
+					break;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -227,6 +260,19 @@ public class CustomersDAO {
 		return null;
 	}
 	
+	private User.RoleEnum  getStringToRole(String status) {
+		if (status.equals("CUSTOMER") ) {
+			return User.RoleEnum.CUSTOMER;
+		}else if (status.equals("ADMIN")) {
+			return User.RoleEnum.ADMIN ;
+		}else if (status.equals("MANAGER")) {
+			return User.RoleEnum.MANAGER;
+		}else if (status.equals("COACH")) {
+			return User.RoleEnum.COACH ;
+		}
+		return null;
+	}
+	
 	private String getCustomerTypeToString(CustomerType.TypeEnum status) {
 		if (status == CustomerType.TypeEnum.BRONZE) {
 			return "BRONZE";
@@ -247,6 +293,8 @@ public class CustomersDAO {
 	
 	public User izmenaPodataka(User korisnik, String putanja) throws IOException {
 		User k = korisnici.get(korisnik.getUsername());
+		if(k == null)
+			k = admininstrator;
 		if (!korisnik.getName().equals(k.getName())) {
 			k.setName(korisnik.getName());
 		}
@@ -317,6 +365,21 @@ public class CustomersDAO {
 		upis.append(getRoleTypeToString(korisnik.getRole()));
 		upis.append("\n");
 		}
+		User korisnik = admininstrator;
+		upis.append(korisnik.getName());
+		upis.append(",");
+		upis.append(korisnik.getSurname());
+		upis.append(",");
+		upis.append(korisnik.getUsername());
+		upis.append(",");
+		upis.append(korisnik.getPassword());
+		upis.append(",");
+		upis.append(korisnik.getGender().toString());
+		upis.append(",");
+		upis.append(korisnik.getDate());
+		upis.append(",");
+		upis.append(getRoleTypeToString(korisnik.getRole()));
+		upis.append("\n");
 		upis.flush();
 		upis.close();
 	}
@@ -357,6 +420,12 @@ public class CustomersDAO {
 		upisSvihKorisnikaUFajl(put2);
 		upisSvihKorisnikaUFajl(putanje[2]);
 		return member;
+	}
+	
+	public User adminProfile(String username) {
+		if(username.equals("admin"))
+			return admininstrator;
+		return null;
 	}
 	
 	
