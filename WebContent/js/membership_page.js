@@ -130,7 +130,7 @@ function setMember(date,date1,price,termins,type,data){
         }),
         success: function(odgovor) {
             alert("Clanarina je uspesno kupljena!")
-            
+            window.location("http://localhost:8080/FitnessCentar/html/membership_page.html")
             
         },
         error: function(odgovor) {

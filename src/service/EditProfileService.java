@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -49,6 +50,18 @@ public class EditProfileService {
 				return Response.status(400).entity("Greska pri izmeni podataka").build();
 			}
 		}
+		return Response.status(401).entity("Sesija vam je istekla").build();
+	}
+	
+	@PUT
+	@Path("/delete")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response brisanjePodataka(@QueryParam("username") String username) {
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		String putanja = kontekst.getRealPath("");
+		User u = korisnikDAO.deleteUser(username,putanja);
+			if(u != null)
+				return Response.ok().build();
 		return Response.status(401).entity("Sesija vam je istekla").build();
 	}
 }

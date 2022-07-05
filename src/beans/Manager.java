@@ -14,8 +14,9 @@ public class Manager extends User{
 	}
 
 	public Manager(String username, String password, String name, String surname, Boolean gender, String date,
-			RoleEnum role) {
-		super(username, password, name, surname, gender, date, role);
+			RoleEnum role, Boolean deleted, SportsFacility sport) {
+		super(username, password, name, surname, gender, date, role,deleted);
+		Facility = sport;
 	}
 
 	public SportsFacility getFacility() {
