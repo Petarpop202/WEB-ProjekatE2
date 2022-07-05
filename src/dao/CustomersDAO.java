@@ -25,6 +25,7 @@ public class CustomersDAO {
 	
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
+	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv",
@@ -37,7 +38,7 @@ public class CustomersDAO {
 		korisnici = new HashMap<String, Customer>();
 		memberships = new HashMap<String, Membership>();
 		getAdmin(path);
-		getAllCustomers(putanje[2]);
+		getAllCustomers(putanje[0]);
 		path += "\\data\\Memberships.csv";
 		getAllMemberships(path);
 		
@@ -51,9 +52,9 @@ public class CustomersDAO {
 		}
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[2], korisnik);
+		upisKorisnikaUFajl(putanje[0], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[3], korisnik);
+		upisUUsers(putanje[1], korisnik);
 		return korisnik;
 	}
 	
@@ -313,7 +314,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[3]);
+		writeAllUsers(putanje[1]);
 		return k;
 	}
 	
@@ -416,9 +417,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[4]);
+		writeAllMemberships(putanje[2]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[2]);
+		upisSvihKorisnikaUFajl(putanje[0]);
 		return member;
 	}
 	

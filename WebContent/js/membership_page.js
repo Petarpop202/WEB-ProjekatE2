@@ -8,6 +8,8 @@ $(document).ready(function () {
         type: "GET",
         success: function(data)
         {
+	 let n = document.getElementById("nameMain");	
+	if(data != ""){
             if(data.status)
                  s = "Aktivna";
             else s = "Neaktivna";
@@ -16,10 +18,11 @@ $(document).ready(function () {
             else if(data.customer.type.type == "SILVER")
                 i = "silver";
             else i = "gold";
-            let n = document.getElementById("nameMain");	
-            if(data != "")
-            	n.innerHTML = ' <h3 class="fs-1">Trenutna clanarina:</h3><div class="card bg-dark text-white mr-3" style="width: 18rem;"><img src="../img/'+i+'.jpg" style="width: 500px; height:200px;" class="card-img" alt="..."><div class="card-img-overlay"><h5 class="card-title">'+data.typeStr+'</h5><p class="card-text">Ova clanarina je stalna &nbsp;&nbsp;&nbsp;&nbsp; Clanarina je kupljena : '+data.payDate+' Clanarina vam istice : '+data.memberDate+'</p><p class="card-text">Status: '+s+'</p></div></div>';
-       		else n.innerHTML = '<h3>Trenutno nemate aktivnu clanarinu !</h3>';
+           
+         
+            n.innerHTML = ' <h3 class="fs-1">Trenutna clanarina:</h3><div class="card bg-dark text-white mr-3" style="width: 18rem;"><img src="../img/'+i+'.jpg" style="width: 500px; height:200px;" class="card-img" alt="..."><div class="card-img-overlay"><h5 class="card-title">'+data.typeStr+'</h5><p class="card-text">Ova clanarina je stalna &nbsp;&nbsp;&nbsp;&nbsp; Clanarina je kupljena : '+data.payDate+' Clanarina vam istice : '+data.memberDate+'</p><p class="card-text">Status: '+s+'</p></div></div>';
+       		 }
+       		 else n.innerHTML = '<h3>Trenutno nemate aktivnu clanarinu !</h3>';
        		
         }
     });
