@@ -14,6 +14,7 @@ import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
 import beans.Customer;
+import beans.Manager;
 import beans.Membership;
 import beans.User;
 import dao.CustomersDAO;
@@ -47,6 +48,25 @@ public class CustomerService {
 				return Response.status(400).entity("Korisnik sa datim korisnickim imenom vec postoji!").build();
 			}
 			return Response.ok(k).build();
+		} catch (Exception e) {
+			return Response.status(500).entity("Greska pri registraciji!").build();
+		}
+	}
+	
+	
+	@POST
+	@Path("/manager")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addManager(Manager manager) {
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		String putanja = kontekst.getRealPath("");
+		try {
+			Manager m = korisnikDAO.addManager(manager, putanja);
+			if (m == null) {
+				return Response.status(400).entity("Korisnik sa datim korisnickim imenom vec postoji!").build();
+			}
+			return Response.ok(m).build();
 		} catch (Exception e) {
 			return Response.status(500).entity("Greska pri registraciji!").build();
 		}

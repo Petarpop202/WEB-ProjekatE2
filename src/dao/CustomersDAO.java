@@ -18,6 +18,7 @@ import beans.Membership;
 import beans.Membership.TypeEnum;
 import beans.SportsFacility;
 import beans.User;
+import beans.User.RoleEnum;
 public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
@@ -28,11 +29,10 @@ public class CustomersDAO {
 	private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv",
+	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
-	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv",
-	 "C:\\Users\\david\\OneDrive\\Desktop\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
-	 "C:\\Users\\david\\OneDrive\\Desktop\\WEB-ProjekatE2\\WebContent\\data\\Users.csv"};
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv"};
 
 	
 	public CustomersDAO(String path) {
@@ -230,7 +230,7 @@ public class CustomersDAO {
 		upis.close();
 	}
 	
-	private void upisUUsers(String putanja, Customer korisnik) throws IOException {
+	private void upisUUsers(String putanja, User korisnik) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja,true));
 		upis.append(korisnik.getName());
 		upis.append(",");
@@ -519,6 +519,53 @@ public class CustomersDAO {
 			}
 		}
 		return u;
+	}
+	
+	private void upisMenadzeraUFajl(String putanja, Manager manager) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(manager.getName());
+		upis.append(",");
+		upis.append(manager.getSurname());
+		upis.append(",");
+		upis.append(manager.getUsername());
+		upis.append(",");
+		upis.append(manager.getPassword());
+		upis.append(",");
+		upis.append(manager.getGender().toString());
+		upis.append(",");
+		upis.append(manager.getDate());
+		upis.append(",");
+		upis.append(getRoleTypeToString(User.RoleEnum.MANAGER));
+		upis.append(",");
+		upis.append(manager.getDeleted().toString());
+		upis.append(",");
+		if(manager.getFacility() != null)
+		upis.append(manager.getFacility().getName());
+		else upis.append("n");
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+	}
+	
+	
+	
+	
+
+	public Manager addManager(Manager manager, String putanja) throws IOException {
+		String put1 = putanja + "\\data\\Managers.csv";
+		String put2 = putanja + "\\data\\Users.csv";
+		if (managers.containsKey(manager.getUsername())) {
+			return null;
+		}
+		managers.put(manager.getUsername(), manager);
+		manager.setDeleted(false);
+		manager.setRole(RoleEnum.MANAGER);
+		manager.setFacility(null);
+		upisMenadzeraUFajl(put1, manager);
+		upisMenadzeraUFajl(putanje[3], manager);
+		upisUUsers(put2, manager);
+		upisUUsers(putanje[1], manager);
+		return manager;
 	}
 	
 	

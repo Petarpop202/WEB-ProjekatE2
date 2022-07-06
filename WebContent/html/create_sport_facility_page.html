@@ -94,7 +94,7 @@
                             
                         </select>
 						<div class="form-group col-auto">
-							<button type="button" id="createNewManager" data-toggle="modal" data-target="#modalRegisterForm" class="btn btn-primary">Novi menadzer</button>
+							<a class="button" href="" data-toggle="modal" data-target="#modalCreatingManagerForm">Novi menadzer</a>
 						  </div>
 
                         </div>
@@ -124,8 +124,8 @@
 					<div class="modal-body mx-3">
 						<div class="md-form mb-5 text-primary">
 						<i class="fas fa-user prefix grey-text"></i>
-						<label data-error="wrong" data-success="right" for="name">Ime</label>
-						<input type="text" id="name" name="name" class="form-control validate">
+						<label data-error="wrong" data-success="right" for="name2">Ime</label>
+						<input type="text" id="name2" name="name2" class="form-control validate">
 						
 						<label class="text-lg-right" id="eri" style="color: red;" hidden>Pogresan format imena!</label>
 						</div>
@@ -151,6 +151,7 @@
 							<div>
 							<label data-error="wrong" data-success="right" for="username">Pol</label>
 							</div>
+							
 							<select class="form-select" name="gender">
 							   <!-- proveriti ovo kako se pristupa ovome u js-u-->
 								 <option value=True selected>Muški</option>
@@ -179,7 +180,7 @@
 						</div>
 					</div>
 					<div class="modal-footer d-flex justify-content-center">
-						<button type="submit" id="register"  class="btn btn-deep-orange text-white">Registruj se</button>
+						<button type="submit" id="register"  class="btn btn-deep-orange text-white">Kreiraj</button>
 					</div>
 					</div>
 				</div>
