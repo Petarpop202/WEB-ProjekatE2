@@ -46,7 +46,7 @@ public class CustomersDAO {
 		managers = new HashMap<String, Manager>();
 		trainers = new HashMap<String, Coach>();
 		getAdmin(path);
-		getAllCustomers(putanje[4]);
+		getAllCustomers(putanje[0]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		path += "\\data\\Memberships.csv";
@@ -65,9 +65,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[4], korisnik);
+		upisKorisnikaUFajl(putanje[0], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[5], korisnik);
+		upisUUsers(putanje[1], korisnik);
 		return korisnik;
 	}
 	
@@ -363,7 +363,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[5]);
+		writeAllUsers(putanje[1]);
 		return k;
 	}
 	
@@ -514,9 +514,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[6]);
+		writeAllMemberships(putanje[2]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[4]);
+		upisSvihKorisnikaUFajl(putanje[0]);
 		return member;
 	}
 	
@@ -551,7 +551,7 @@ public class CustomersDAO {
 				upisSvihKorisnikaUFajl(putanje[0]);
 				String put2 = path + "\\data\\Users.csv";
 				writeAllUsers(put2);
-				writeAllUsers(putanje[5]);
+				writeAllUsers(putanje[1]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -612,15 +612,52 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[7], manager);
+		upisMenadzeraUFajl(putanje[3], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[5], manager);
+		upisUUsers(putanje[1], manager);
 		return manager;
 	}
 	
 	public SportsFacility getManagerFacility(Manager m, String path) {
 		SportsFacilityDAO sf = new SportsFacilityDAO(path);
 		return sf.managers.get(m.getUsername()).getFacility();
+	}
+
+	
+	
+	private void upisTreneraUFajl(String putanja, Coach coach) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(coach.getName());
+		upis.append(",");
+		upis.append(coach.getSurname());
+		upis.append(",");
+		upis.append(coach.getUsername());
+		upis.append(",");
+		upis.append(coach.getPassword());
+		upis.append(",");
+		upis.append(coach.getGender().toString());
+		upis.append(",");
+		upis.append(coach.getDate());
+		upis.append(",");
+		upis.append(getRoleTypeToString(coach.getRole()));
+		upis.append(",");
+		upis.append(coach.getDeleted().toString());
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+	}
+
+	public Coach addCoach(Coach coach, String putanja) throws IOException {
+		String put2 = putanja + "\\data\\Users.csv";
+		if (managers.containsKey(coach.getUsername())) {
+			return null;
+		}
+		trainers.put(coach.getUsername(), coach);
+		coach.setDeleted(false);
+		coach.setRole(RoleEnum.COACH);
+		upisUUsers(put2, coach);
+		upisUUsers(putanje[1], coach);
+		return coach;
 	}
 	
 }

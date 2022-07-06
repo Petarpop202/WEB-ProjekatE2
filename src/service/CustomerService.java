@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
+import beans.Coach;
 import beans.Customer;
 import beans.Manager;
 import beans.Membership;
@@ -55,7 +56,25 @@ public class CustomerService {
 	
 	
 	@POST
-	@Path("/manager")
+	@Path("/coach")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addCoach(Coach coach) {
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		String putanja = kontekst.getRealPath("");
+		try {
+			Coach c = korisnikDAO.addCoach(coach, putanja);
+			if (c == null) {
+				return Response.status(400).entity("Trener sa datim korisnickim imenom vec postoji!").build();
+			}
+			return Response.ok(c).build();
+		} catch (Exception e) {
+			return Response.status(500).entity("Greska pri registraciji!").build();
+		}
+	}
+	
+	@POST
+	@Path("/trainer")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addManager(Manager manager) {

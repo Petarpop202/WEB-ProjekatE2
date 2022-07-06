@@ -11,7 +11,7 @@
 							success: function(data)
 							{
 								let n = document.getElementById("left");	
-								n.innerHTML = '<div class="card mb-4"><div class="card-body text-center"><img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"class="rounded-circle img-fluid" style="width: 150px;"><h5 class="my-3">'+data.name+' '+data.surname+'</h5><p class="text-muted mb-1">Kupac</p><div class="d-flex justify-content-center mb-2"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegisterForm">Izmeni nalog</button></div></div></div>';
+								n.innerHTML = '<div class="card mb-4"><div class="card-body text-center"><img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"class="rounded-circle img-fluid" style="width: 150px;"><h5 class="my-3">'+data.name+' '+data.surname+'</h5><p class="text-muted mb-1">'+ data.role +'</p><div class="d-flex justify-content-center mb-2"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegisterForm">Izmeni nalog</button></div></div></div>';
 								setName(data);
 								setSurname(data);
 								setGender(data);
@@ -59,8 +59,11 @@
 			let s = "";
 			if(data.role == "CUSTOMER"){
 				s = "Kupac";
-			}
-			else s = "Admin";
+			}else if(data.role == "COACH"){
+				s = "Trener";
+			} else if(data.role == "MANAGER"){
+				s = "Menadžer";
+			} else s = "Admin";
 			n.innerHTML = '<div class="col-sm-3"><p class="mb-0">Nalog</p></div><div class="col-sm-9"><p class="text-muted mb-0">'+s+'</p></div><div class="row gutters-sm" id="mem"></div>';
 		}
 

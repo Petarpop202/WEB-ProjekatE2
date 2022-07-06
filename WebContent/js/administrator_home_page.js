@@ -100,5 +100,98 @@
 		function createSportFacility(){
 			location.assign("create_sport_facility_page.html");
 		}
+
+
+		function validateCheck(document){
+			let username = $('input[name="username"]').val();
+				let password = $('input[name="password"]').val();
+				let name2 = $('input[name="name2"]').val();
+				let surname = $('input[name="surname"]').val();
+				let gender = $('select[name="gender"]').find(":selected").val();
+				let date = $('input#datum').val();
+				let validate = false;
+		
+				var regName = new RegExp('([A-Z]{1})([a-z]+)$');
+				var regUser = new RegExp('[a-zA-Z0-9]+$');
+				if(!regName.test(name2)){
+					document.getElementById("eri").removeAttribute("hidden");
+				}else{
+					document.getElementById("eri").setAttribute("hidden","true");
+					validate = true;
+				}
+				if(!regName.test(surname)){
+					document.getElementById("erp").removeAttribute("hidden");
+					validate = false;
+				}
+				else{
+					document.getElementById("erp").setAttribute("hidden","true");
+					if(validate)
+					validate = true;
+				}
+				if(date == ""){
+					document.getElementById("erd").removeAttribute("hidden");
+					validate = false;
+				}
+				else{
+					document.getElementById("erd").setAttribute("hidden","true");
+					if(validate)
+					validate = true;
+				}
+				if(!regUser.test(username)){
+					document.getElementById("erk").removeAttribute("hidden");
+					validate = false;
+				}
+				else{
+					document.getElementById("erk").setAttribute("hidden","true");
+					if(validate)
+					validate = true;
+				}
+				if(!regUser.test(password)){
+					document.getElementById("erl").removeAttribute("hidden");
+					validate = false;
+				}
+				else{
+					document.getElementById("erl").setAttribute("hidden","true");
+					if(validate)
+					validate = true;
+				}
+		
+				if(validate){
+					$.post({
+						url: "../rest/registration/coach",
+						contentType: "application/json",
+						data: JSON.stringify({
+							username: username,
+							password: password,
+							name: name2,
+							surname: surname,
+							gender: gender,
+							date: date,
+						}),
+						success: function(odgovor) {
+							alert("Korisnik " + odgovor.username + " je registrovan!")
+							
+							
+						},
+						error: function(odgovor) {
+							if (odgovor.status == 400) {
+								document.getElementById("errorUser").removeAttribute("hidden");
+							}else {
+								document.getElementById("errorUser").setAttribute("hidden","true");
+								alert("Greska pri registraciji!");
+							}
+						}
+					});
+				}
+		
+		}
+		$(window).ready(function() {
+			$("#register").click(function (event) {
+				event.preventDefault();
+				validateCheck(document);
+				
+			});
+		})
+		
 		
 		

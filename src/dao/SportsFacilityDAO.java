@@ -28,12 +28,14 @@ private HashMap<String, SportsFacility> facilities;
 private HashMap<String, Location> locations;
 private HashMap<String, Training> trainings;
 public HashMap<String, Manager> managers;
+public HashMap<String, Coach> trainers;
 	
 
 
 private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
 		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
 		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv",
+		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Trainings.csv",
 		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
 		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
 		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv"};
@@ -158,6 +160,17 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return null;
 	}
 	
+	private String getTrainingTypeToString(Training.TypeEnum status) {
+		if (status == Training.TypeEnum.GYM) {
+			return "GYM";
+		}else if (status == Training.TypeEnum.GROUP) {
+			return "GROUP";
+		}else if (status == Training.TypeEnum.PERSONAL) {
+			return "PERSONAL";
+		}
+		return null;
+	}
+	
 	
 	
 	private SportsFacility.TypeEnum getTypeSr(String status) {
@@ -172,6 +185,18 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		return null;
 	}
+	
+	private Training.TypeEnum getTrainingTypeSr(String status) {
+		if (status.equals("Teretana")) {
+			return Training.TypeEnum.GYM;
+		}else if (status.equals("Personalni trening")) {
+			return Training.TypeEnum.PERSONAL;
+		}else if (status.equals("Grupni trening")) {
+			return Training.TypeEnum.GROUP;
+		}
+		return null;
+	}
+	
 	
 	private SportsFacility.ContentEnum getContent(String status) {
 		if (status.equals("GROUP")) {
@@ -352,6 +377,13 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
         }
         return null;
     }
+	
+	public Coach getCoach(String name) {
+        if (trainers.containsKey(name)) {
+            return trainers.get(name);
+        }
+        return null;
+    }
 
 	public SportsFacility dodajObjekat(SportsFacility facility, String putanja) throws IOException {
 		String put = putanja + "\\data\\SportsFacility.csv";
@@ -360,7 +392,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[4], facility);
+		upisObjektaUFajl(putanje[1], facility);
 		return facility;
 	}
 	
@@ -443,11 +475,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[3], l);
+		upisLokacijeUFajl(putanje[0], l);
 		upisObjektaUFajl(put1, sf);
-		upisObjektaUFajl(putanje[4], sf);
+		upisObjektaUFajl(putanje[1], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[5]);
+		upisSvihMenadzeraUFajl(putanje[2]);
 		return sf;
 	}
 	
@@ -466,6 +498,40 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			} else continue;
 		}
 		return managers;
+	}
+
+	public Training dodajTrening(String name, String type, String facility, String duration, String trainer, String description, String picture, String putanja) throws IOException {
+		String put0 = putanja + "\\data\\Trainings.csv";
+		Training.TypeEnum t = getTrainingTypeSr(type);
+		SportsFacility sf = getFacility(facility);
+		Coach c = getCoach(trainer);
+		Training tr = new Training(name,t,sf,duration,c,description,picture);
+
+		upisTreningaUFajl(put0, tr);
+		upisTreningaUFajl(putanje[3], tr);
+
+		return tr;
+	}
+
+	private void upisTreningaUFajl(String putanja, Training training) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(training.getName());
+		upis.append(",");
+		upis.append(getTrainingTypeToString(training.getType()));
+		upis.append(",");
+		upis.append(training.getFacility().getName());
+		upis.append(",");
+		upis.append(training.getDuration());
+		upis.append(",");
+		upis.append(training.getTrainer().getName());
+		upis.append(",");
+		upis.append(training.getDescription());
+		upis.append(",");
+		upis.append(training.getPicture());
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+		
 	}
 
 	
