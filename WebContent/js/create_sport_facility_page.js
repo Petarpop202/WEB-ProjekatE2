@@ -63,7 +63,6 @@ function getAvailableManagers(managers){
     
     obj.innerHTML = i;
     }
-}
 
 
 function validateCheck(document){

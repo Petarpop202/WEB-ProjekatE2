@@ -116,8 +116,7 @@
 							date: date,
 						}),
 						success: function(odgovor) {
-							alert("Korisnik " + odgovor.username + " je registrovan!")
-							
+					
 							
 						},
 						error: function(odgovor) {
