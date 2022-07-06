@@ -31,7 +31,9 @@ public HashMap<String, Manager> managers;
 	
 
 
-private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
+private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
+		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
+		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv",
 		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv"};
 	
 
@@ -394,10 +396,39 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 		upis.close();
 	}
 	
+	private void upisSvihMenadzeraUFajl(String putanja) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja));
+		for(Manager manager : managers.values()) {
+		upis.append(manager.getName());
+		upis.append(",");
+		upis.append(manager.getSurname());
+		upis.append(",");
+		upis.append(manager.getUsername());
+		upis.append(",");
+		upis.append(manager.getPassword());
+		upis.append(",");
+		upis.append(manager.getGender().toString());
+		upis.append(",");
+		upis.append(manager.getDate());
+		upis.append(",");
+		upis.append(CustomersDAO.getRoleTypeToString(manager.getRole()));
+		upis.append(",");
+		upis.append(manager.getDeleted().toString());
+		upis.append(",");
+		if(manager.getFacility() != null)
+		upis.append(manager.getFacility().getName());
+		else upis.append("n");
+		upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
+	
 
 	public SportsFacility dodajObjekat(String name, String type, String address, String width, String length, String manager, String picture,String putanja) throws IOException {
+		String put0 = putanja + "\\data\\Locations.csv";
 		String put1 = putanja + "\\data\\SportsFacility.csv";
-		String put2 = putanja + "\\data\\Locations.csv";
+		String put2 = putanja + "\\data\\Managers.csv";
 		SportsFacility.TypeEnum t = getTypeSr(type);
 		Location l = new Location(Double.parseDouble(length), Double.parseDouble(width),address);
 		SportsFacility sf = new SportsFacility(name,t,l,picture);
@@ -409,9 +440,12 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 		}
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
-		upisLokacijeUFajl(put2, l);
+		upisLokacijeUFajl(put0, l);
+		upisLokacijeUFajl(putanje[0], l);
 		upisObjektaUFajl(put1, sf);
 		upisObjektaUFajl(putanje[1], sf);
+		upisSvihMenadzeraUFajl(put2);
+		upisSvihMenadzeraUFajl(putanje[2]);
 		return sf;
 	}
 	

@@ -45,7 +45,7 @@ public class CustomersDAO {
 		managers = new HashMap<String, Manager>();
 		trainers = new HashMap<String, Coach>();
 		getAdmin(path);
-		getAllCustomers(putanje[3]);
+		getAllCustomers(putanje[0]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		path += "\\data\\Memberships.csv";
@@ -64,9 +64,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[3], korisnik);
+		upisKorisnikaUFajl(putanje[0], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[4], korisnik);
+		upisUUsers(putanje[1], korisnik);
 		return korisnik;
 	}
 	
@@ -227,7 +227,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(korisnik.getDate());
 		upis.append(",");
-		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append(getRoleTypeToString(korisnik.getRole()));
 		upis.append(",");
 		upis.append(NullToString(korisnik.getPoints()));
 		upis.append(",");
@@ -254,7 +254,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(korisnik.getDate());
 		upis.append(",");
-		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append(getRoleTypeToString(korisnik.getRole()));
 		upis.append(",");
 		upis.append(NullToString(korisnik.getPoints()));
 		upis.append(",");
@@ -281,7 +281,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(korisnik.getDate());
 		upis.append(",");
-		upis.append(getRoleTypeToString(User.RoleEnum.CUSTOMER));
+		upis.append(getRoleTypeToString(korisnik.getRole()));
 		upis.append(",");
 		upis.append(korisnik.getDeleted().toString());
 		upis.append("\n");
@@ -295,7 +295,7 @@ public class CustomersDAO {
 		}
 	
 	
-	private String getRoleTypeToString(User.RoleEnum status) {
+	public static String getRoleTypeToString(User.RoleEnum status) {
 		if (status == User.RoleEnum.CUSTOMER) {
 			return "CUSTOMER";
 		}else if (status == User.RoleEnum.ADMIN) {
@@ -362,7 +362,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[4]);
+		writeAllUsers(putanje[1]);
 		return k;
 	}
 	
@@ -513,9 +513,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[5]);
+		writeAllMemberships(putanje[2]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[3]);
+		upisSvihKorisnikaUFajl(putanje[0]);
 		return member;
 	}
 	
@@ -550,7 +550,7 @@ public class CustomersDAO {
 				upisSvihKorisnikaUFajl(putanje[0]);
 				String put2 = path + "\\data\\Users.csv";
 				writeAllUsers(put2);
-				writeAllUsers(putanje[4]);
+				writeAllUsers(putanje[1]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -586,7 +586,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(manager.getDate());
 		upis.append(",");
-		upis.append(getRoleTypeToString(User.RoleEnum.MANAGER));
+		upis.append(getRoleTypeToString(manager.getRole()));
 		upis.append(",");
 		upis.append(manager.getDeleted().toString());
 		upis.append(",");
@@ -597,8 +597,6 @@ public class CustomersDAO {
 		upis.flush();
 		upis.close();
 	}
-	
-	
 	
 	
 
