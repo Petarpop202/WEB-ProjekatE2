@@ -41,6 +41,10 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 	public Collection<Training> findAllTrainings(){
 		return trainings.values();
 	}
+	
+	public Collection<Manager> findAllManagers(){
+		return managers.values();
+	}
 
 	public SportsFacilityDAO() {
 		facilities = new HashMap<String, SportsFacility>();
@@ -387,12 +391,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 	}
 	
 
-	public SportsFacility dodajObjekat(String name, String type, String address, String manager, String picture,String putanja) throws IOException {
+	public SportsFacility dodajObjekat(String name, String type, String address, String width, String length, String manager, String picture,String putanja) throws IOException {
 		String put1 = putanja + "\\data\\SportsFacility.csv";
 		String put2 = putanja + "\\data\\Locations.csv";
 		SportsFacility.TypeEnum t = getTypeSr(type);
-		Location l = new Location(5.0,5.0,address);
-		String pic [] = picture.split(".");
+		Location l = new Location(Double.parseDouble(length), Double.parseDouble(width),address);
 		SportsFacility sf = new SportsFacility(name,t,l,picture);
 		sf.setStatus(true);
 		Manager m = getManager(manager);
@@ -413,5 +416,47 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 			return managers.get(username);
 		return null;
 	}
+	
+	/*public Collection<Manager> getAllAvailableManagers(String putanja) {
+		BufferedReader citac = null;
+		try {
+			putanja += "\\data\\Managers.csv";
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				Manager korisnik = new Manager(parametri[2], parametri[3], parametri[0], 
+						parametri[1], pol, parametri[5],User.RoleEnum.MANAGER,false,getFacility(parametri[8]));
+				if(korisnik.getFacility() == null) {
+				managers.put(parametri[2],korisnik);
+				}
+				else continue;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+		return (Collection<Manager>) managers;
+	}*/
+	
+	
+	public Collection<Manager> GetAllAvlManager(){
+		Collection<Manager> managers = new ArrayList<Manager>();
+		for(Manager m : findAllManagers()) {
+			if(m.getFacility() == null) {
+				managers.add(m);
+			} else continue;
+		}
+		return managers;
+	}
+
 	
 }

@@ -2,6 +2,8 @@ function create(document){
         let name = $('input[name="name"]').val();
         let type = document.getElementById("type").value;
         let address = $('input[name="address"]').val();
+        let width = $('input[name="width"]').val();
+        let length = $('input[name="length"]').val();
         let manager = document.getElementById("manager").value;
         var input = document.getElementById("picture");
         var file = input.value.split("\\");
@@ -14,7 +16,7 @@ function create(document){
 
 
             $.post({
-                url: "../rest/sports/create?name=" + name + "&type="+ type + "&address=" + address + "&picture=" + picture + "&manager=" + manager,
+                url: "../rest/sports/create?name=" + name + "&type="+ type + "&address=" + address + "&width=" + width + "&length=" + length + "&picture=" + picture + "&manager=" + manager,
                 contentType: "application/json",
 
                 success: function(odgovor) {
@@ -37,3 +39,23 @@ $(window).ready(function() {
         
     });
 })
+
+
+$(document).ready(function () {
+    $.ajax({
+        url: "../rest/sports/available",
+        type: "GET",
+        success: function(objekat){
+            getAvailableManagers(objekat);
+        }
+    });
+    })
+
+function getAvailableManagers(managers){
+    let i = "";
+    for(let m in managers){
+        i = i + "<option value="+ m.name +"></option> "
+    }
+    
+    let obj  = document.getElementById("manager");
+}

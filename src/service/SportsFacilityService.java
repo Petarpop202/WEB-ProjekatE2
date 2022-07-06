@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
 import beans.Customer;
+import beans.Manager;
 import beans.SportsFacility;
 import beans.Training;
 import beans.User;
@@ -54,7 +55,16 @@ public class SportsFacilityService {
     }
 	
 	@GET
-	@Path("/trainings")
+	@Path("/available")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAvailableManagers(@Context HttpServletRequest zahtev) {
+		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		Collection<Manager> managerss = dao.GetAllAvlManager();
+				return Response.ok(managerss).build();
+	}
+	
+	@GET
+	@Path("/managers")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTrainings(@Context HttpServletRequest zahtev, @QueryParam("name") String name) {
 		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
@@ -66,11 +76,11 @@ public class SportsFacilityService {
 	@POST
 	@Path("/create")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response dodajObjekat(@QueryParam("name") String name, @QueryParam("type") String type, @QueryParam("address") String address, @QueryParam("manager") String manager, @QueryParam("picture") String picture) {
+	public Response dodajObjekat(@QueryParam("name") String name, @QueryParam("type") String type, @QueryParam("address") String address, @QueryParam("width") String width, @QueryParam("length") String length, @QueryParam("manager") String manager, @QueryParam("picture") String picture) {
 		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
 		String putanja = ctx.getRealPath("");
 		try {
-			SportsFacility sf = sportsFacilityDAO.dodajObjekat(name,type,address,manager,picture, putanja);
+			SportsFacility sf = sportsFacilityDAO.dodajObjekat(name,type,address,width,length,manager,picture, putanja);
 			if (sf == null) {
 				return Response.status(400).entity("Korisnik sa datim korisnickim imenom vec postoji!").build();
 			}
