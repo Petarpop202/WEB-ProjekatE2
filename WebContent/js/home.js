@@ -22,8 +22,6 @@
 			document.getElementById("rate").removeAttribute("hidden");
 		}
 
-
-
 	}
 
 		$(document).ready(function () {

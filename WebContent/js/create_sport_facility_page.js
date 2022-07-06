@@ -32,6 +32,7 @@ function create(document){
         
 
 }
+
 $(window).ready(function() {
     $("#create").click(function (event) {
         event.preventDefault();
@@ -40,22 +41,24 @@ $(window).ready(function() {
     });
 })
 
-
 $(document).ready(function () {
     $.ajax({
-        url: "../rest/sports/available",
+        url : "../rest/sports/available",
         type: "GET",
-        success: function(objekat){
-            getAvailableManagers(objekat);
+        success: function(data)
+        {
+            getAvailableManagers(data);
         }
     });
-    })
+})
+
 
 function getAvailableManagers(managers){
     let i = "";
-    for(let m in managers){
-        i = i + "<option value="+ m.name +"></option> "
+    for(let m of managers){
+        i = i + "<option value="+ m.username +">"+m.name+" "+m.surname+"</option> "
     }
     
     let obj  = document.getElementById("manager");
+    obj.innerHTML = i;
 }

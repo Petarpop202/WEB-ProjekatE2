@@ -32,8 +32,7 @@ public class SportsFacilityService {
 	
 	@PostConstruct
 	public void init() {
-		System.out.println("USO");
-			    	String contextPath = ctx.getRealPath("");
+			String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("SportsFacilityDAO", new SportsFacilityDAO(contextPath));
 		}
 
