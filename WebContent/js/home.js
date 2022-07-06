@@ -155,8 +155,12 @@
 							alert("Uspesna prijava");
 							if(odgovor.role == "CUSTOMER")
 							window.location.assign("http://localhost:8080/FitnessCentar/html/customer_home_page.html");
-							else 
+							else if(odgovor.role == "ADMIN")
 							window.location.assign("http://localhost:8080/FitnessCentar/html/administrator_home_page.html");
+							else if(odgovor.role == "MANAGER")
+							window.location.assign("http://localhost:8080/FitnessCentar/html/manager_home_page.html");
+							else
+							window.location.assign("http://localhost:8080/FitnessCentar/html/trainer_home_page.html");
 						},
 						error: function(odgovor) {
 							document.getElementById("er").removeAttribute("hidden");
