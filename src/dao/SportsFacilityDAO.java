@@ -218,9 +218,10 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 				Training.TypeEnum Type = getTrainingType(parametri[1]);
 				SportsFacility Facility = getFacility(parametri[2]);
 				String duration = parametri[3];
-				Coach Trainer = new Coach();
-				String Description = parametri[4];
-				String Picture = parametri[5];
+				CustomersDAO cd = new CustomersDAO(path);
+				Coach Trainer = cd.getCoach(parametri[4]);
+				String Description = parametri[5];
+				String Picture = parametri[6];
 				Training t = new Training(Name,Type,Facility,duration,Trainer,Description,Picture);
 				trainings.put(Name, t);
 			}

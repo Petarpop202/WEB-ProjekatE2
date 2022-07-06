@@ -13,7 +13,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
+import beans.Coach;
 import beans.Customer;
+import beans.Manager;
 import beans.User;
 import dao.CustomersDAO;
 
@@ -43,19 +45,38 @@ public class LogInService {
 		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
 		Customer korisnik = korisnikDAO.dobaviKorisnika(username);
 		User admin = korisnikDAO.adminProfile(username);
-		if (korisnik == null && admin == null) {
+		Manager manager = korisnikDAO.getManager(username);
+		User trainer = korisnikDAO.getCoach(username);
+		if (korisnik == null && admin == null && manager == null && trainer == null) {
 			return Response.status(401).entity("Uneli ste pogresno korisnicko ime!").build();
 		}
 		if (korisnik != null)
-			if(password.equals(korisnik.getPassword())){
+			if(korisnik.getDeleted())
+				Response.status(401).entity("Nalog je izbrisan").build();
+			else if(password.equals(korisnik.getPassword())){
 				jwtKontroler.kreiranjeJWT(korisnik);
 				return Response.ok(korisnik).build();
 		}
 		if (admin != null) 
-		 	if(password.equals(admin.getPassword())){
+			if(password.equals(admin.getPassword())){
 		 		jwtKontroler.kreiranjeJWT(admin);
 		 		return Response.ok(admin).build();
 		}
+		if (manager != null)
+			if(manager.getDeleted())
+				Response.status(401).entity("Nalog je izbrisan").build();
+			else if(password.equals(manager.getPassword())){
+		 		jwtKontroler.kreiranjeJWT(manager);
+		 		return Response.ok(manager).build();
+		}
+		if (trainer != null)
+			if(trainer.getDeleted())
+				Response.status(401).entity("Nalog je izbrisan").build();
+			else if(password.equals(trainer.getPassword())){
+		 		jwtKontroler.kreiranjeJWT(trainer);
+		 		return Response.ok(trainer).build();
+		}
+		
 		return Response.status(401).entity("Uneli ste pogresnu lozinku!").build();
 	}
 	

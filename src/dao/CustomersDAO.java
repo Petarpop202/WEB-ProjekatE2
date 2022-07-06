@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import beans.Coach;
 import beans.Customer;
 import beans.CustomerType;
 import beans.Manager;
@@ -18,11 +19,13 @@ import beans.Membership;
 import beans.Membership.TypeEnum;
 import beans.SportsFacility;
 import beans.User;
+import beans.User.RoleEnum;
 public class CustomersDAO {
 	
 	private HashMap<String, Customer> korisnici;
 	private HashMap<String, Membership> memberships;
 	private HashMap<String, Manager> managers; 
+	private HashMap<String, Coach> trainers;
 	private User admininstrator;
 	
 	private String[] putanje = {
@@ -39,20 +42,25 @@ public class CustomersDAO {
 		korisnici = new HashMap<String, Customer>();
 		memberships = new HashMap<String, Membership>();
 		managers = new HashMap<String, Manager>();
+		trainers = new HashMap<String, Coach>();
 		getAdmin(path);
 		getAllCustomers(putanje[3]);
 		getAllManagers(path);
+		getAllTrainers(path);
 		path += "\\data\\Memberships.csv";
 		getAllMemberships(path);
 		
 	}
 	
+
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
 		String put1 = putanja + "\\data\\Customers.csv";
 		String put2 = putanja + "\\data\\Users.csv";
 		if (korisnici.containsKey(korisnik.getUsername())) {
 			return null;
 		}
+		korisnik.setRole(RoleEnum.CUSTOMER);
+		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
 		upisKorisnikaUFajl(putanje[3], korisnik);
@@ -175,6 +183,35 @@ public class CustomersDAO {
 		}
 	}
 	
+	private void getAllTrainers(String putanja) {
+		BufferedReader citac = null;
+		try {
+			putanja += "\\data\\Users.csv";
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				Coach korisnik = new Coach(parametri[2], parametri[3], parametri[0], 
+						parametri[1], pol, parametri[5],getStringToRole(parametri[6]),false);
+				if(getStringToRole(parametri[6]) ==  User.RoleEnum.ADMIN) {
+					continue;
+				}
+				else trainers.put(parametri[2],korisnik);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+	}
+	
 	private void upisKorisnikaUFajl(String putanja, Customer korisnik) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
 		upis.append(korisnik.getName());
@@ -193,7 +230,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(NullToString(korisnik.getPoints()));
 		upis.append(",");
-		upis.append(getCustomerTypeToString(korisnik.getType().getType()));
+		upis.append(getCustomerTypeToString(korisnik.getType()));
 		upis.append(",");
 		upis.append(korisnik.getDeleted().toString());
 		upis.append("\n");
@@ -220,7 +257,7 @@ public class CustomersDAO {
 		upis.append(",");
 		upis.append(NullToString(korisnik.getPoints()));
 		upis.append(",");
-		upis.append(getCustomerTypeToString(korisnik.getType().getType()));
+		upis.append(getCustomerTypeToString(korisnik.getType()));
 		upis.append(",");
 		upis.append(korisnik.getDeleted().toString());
 		upis.append("\n");
@@ -283,15 +320,16 @@ public class CustomersDAO {
 		return null;
 	}
 	
-	private String getCustomerTypeToString(CustomerType.TypeEnum status) {
-		if (status == CustomerType.TypeEnum.BRONZE) {
+	private String getCustomerTypeToString(CustomerType status) {
+		if(status != null)
+		if (status.getType() == CustomerType.TypeEnum.BRONZE) {
 			return "BRONZE";
-		}else if (status == CustomerType.TypeEnum.SILVER) {
+		}else if (status.getType() == CustomerType.TypeEnum.SILVER) {
 			return "SILVER";
-		}else if (status == CustomerType.TypeEnum.GOLD) {
+		}else if (status.getType() == CustomerType.TypeEnum.GOLD) {
 			return "GOLD";
 		}
-		return null;
+		return "";
 	}
 	
 	public Customer dobaviKorisnika(String korisnickoIme) {
@@ -518,6 +556,19 @@ public class CustomersDAO {
 			}
 		}
 		return u;
+	}
+
+	public Manager getManager(String username) {
+		if(managers.containsKey(username))
+			return managers.get(username);
+		return null;
+	}
+
+
+	public Coach getCoach(String username) {
+		if(trainers.containsKey(username))
+			return trainers.get(username);
+		return null;
 	}
 	
 	
