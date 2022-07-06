@@ -35,7 +35,8 @@ public class CustomersDAO {
 	 "D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Customers.csv",
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Users.csv",
-	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv"};
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Memberships.csv",
+	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv"};
 
 	
 	public CustomersDAO(String path) {
@@ -45,7 +46,7 @@ public class CustomersDAO {
 		managers = new HashMap<String, Manager>();
 		trainers = new HashMap<String, Coach>();
 		getAdmin(path);
-		getAllCustomers(putanje[0]);
+		getAllCustomers(putanje[4]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		path += "\\data\\Memberships.csv";
@@ -64,9 +65,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[0], korisnik);
+		upisKorisnikaUFajl(putanje[4], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[1], korisnik);
+		upisUUsers(putanje[5], korisnik);
 		return korisnik;
 	}
 	
@@ -362,7 +363,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[1]);
+		writeAllUsers(putanje[5]);
 		return k;
 	}
 	
@@ -513,9 +514,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[2]);
+		writeAllMemberships(putanje[6]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[0]);
+		upisSvihKorisnikaUFajl(putanje[4]);
 		return member;
 	}
 	
@@ -550,7 +551,7 @@ public class CustomersDAO {
 				upisSvihKorisnikaUFajl(putanje[0]);
 				String put2 = path + "\\data\\Users.csv";
 				writeAllUsers(put2);
-				writeAllUsers(putanje[1]);
+				writeAllUsers(putanje[5]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -611,11 +612,15 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[3], manager);
+		upisMenadzeraUFajl(putanje[7], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[1], manager);
+		upisUUsers(putanje[5], manager);
 		return manager;
 	}
 	
+	public SportsFacility getManagerFacility(Manager m, String path) {
+		SportsFacilityDAO sf = new SportsFacilityDAO(path);
+		return sf.managers.get(m.getUsername()).getFacility();
+	}
 	
 }

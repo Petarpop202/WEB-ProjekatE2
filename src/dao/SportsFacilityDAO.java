@@ -34,7 +34,9 @@ public HashMap<String, Manager> managers;
 private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
 		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
 		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv",
-		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv"};
+		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
+		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
+		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv"};
 	
 
 	public Collection<SportsFacility> findAll() {
@@ -358,7 +360,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[1], facility);
+		upisObjektaUFajl(putanje[4], facility);
 		return facility;
 	}
 	
@@ -441,11 +443,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[0], l);
+		upisLokacijeUFajl(putanje[3], l);
 		upisObjektaUFajl(put1, sf);
-		upisObjektaUFajl(putanje[1], sf);
+		upisObjektaUFajl(putanje[4], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[2]);
+		upisSvihMenadzeraUFajl(putanje[5]);
 		return sf;
 	}
 	

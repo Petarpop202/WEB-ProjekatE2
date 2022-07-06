@@ -34,6 +34,10 @@ public class SportsFacilityService {
 	public void init() {
 			String contextPath = ctx.getRealPath("");
 			ctx.setAttribute("SportsFacilityDAO", new SportsFacilityDAO(contextPath));
+			ctx.setAttribute("CustomersDAO", new CustomersDAO(contextPath));
+			if (ctx.getAttribute("JWTSession") == null) {
+				ctx.setAttribute("JWTSession", new JWTSession());
+			}
 		}
 
 	@GET
@@ -61,6 +65,7 @@ public class SportsFacilityService {
 		Collection<Manager> managerss = dao.GetAllAvlManager();
 				return Response.ok(managerss).build();
 	}
+	
 	
 	@GET
 	@Path("/managers")

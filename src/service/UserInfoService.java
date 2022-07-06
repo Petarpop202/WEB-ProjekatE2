@@ -14,7 +14,9 @@ import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
 import beans.Customer;
+import beans.Manager;
 import beans.Membership;
+import beans.SportsFacility;
 import beans.User;
 import dao.CustomersDAO;
 import dao.SportsFacilityDAO;
@@ -91,5 +93,17 @@ public class UserInfoService {
 		}
 	}
 	
+	@GET
+	@Path("/managerFacility")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getManagersFacility(@Context HttpServletRequest zahtev) {
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		String putanja = kontekst.getRealPath("");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		Manager m = korisnikDAO.getManager(ulogovani.getUsername());
+		SportsFacility sf = korisnikDAO.getManagerFacility(m,putanja );
+				return Response.ok(sf).build();
+	}
 	
 }
