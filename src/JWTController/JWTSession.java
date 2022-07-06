@@ -31,6 +31,10 @@ public class JWTSession {
 				User korisnik = korisnikDAO.dobaviKorisnika(korisnickoIme);
 				if(korisnik == null)
 					korisnik = korisnikDAO.adminProfile(korisnickoIme);
+				if(korisnik == null)
+					korisnik = korisnikDAO.getManager(korisnickoIme);
+				if(korisnik == null)
+					korisnik = korisnikDAO.getCoach(korisnickoIme);
 				return korisnik;
 			} catch (Exception e) {
 				return null;

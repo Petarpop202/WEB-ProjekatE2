@@ -31,7 +31,8 @@ public HashMap<String, Manager> managers;
 	
 
 
-private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv"};
+private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
+		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv"};
 	
 
 	public Collection<SportsFacility> findAll() {
@@ -66,6 +67,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 	
 	private void getAllManagers(String putanja) {
 		BufferedReader citac = null;
+		String s;
 		try {
 			putanja += "\\data\\Managers.csv";
 			File fajl = new File(putanja);
@@ -74,8 +76,9 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 			while((linija = citac.readLine()) != null) {
 				String[] parametri = linija.split(",");
 				Boolean pol = Boolean.parseBoolean(parametri[4]);
+				SportsFacility sf = getFacility(parametri[8]);
 				Manager korisnik = new Manager(parametri[2], parametri[3], parametri[0], 
-						parametri[1], pol, parametri[5],User.RoleEnum.MANAGER,false,getFacility(parametri[8]));
+						parametri[1], pol, parametri[5],User.RoleEnum.MANAGER,false,sf);
 				managers.put(parametri[2],korisnik);
 			}
 		} catch (Exception e) {
@@ -215,9 +218,10 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 				Training.TypeEnum Type = getTrainingType(parametri[1]);
 				SportsFacility Facility = getFacility(parametri[2]);
 				String duration = parametri[3];
-				Coach Trainer = new Coach();
-				String Description = parametri[4];
-				String Picture = parametri[5];
+				CustomersDAO cd = new CustomersDAO(path);
+				Coach Trainer = cd.getCoach(parametri[4]);
+				String Description = parametri[5];
+				String Picture = parametri[6];
 				Training t = new Training(Name,Type,Facility,duration,Trainer,Description,Picture);
 				trainings.put(Name, t);
 			}
@@ -352,7 +356,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[0], facility);
+		upisObjektaUFajl(putanje[1], facility);
 		return facility;
 	}
 	
@@ -407,7 +411,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put2, l);
 		upisObjektaUFajl(put1, sf);
-		upisObjektaUFajl(putanje[0], sf);
+		upisObjektaUFajl(putanje[1], sf);
 		return sf;
 	}
 	
@@ -416,36 +420,6 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\S
 			return managers.get(username);
 		return null;
 	}
-	
-	/*public Collection<Manager> getAllAvailableManagers(String putanja) {
-		BufferedReader citac = null;
-		try {
-			putanja += "\\data\\Managers.csv";
-			File fajl = new File(putanja);
-			citac = new BufferedReader(new FileReader(fajl));
-			String linija = "";
-			while((linija = citac.readLine()) != null) {
-				String[] parametri = linija.split(",");
-				Boolean pol = Boolean.parseBoolean(parametri[4]);
-				Manager korisnik = new Manager(parametri[2], parametri[3], parametri[0], 
-						parametri[1], pol, parametri[5],User.RoleEnum.MANAGER,false,getFacility(parametri[8]));
-				if(korisnik.getFacility() == null) {
-				managers.put(parametri[2],korisnik);
-				}
-				else continue;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}finally {
-			if ( citac != null ) {
-				try {
-					citac.close();
-				}
-				catch (Exception e) { }
-			}
-		}
-		return (Collection<Manager>) managers;
-	}*/
 	
 	
 	public Collection<Manager> GetAllAvlManager(){
