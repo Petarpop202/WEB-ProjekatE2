@@ -68,13 +68,14 @@ public class SportsFacilityService {
 	
 	
 	@GET
-	@Path("/managers")
+	@Path("/trainings")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getTrainings(@Context HttpServletRequest zahtev, @QueryParam("name") String name) {
 		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
 		Collection<Training> trainings = dao.getFacilityTrainings(name);
 				return Response.ok(trainings).build();
 	}
+	
 	
 	
 	@POST
