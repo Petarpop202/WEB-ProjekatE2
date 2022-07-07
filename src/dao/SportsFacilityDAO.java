@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -20,6 +22,7 @@ import beans.Manager;
 import beans.SportsFacility;
 import beans.Training;
 import beans.Training.TypeEnum;
+import beans.TrainingHistory;
 import beans.User;
 
 
@@ -29,7 +32,7 @@ private HashMap<String, Location> locations;
 private HashMap<String, Training> trainings;
 public HashMap<String, Manager> managers;
 public HashMap<String, Coach> trainers;
-	
+public HashMap<String, TrainingHistory> trainingHistories;
 
 
 private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
@@ -39,7 +42,8 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
 		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
 		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv",
-		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Trainings.csv"};
+		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Trainings.csv",
+		"C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\TrainingHistories.csv"};
 	
 
 	public Collection<SportsFacility> findAll() {
@@ -68,14 +72,45 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		locations = new HashMap<String, Location>();
 		trainings = new HashMap<String, Training>();
 		managers = new HashMap<String, Manager>();
+		trainingHistories = new HashMap<String, TrainingHistory>();
 
 		getAllLocations(path);
 		getAllSportFacilities(path);
 		getAllTrainings(path);
 		getAllManagers(path);
+		getAllTrainingHistories(path);
 
 	}
 	
+	private void getAllTrainingHistories(String path) {
+		BufferedReader reader = null;
+		try {
+			File file = new File(path + "data\\TrainingHistories.csv");
+			reader = new BufferedReader(new FileReader(file));
+			String linija = "";
+			while ((linija = reader.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				String Date= parametri[0];
+				Training training = getTraining(parametri[1]);
+				CustomersDAO cd = new CustomersDAO(path);
+				Customer custom = cd.dobaviKorisnika(parametri[2]);
+				Coach coach = cd.getCoach(parametri[3]);
+				TrainingHistory t = new TrainingHistory(Date,training,custom,coach);
+				trainingHistories.put(parametri[1],t);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( reader != null ) {
+				try {
+					reader.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+		
+	}
+
 	private void getAllManagers(String putanja) {
 		BufferedReader citac = null;
 		String s;
@@ -542,8 +577,48 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		
 	}
 
-
-
-
+	public Training getTraining(String name) {
+		if(trainings.containsKey(name))
+			return trainings.get(name);
+		return null;
+	}
 	
+	public Collection<TrainingHistory> getTrainingHistoriesOfCustomer(String name, String path){
+		Collection<TrainingHistory> history = new ArrayList<TrainingHistory>();
+		for(TrainingHistory th : trainingHistories.values()) {
+			if(th.getCustomer().getUsername().equals(name))
+				history.add(th);
+		}
+		return history;
+	}
+
+	public TrainingHistory checkTraining(Customer ulogovani, Training tr,String path) {
+		LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		TrainingHistory his = new TrainingHistory(date.format(formatter).toString(),tr,ulogovani,tr.getTrainer());
+		trainingHistories.put(tr.getName(),his);
+		
+		try {
+			writeHistory(his,path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return his;
+	}
+
+	private void writeHistory(TrainingHistory his, String path) throws IOException {
+		path += "\\data\\TrainingHistories.csv";
+		Writer upis = new BufferedWriter(new FileWriter(path, true));
+		upis.append(his.getDate());
+		upis.append(",");
+		upis.append(his.getTraining().getName());
+		upis.append(",");
+		upis.append(his.getCustomer().getUsername());
+		upis.append(",");
+		upis.append(his.getTrainer().getUsername());
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+	}
 }

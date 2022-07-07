@@ -20,6 +20,7 @@ $(document).ready(function () {
         dataType:"json",
         success: function(data){
             createCards(data);
+            createTrainers(data);
         }
     })
 
@@ -52,4 +53,18 @@ $(document).ready(function () {
 </div>`;}
 let n = document.getElementById("sadrzaj");
 n.innerHTML = i;
+ }
+
+ function createTrainers(objekat){
+    let i = '<tr><th>#</th><th>Ime</th><th>Prezime</th><th>Korisnicko ime</th><th>Datum rodjenja</th><th>Pol</th></tr>';
+    let h = 1;
+    for(let s of objekat){
+        if(s.trainer.gender)
+            p = "Musko";
+        else p = "Zensko"
+        i = i + '<tr><td>'+h+'</td><td>'+s.trainer.name+'</td><td>'+s.trainer.surname+'</td><td>'+s.trainer.username+'</td><td>'+s.trainer.date+'</td><td>'+p+'</td></tr>';
+        h++;
+    }
+    let n = document.getElementById("tabela");
+    n.innerHTML = i;
  }
