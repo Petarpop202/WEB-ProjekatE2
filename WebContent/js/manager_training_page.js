@@ -3,20 +3,17 @@ function create(document){
     let type = document.getElementById("type").value;
     let facility = document.getElementById("facility").value;
     let duration = $('input[name="duration"]').val();
-    let trainer = document.getElementById("manager").value;
-    let description = document.getElementById("description").value;
+    let trainer = document.getElementById("trainer").value;
+    let description = $('input[name="description"]').val();
     var input = document.getElementById("picture");
     var file = input.value.split("\\");
     var one = file[file.length-1];
     var pic = one.split(".");
-    var picture = pic[0];
-    alert(picture);
-    
-    
+    var picture = pic[0];    
 
 
         $.post({
-            url: "../rest/sports/create?name=" + name + "&type="+ type + "&facility=" + facility + "&duration=" + duration + "&trainer=" + trainer + "&picture=" + picture + "&description=" + description,
+            url: "../rest/sports/training?name=" + name + "&type="+ type + "&facility=" + facility + "&duration=" + duration + "&trainer=" + trainer + "&picture=" + picture + "&description=" + description,
             contentType: "application/json",
 
             success: function(odgovor) {
@@ -34,7 +31,7 @@ function create(document){
 }
 
 $(window).ready(function() {
-$("#create").click(function (event) {
+$("#createTraining").click(function (event) {
     event.preventDefault();
     create(document);
     
@@ -44,32 +41,52 @@ $("#create").click(function (event) {
 
 $(document).ready(function () {
     $.ajax({
-        url : "../rest/sports/trainer",
+        url : "../rest/sports/facilities",
         type: "GET",
         success: function(data)
         {
-            getDropDowns(data);
+            getFacilities(data);
         }
     });
 })
 
 
-function getDropDowns(trainers, facilities){
+function getFacilities(facilities){
     let i = "";
-    let j = "";
-    for(let t of trainers){
-        i = i + "<option value="+ t.username +">"+t.name+" "+t.surname+"</option> "
+    for(let f of facilities){
+        i = i + "<option value="+ f.name +">" + f.name+ "</option>"
     }
 
-    for(let sf of faiclity){
-        j = j + "<option value="+ sf.username + ">" + sf.name + "</option> "
-    }
-
-
-    
-    let obj  = document.getElementById("trainer");
-    let obj2  = document.getElementById("facility");
-    
+    let obj  = document.getElementById("facility");
     obj.innerHTML = i;
-    obj2.innerHTML = j;
     }
+
+
+
+
+
+
+
+
+
+    $(document).ready(function () {
+        $.ajax({
+            url : "../rest/sports/trainers",
+            type: "GET",
+            success: function(data)
+            {
+                getTrainers(data);
+            }
+        });
+    })
+    
+    
+    function getTrainers(trainers){
+        let i = "";
+        for(let t of trainers){
+            i = i + "<option value="+ t.username +">"+t.name+" "+t.surname+"</option>"
+        }
+    
+        let obj  = document.getElementById("trainer");
+        obj.innerHTML = i;
+        }

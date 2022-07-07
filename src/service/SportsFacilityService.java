@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
+import beans.Coach;
 import beans.Customer;
 import beans.Manager;
 import beans.SportsFacility;
@@ -110,6 +111,27 @@ public class SportsFacilityService {
 		} catch (Exception e) {
 			return Response.status(500).entity("Greska pri kreiranju treninga!").build();
 		}
+	}
+	
+	
+	
+	@GET
+	@Path("/trainers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getTrainers(@Context HttpServletRequest zahtev) {
+		CustomersDAO dao = (CustomersDAO) ctx.getAttribute("CustomersDAO");
+		Collection<Coach> trainers = dao.getCoaches();
+				return Response.ok(trainers).build();
+	}
+	
+	
+	@GET
+	@Path("/facilities")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSportsFacilities(@Context HttpServletRequest zahtev) {
+		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		Collection<SportsFacility> facility = dao.GetAll();
+				return Response.ok(facility).build();
 	}
 	
 	

@@ -578,6 +578,10 @@ public class CustomersDAO {
 		return null;
 	}
 	
+	public Collection<Coach> findAllCoaches(){
+		return trainers.values();
+	}
+	
 	private void upisMenadzeraUFajl(String putanja, Manager manager) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
 		upis.append(manager.getName());
@@ -663,6 +667,14 @@ public class CustomersDAO {
 		upisUUsers(put2, coach);
 		upisUUsers(putanje[5], coach);
 		return coach;
+	}
+	
+	public Collection<Coach> getCoaches() {
+		Collection<Coach> coaches = new ArrayList<Coach>();
+		for(Coach c : findAllCoaches()) {
+				coaches.add(c);
+		}
+		return coaches;
 	}
 	
 }
