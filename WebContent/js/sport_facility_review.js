@@ -88,7 +88,6 @@ function zakazi(id){
         contentType: "application/json",
         success: function(odgovor) {
             alert("Uspesna prijava")
-            window.location.reload();
         },
         error: function(odgovor) {
             document.getElementById("eril").removeAttribute("hidden");

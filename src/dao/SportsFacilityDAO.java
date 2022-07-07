@@ -87,7 +87,33 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 	}
 	
 	private void getAllCheckedTrainings(String path) {
-		
+		BufferedReader reader = null;
+		try {
+			File file = new File(path + "data\\CheckedTrainings.csv");
+			reader = new BufferedReader(new FileReader(file));
+			String linija = "";
+			while ((linija = reader.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Training training= getTraining(parametri[0]);
+				String checked = parametri[1];
+				String trainingDate = parametri[2];
+				CustomersDAO cd = new CustomersDAO(path);
+				Customer custom = cd.dobaviKorisnika(parametri[3]);
+				Coach coach = cd.getCoach(parametri[4]);
+				Boolean active = Boolean.parseBoolean(parametri[5]);
+				CheckedTraining t = new CheckedTraining(training,checked,trainingDate,custom,coach,active);
+				checkedTrainings.put(trainingDate,t);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( reader != null ) {
+				try {
+					reader.close();
+				}
+				catch (Exception e) { }
+			}
+		}
 		
 	}
 
