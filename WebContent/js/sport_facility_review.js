@@ -25,6 +25,7 @@
         dataType: "json",
         success: function(treninzi){
             reviewTr(treninzi);
+            editForms(treninzi);
         }
     })
 
@@ -46,6 +47,8 @@
 function reviewTr(objekat){
 
     let i = "";
+    let z = 1;
+    let s = "onclick=zakazi('`+data.name+`')";
     for(let data of objekat){
         i = i + `<div class="col-sm mt-5 d-flex justify-content-center">
         <div class="card border-success" style="width: 19rem;">
@@ -55,12 +58,13 @@ function reviewTr(objekat){
                 <p class="card-text">`+data.description+`</p>
                 <p class="card-text">String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje</p>
                 <div class="float-start">
-                    <a onclick="zakazi('`+data.name+`')" class="btn btn-primary">Prijavi</a>
+                    <a data-toggle="modal" data-target="#modalEditContent`+z+`" class="btn btn-primary">Prijavi</a>
                     <p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje: `+data.duration+`min</p>
                 </div>
             </div>
         </div>
-    </div>`;}
+    </div>`;
+    z++;}
 
     let t = document.getElementById("sadrzaj");
     t.innerHTML = i;  
@@ -76,15 +80,69 @@ function profile(){
 }
 
 function zakazi(id){
+    let date = $('input#datum').val();
+
     $.post({
-        url: "../rest/info/doTraining?name="+id,
+        url: "../rest/info/doTraining?name="+id+"&date="+date,
         headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
         contentType: "application/json",
         success: function(odgovor) {
             alert("Uspesna prijava")
+            window.location.reload();
         },
         error: function(odgovor) {
-                alert("Greska prilikom prijave!");
+            document.getElementById("eril").removeAttribute("hidden");
         }
     });
+}
+
+function editForms(treninzi){
+    let i = "";
+    let z = 1;
+    var today = new Date();
+    var date =today. getDate() +'.'+(today. getMonth() + 1)+'.'+ today. getFullYear()+'.';
+    var dateTime = date;
+    for(let data of treninzi){
+        i = i + `<div class="modal fade" id="modalEditContent`+z+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content bg-dark text-white">
+            <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold text-primary">Prijava treninga</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+
+            <div class="md-form mb-5 text-primary">
+				<label data-error="wrong" data-success="right" for="name">Ime</label>
+				<input type="text" id="name" name="name" class="form-control validate">
+						
+				<label class="text-lg-right" id="eri" style="color: red;" hidden>Pogresan format imena!</label>
+			</div>
+
+            <div class="md-form mb-5 text-primary">
+				<label data-error="wrong" data-success="right" for="name">Prezime</label>
+				<input type="text" id="surname" name="surname" class="form-control validate">
+						
+				<label class="text-lg-right" id="eri" style="color: red;" hidden>Pogresan format imena!</label>
+			</div>
+
+            <div class="md-form mb-5 text-primary">
+            <label data-error="wrong" data-success="right" for="date">Zeljeni datum</label>
+            <input type="text" class="datepickeri form-control" id="datum" name="date"
+            min="`+dateTime+`" onfocus="(this.type='date')">
+            <label id="erd" style="color: red;">Izaberite datum</label>
+        </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center"><button type="submit" id="edit" name="edit" onclick="zakazi('`+data.name+`')" class="btn btn-deep-orange text-white">Zakazi</button>
+            <label class="text-lg-right" id="eril" style="color: red;" hidden>Nemate vise termina !</label>
+            </div>
+            </div>
+        </div>
+        </div>`;
+        z++;
+    }
+    let n = document.getElementById("form");
+    n.innerHTML = i;
 }

@@ -368,7 +368,7 @@ public class CustomersDAO {
 		return k;
 	}
 	
-	private void writeAllMemberships(String putanja) throws IOException{
+	public void writeAllMemberships(String putanja) throws IOException{
 		Writer upis = new BufferedWriter(new FileWriter(putanja));
 		for(Membership member : memberships.values()) {
 			upis.append(getTypeToString(member.getType()));
