@@ -61,14 +61,6 @@ function getFacilities(facilities){
     obj.innerHTML = i;
     }
 
-
-
-
-
-
-
-
-
     $(document).ready(function () {
         $.ajax({
             url : "../rest/sports/trainers",
