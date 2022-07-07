@@ -53,12 +53,14 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 	public Collection<Manager> findAllManagers(){
 		return managers.values();
 	}
+	
 
 	public SportsFacilityDAO() {
 		facilities = new HashMap<String, SportsFacility>();
 		locations = new HashMap<String, Location>();
 		trainings = new HashMap<String, Training>();
 		managers = new HashMap<String, Manager>();
+
 	}
 	
 	public SportsFacilityDAO(String path) {
@@ -66,10 +68,12 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		locations = new HashMap<String, Location>();
 		trainings = new HashMap<String, Training>();
 		managers = new HashMap<String, Manager>();
+
 		getAllLocations(path);
 		getAllSportFacilities(path);
 		getAllTrainings(path);
 		getAllManagers(path);
+
 	}
 	
 	private void getAllManagers(String putanja) {
@@ -100,6 +104,8 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 	}
 	
+	
+
 
 	private void getAllSportFacilities(String path) {
 		BufferedReader reader = null;
@@ -393,7 +399,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[5], facility);
+		upisObjektaUFajl(putanje[1], facility);
 		return facility;
 	}
 	
@@ -476,11 +482,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[4], l);
+		upisLokacijeUFajl(putanje[0], l);
 		upisObjektaUFajl(put1, sf);
 		upisObjektaUFajl(putanje[5], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[6]);
+		upisSvihMenadzeraUFajl(putanje[2]);
 		return sf;
 	}
 	
@@ -505,11 +511,12 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		String put0 = putanja + "\\data\\Trainings.csv";
 		Training.TypeEnum t = getTrainingTypeSr(type);
 		SportsFacility sf = getFacility(facility);
-		Coach c = getCoach(trainer);
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Coach c = cd.getCoach(trainer);
 		Training tr = new Training(name,t,sf,duration,c,description,picture);
 
 		upisTreningaUFajl(put0, tr);
-		upisTreningaUFajl(putanje[7], tr);
+		upisTreningaUFajl(putanje[3], tr);
 
 		return tr;
 	}
@@ -534,6 +541,9 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		upis.close();
 		
 	}
+
+
+
 
 	
 }
