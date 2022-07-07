@@ -536,6 +536,10 @@ public class CustomersDAO {
 			if(!m.getDeleted())
 				users.add(m);
 		}
+		for(Coach c : trainers.values()) {
+			if(!c.getDeleted())
+				users.add(c);
+		}
 		users.add(admininstrator);
 		return users;
 		
