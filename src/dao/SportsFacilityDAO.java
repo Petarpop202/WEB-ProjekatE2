@@ -434,7 +434,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[5], facility);
+		upisObjektaUFajl(putanje[1], facility);
 		return facility;
 	}
 	
@@ -517,11 +517,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[4], l);
+		upisLokacijeUFajl(putanje[0], l);
 		upisObjektaUFajl(put1, sf);
-		upisObjektaUFajl(putanje[5], sf);
+		upisObjektaUFajl(putanje[1], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[6]);
+		upisSvihMenadzeraUFajl(putanje[2]);
 		return sf;
 	}
 	
@@ -551,7 +551,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		Training tr = new Training(name,t,sf,duration,c,description,picture);
 
 		upisTreningaUFajl(put0, tr);
-		upisTreningaUFajl(putanje[7], tr);
+		upisTreningaUFajl(putanje[3], tr);
 
 		return tr;
 	}
@@ -621,4 +621,65 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		upis.flush();
 		upis.close();
 	}
+
+	public Training izmeniTrening(String trainingName, String duration, String description, String trainer, String type,
+			String putanja) throws IOException {
+		String put0 = putanja + "\\data\\Trainings.csv";
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Coach c = cd.getCoach(trainer);
+		Training.TypeEnum t = getTrainingTypeSr(type);
+		Training tr = new Training(trainingName,t,duration,c,description);
+		Training training = trainings.get(tr.getName());
+		
+		if (!tr.getName().equals(training.getName())) {
+			training.setName(tr.getName());
+		}
+		if (!tr.getTrainer().equals(training.getTrainer())) {
+			training.setTrainer(tr.getTrainer());
+		}
+		if (!tr.getDuration().equals(training.getDuration())) {
+			training.setDuration(tr.getDuration());
+		}
+		if (!tr.getDescription().equals(training.getDescription())) {
+			training.setDescription(tr.getDescription());
+		}
+		if (!tr.getType().equals(training.getType())) {
+			training.setType(tr.getType());
+		}
+		
+		writeAllTrainings(put0);
+		writeAllTrainings(putanje[3]);
+		return training;
+		
+	}
+	
+	private void writeAllTrainings(String putanja) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(putanja));
+		for(Training training : trainings.values()) {
+			upis.append(training.getName());
+			upis.append(",");
+			upis.append(getTrainingTypeToString(training.getType()));
+			upis.append(",");
+			upis.append(training.getFacility().getName());
+			upis.append(",");
+			upis.append(training.getDuration());
+			upis.append(",");
+			upis.append(training.getTrainer().getUsername());
+			upis.append(",");
+			upis.append(training.getDescription());
+			upis.append(",");
+			upis.append(training.getPicture());
+			upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

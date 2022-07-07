@@ -25,6 +25,16 @@ $(document).ready(function () {
         }
     })
 
+
+    $.ajax({
+        url : "../rest/sports/trainers",
+        type: "GET",
+        success: function(data)
+        {
+            getTrainers(data);
+        }
+    })
+
  });
 
 
@@ -91,7 +101,7 @@ n.innerHTML = i;
                                 
                             <div class="modal-body mx-3">
                                     <div class="md-form mb-5 text-primary"><i class="fas fa-user prefix grey-text"></i><label data-error="wrong" data-success="right" for="name">Naziv treninga</label>
-                                    <input type="text" value="`+data.name+`" id="name" name="name" class="form-control validate">
+                                    <input type="text" value="`+data.name+`" id="name" name="trainingName" class="form-control validate">
                             </div>
                                 
                             <div class="md-form mb-5 text-primary">
@@ -99,18 +109,24 @@ n.innerHTML = i;
                                 <div>
                                     <label data-error="wrong" data-success="right" for="username">Tip treninga</label>
                                 </div>
-                                <select class="form-select" name="gender">
+                                <select class="form-select" name="type">
                                     <option value=Teretana selected>Teretana</option>
-                                    <option value=Grupni trening>Grupni trening</option>
-                                    <option value=Personalni trening>Personalni trening</option>
+                                    <option value="Grupni trening">Grupni trening</option>
+                                    <option value="Personalni trening">Personalni trening</option>
                                 </select>
                             </div>
 
+                            <div class="form-group col-auto">
+                            <label for="trainer">Trener</label>
+                            <select id="trainer" class="form-group col-auto custom-select">
+                                
+                            </select>
+                        </div>
                             
                             <div class="md-form mb-5 text-primary">
                                 <i class="fas fa-envelope prefix grey-text"></i>
                                 <label data-error="wrong" data-success="right" for="duration">Trajanje</label>
-                                <input type="text" value="`+data.duration+`" name="duration" class="form-control validate" disabled>
+                                <input type="text" value="`+data.duration+`" name="duration" class="form-control validate">
                             </div>
 
 
@@ -118,7 +134,7 @@ n.innerHTML = i;
                             <div class="md-form mb-5 text-primary">
                                 <i class="fas fa-envelope prefix grey-text"></i>
                                 <label data-error="wrong" data-success="right" for="description">Opis</label>
-                                <input type="text" value="`+data.description+`" name="description" class="form-control validate" disabled>
+                                <input type="text" value="`+data.description+`" name="description" class="form-control validate">
                             </div>
                             
                         </div>
@@ -133,17 +149,6 @@ n.innerHTML = i;
 }
 
 
-function getFacilities(facilities){
-    let i = "";
-    for(let f of facilities){
-        i = i + "<option value="+ f.name +">" + f.name+ "</option>"
-    }
-
-    let obj  = document.getElementById("facility");
-    obj.innerHTML = i;
-    }
-
-
     function getTrainers(trainers){
         let i = "";
         for(let t of trainers){
@@ -153,6 +158,34 @@ function getFacilities(facilities){
         let obj  = document.getElementById("trainer");
         obj.innerHTML = i;
         }
+
+        function EditStart(){
+            let trainingName = $('input[name="trainingName"]').val();
+            let duration = $('input[name="duration"]').val();
+            let description = $('input[name="description"]').val();
+            let trainer = document.getElementById("trainer").value;
+            let type = $('select[name="type"]').find(":selected").val();
+
+
+            $.ajax({
+                type: "PUT",
+                url: "../rest/sports/editTraining?trainingName="+trainingName+ "&duration=" + duration + "&description=" + description + "&trainer=" + trainer + "&type=" + type,
+
+                contentType:"application/json",
+                dataType:"json",
+                success: function(odgovor) {
+                    alert("Uspesno izmenjen trening!")
+                    window.location.assign("http://localhost:8080/FitnessCentar/html/manager_training_page.html");
+                },
+                error: function(odgovor) {
+                    alert(odgovor.responseText);
+                    if(odgovor.status == 401) {
+                        alert("Greska!");
+                    }
+                }
+            });
+            
+    }
 
 
 
