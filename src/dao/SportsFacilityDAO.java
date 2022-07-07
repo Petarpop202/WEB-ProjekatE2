@@ -434,7 +434,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[1], facility);
+		upisObjektaUFajl(putanje[5], facility);
 		return facility;
 	}
 	
@@ -517,11 +517,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[0], l);
+		upisLokacijeUFajl(putanje[4], l);
 		upisObjektaUFajl(put1, sf);
 		upisObjektaUFajl(putanje[5], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[2]);
+		upisSvihMenadzeraUFajl(putanje[6]);
 		return sf;
 	}
 	
@@ -551,7 +551,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		Training tr = new Training(name,t,sf,duration,c,description,picture);
 
 		upisTreningaUFajl(put0, tr);
-		upisTreningaUFajl(putanje[3], tr);
+		upisTreningaUFajl(putanje[7], tr);
 
 		return tr;
 	}
@@ -566,7 +566,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		upis.append(",");
 		upis.append(training.getDuration());
 		upis.append(",");
-		upis.append(training.getTrainer().getName());
+		upis.append(training.getTrainer().getUsername());
 		upis.append(",");
 		upis.append(training.getDescription());
 		upis.append(",");

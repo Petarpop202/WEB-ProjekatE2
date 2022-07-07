@@ -19,9 +19,9 @@ $(document).ready(function () {
         contentType:"application/json",
         dataType:"json",
         success: function(data){
-            createCards(data);
-           // createTrainers(data);
-          
+            createCards(data);  
+            loadEditPage(data);  
+            createTrainers(data); 
         }
     })
 
@@ -40,7 +40,6 @@ $(document).ready(function () {
     let i ="";
     let z = 1;
     for(let data of objekat){
-    loadEditPage(data,z);
     i = i + `<div class="col-sm mt-5 d-flex justify-content-center">
     <div class="card border-success" style="width: 19rem;">
         <img src="../img/`+data.picture+`.jpg" class="card-img-top" alt="...">
@@ -49,7 +48,7 @@ $(document).ready(function () {
             <p class="card-text">`+data.description+`</p>
             <p class="card-text">String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje</p>
             <div class="float-start">
-                <a href="" data-toggle="modal" data-target="#modalEditContent" onclick=loadEditPage('`+ data.name +`','`+z+`') class="btn btn-primary">Izmeni</a>
+                <a href="" data-toggle="modal" data-target="#modalEditContent`+z+`" class="btn btn-primary">Izmeni</a>
                 <a href="" class="btn btn-primary">Izbrisi</a>
                 <p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje: `+data.duration+`min</p>
             </div>
@@ -77,10 +76,12 @@ n.innerHTML = i;
  }
 
 
- function loadEditPage(data,i){
-
+ function loadEditPage(objekti){
+    let i = 1;
+    let h = "";
     let n = document.getElementById("edit");
-    n.innerHTML = `<div class="modal fade" id="modalEditContent`+i+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    for(let data of objekti){
+    h = h + `<div class="modal fade" id="modalEditContent`+i+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content bg-dark text-white">
                             <div class="modal-header text-center">
@@ -120,15 +121,15 @@ n.innerHTML = i;
                                 <input type="text" value="`+data.description+`" name="description" class="form-control validate" disabled>
                             </div>
                             
-                            <div class="form-group col-auto">
-                                <label for="exampleFormControlFile1">Izaberite sliku treninga</label>
-                                <input type="file" class="form-control-file" id="`+data.picture+`">
-                            </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-center"><button type="submit" id="edit" name="edit" onclick="EditStart()" class="btn btn-deep-orange text-white">Izmeni</button>
                         </div>
                     </div>
-                    </div>`;
+                    </div>
+                </div>`;
+                    i++;
+                }
+                n.innerHTML = h;
 }
 
 
