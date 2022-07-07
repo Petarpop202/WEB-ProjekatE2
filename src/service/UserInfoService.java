@@ -1,5 +1,7 @@
 package service;
 
+import java.util.Collection;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import beans.Customer;
 import beans.Manager;
 import beans.Membership;
 import beans.SportsFacility;
+import beans.Training;
 import beans.User;
 import dao.CustomersDAO;
 import dao.SportsFacilityDAO;
@@ -104,6 +107,21 @@ public class UserInfoService {
 		Manager m = korisnikDAO.getManager(ulogovani.getUsername());
 		SportsFacility sf = korisnikDAO.getManagerFacility(m,putanja );
 				return Response.ok(sf).build();
+	}
+	
+	@GET
+	@Path("/FacilityTrainings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFacilityTrainings(@Context HttpServletRequest zahtev) {
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sfD = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		String putanja = kontekst.getRealPath("");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		Manager m = korisnikDAO.getManager(ulogovani.getUsername());
+		SportsFacility sf = korisnikDAO.getManagerFacility(m,putanja );
+		Collection<Training> trainings = sfD.getFacilityTrainings(sf.getName());
+				return Response.ok(trainings).build();
 	}
 	
 }
