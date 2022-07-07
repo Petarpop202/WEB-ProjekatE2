@@ -43,14 +43,26 @@
     
 }
 
-function reviewTr(treninzi){
+function reviewTr(objekat){
 
     let i = "";
-    for(let t of treninzi){
-        i = i + ' <tr><td>'+ t.name+'</td><td>'+t.facility.name+'</td><td>'+t.description+'</td><td><button type="button" class="btn btn-secondary">Prijavi se</button></td></tr>';
-    }
+    for(let data of objekat){
+        i = i + `<div class="col-sm mt-5 d-flex justify-content-center">
+        <div class="card border-success" style="width: 19rem;">
+            <img src="../img/`+data.picture+`.jpg" class="card-img-top" alt="...">
+            <div class="card-body p-4 rounded-bottom" >
+                <h5 class="card-title font-weight-bold">`+data.name+`&nbsp;&nbsp;&nbsp;&nbsp;</h5>
+                <p class="card-text">`+data.description+`</p>
+                <p class="card-text">String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje</p>
+                <div class="float-start">
+                    <a onclick="zakazi('`+data.name+`')" class="btn btn-primary">Prijavi</a>
+                    <p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje: `+data.duration+`min</p>
+                </div>
+            </div>
+        </div>
+    </div>`;}
 
-    let t = document.getElementById("tabletr");
+    let t = document.getElementById("sadrzaj");
     t.innerHTML = i;  
 }
 
@@ -61,4 +73,18 @@ function reviewLocation(objekat){
 
 function profile(){
     location.assign("profile_page.html");
+}
+
+function zakazi(id){
+    $.post({
+        url: "../rest/info/doTraining?name="+id,
+        headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+        contentType: "application/json",
+        success: function(odgovor) {
+            alert("Uspesna prijava")
+        },
+        error: function(odgovor) {
+                alert("Greska prilikom prijave!");
+        }
+    });
 }

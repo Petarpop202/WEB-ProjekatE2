@@ -9,7 +9,7 @@ public class TrainingHistory {
 	public TrainingHistory() {
 		super();
 	}
-	public TrainingHistory(String date, Training training, beans.Customer customer, Coach trainer) {
+	public TrainingHistory(String date, Training training,Customer customer, Coach trainer) {
 		super();
 		Date = date;
 		Training = training;
