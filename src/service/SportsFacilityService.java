@@ -129,7 +129,7 @@ public class SportsFacilityService {
 	
 	
 	@GET
-	@Path("/facilities")
+	@Path("/edit")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getSportsFacilities(@Context HttpServletRequest zahtev) {
 		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
@@ -137,6 +137,26 @@ public class SportsFacilityService {
 				return Response.ok(facility).build();
 	}
 	
+
+	
+	@PUT
+	@Path("/editTraining")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response izmenaPodataka(@Context HttpServletRequest zahtev, @QueryParam("trainingName") String trainingName, @QueryParam("duration") String duration, @QueryParam("description") String description, @QueryParam("trainer") String trainer, @QueryParam("type") String type) {
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+			String putanja = ctx.getRealPath("");
+			try {
+				Training t = sportsFacilityDAO.izmeniTrening(trainingName, duration, description, trainer, type, putanja);
+				if (t == null) {
+					return Response.status(400).entity("Greska pri izmeni podataka").build();
+				}
+				return Response.ok(t).build();
+			} catch (Exception e) {
+				return Response.status(400).entity("Greska pri izmeni podataka").build();
+			}
+	}
+	
+
 	@PUT
 	@Path("/delete")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -155,4 +175,5 @@ public class SportsFacilityService {
 		return Response.status(500).entity("Greska pri otkazivanju!").build();
 				
 	}
+
 }

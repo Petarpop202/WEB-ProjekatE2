@@ -1,14 +1,15 @@
 jkujkui,kjui,kjui,kjui,true,2003-12-27,CUSTOMER,true
 David,Mijailovic,a,a,true,2003-12-26,CUSTOMER,true
+Djoko,Salic,djokara,djokara,true,2003-12-01,CUSTOMER,true
 David,Mijailovic,koda,koda,true,2003-12-18,CUSTOMER,false
+Davidenko,Davidovic,d,d,true,2003-12-03,CUSTOMER,false
 Serena,Cirkovic,seki,seki,false,2003-12-01,CUSTOMER,false
 David,Mijailovic,davidenko9,david,true,2003-12-04,CUSTOMER,false
 Mitar,Miric,mitar,mitar,true,2003-12-09,CUSTOMER,false
 Peta,Kol,davidenko,davidenko,true,2003-12-12,CUSTOMER,false
 Petar,Popovic,Pekara,piletina,true,2001-04-11,CUSTOMER,false
 Petar,Popovic,Petronijevic,kiklop,true,2003-12-18,CUSTOMER,false
-Stevan,Stevanovic,admin,admin,true,1992-12-11,ADMIN,false
-Nikola,Nikolic,tr,tr,true,1995-11-11,COACH,false
 Jovan,Tesic,jovan,jovan,true,2003-12-04,MANAGER,false
 Kojo,Kojic,koja,koja,true,2003-12-04,MANAGER,false
+Nikola,Nikolic,tr,tr,true,1995-11-11,COACH,false
 Rada,Radic,radalegenda,rada123,false,2003-07-31,COACH,false

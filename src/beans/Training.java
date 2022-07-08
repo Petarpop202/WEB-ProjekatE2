@@ -26,6 +26,17 @@ public class Training {
 		Description = description;
 		Picture = picture;
 	}
+	
+	
+	public Training(String trainingName, TypeEnum t, String duration, Coach trainer, String description) {
+		Name = trainingName;
+		Type = t;
+		Duration = duration;
+		Trainer = trainer;
+		Description = description;
+	}
+	
+	
 	public String getName() {
 		return Name;
 	}
