@@ -30,19 +30,19 @@ $(document).ready(function () {
 
 function setTime(){
     var today = new Date();
-    var date =(today. getDate() + 1) +'.'+(today. getMonth() + 1)+'.'+ today. getFullYear()+'.';
+    var date =(today. getDate() + 1) +'-'+(today. getMonth() + 1)+'-'+ today. getFullYear();
     var dateTime = date;
     let n = document.getElementById("day");
     n.innerHTML = 'Datum isteka: '+dateTime;
 
     var today = new Date();
-    var date =today. getDate() +'.'+(today. getMonth() + 2)+'.'+ today. getFullYear()+'.';
+    var date =today. getDate() +'-'+(today. getMonth() + 2)+'-'+ today. getFullYear();
     var dateTime = date;
     let nm = document.getElementById("month");
     nm.innerHTML = 'Datum isteka: '+dateTime;
 
     var today = new Date();
-    var date =today. getDate() +'.'+(today. getMonth() + 1)+'.'+ (today. getFullYear() + 1)+'.';
+    var date =today. getDate() +'-'+(today. getMonth() + 1)+'-'+ (today. getFullYear() + 1);
     var dateTime = date;
     let ny = document.getElementById("year");
     ny.innerHTML = 'Datum isteka: '+dateTime;
@@ -53,8 +53,9 @@ function profile(){
 }
 function buyDay(){
     var today = new Date();
-    var date =today. getDate() +'.'+(today. getMonth() + 1)+'.'+ today. getFullYear()+'.';
-    var date1 =(today. getDate() + 1) +'.'+(today. getMonth() + 1)+'.'+ today. getFullYear()+'.';
+    var date = today. getFullYear() +'-0'+ (today. getMonth() + 1) +'-0'+ today. getDate()  ;
+    var date1 = today. getFullYear()+'-0'+(today. getMonth() + 1) +'-0'+(today. getDate() + 1);
+
     $.ajax({
         url : "../rest/info/getUser",
         headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
@@ -63,7 +64,7 @@ function buyDay(){
         success: function(data)
         {
             let price = 700.0;
-            let termins = 1000;
+            let termins = 1;
             let type = "Dnevna";
             setMember(date,date1,price,termins,type,data);
         },
@@ -76,8 +77,8 @@ function buyDay(){
 }
 function buyMonth(){
     var today = new Date();
-    var date =today. getDate() +'.'+(today. getMonth() + 1)+'.'+ today. getFullYear()+'.';
-    var date1 =today. getDate() +'.'+(today. getMonth() + 2)+'.'+ today. getFullYear()+'.';
+    var date = today. getFullYear()+'-0'+(today. getMonth() + 1)+'-0'+today. getDate() ;
+    var date1 = today. getFullYear()+'-0'+(today. getMonth() + 2)+'-0'+today. getDate() ;
     $.ajax({
         url : "../rest/info/getUser",
         headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
@@ -97,8 +98,8 @@ function buyMonth(){
 }
 function buyYear(){
     var today = new Date();
-    var date = today. getDate() +'.'+(today. getMonth() + 1)+'.'+ today. getFullYear()+'.';
-    var date1 =today. getDate() +'.'+(today. getMonth() + 1)+'.'+ (today. getFullYear() +1)+'.';
+    var date =  today. getFullYear()+'-0'+(today. getMonth() + 1)+'-0'+today. getDate() ;
+    var date1 =(today. getFullYear() +1)+'-0'+ (today. getMonth() + 1) +'-0'+today. getDate();
     $.ajax({
         url : "../rest/info/getUser",
         headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
