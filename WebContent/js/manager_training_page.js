@@ -38,29 +38,6 @@ $("#createTraining").click(function (event) {
 });
 })
 
-
-$(document).ready(function () {
-    $.ajax({
-        url : "../rest/sports/facilities",
-        type: "GET",
-        success: function(data)
-        {
-            getFacilities(data);
-        }
-    });
-})
-
-
-function getFacilities(facilities){
-    let i = "";
-    for(let f of facilities){
-        i = i + "<option value="+ f.name +">" + f.name+ "</option>"
-    }
-
-    let obj  = document.getElementById("facility");
-    obj.innerHTML = i;
-    }
-
     $(document).ready(function () {
         $.ajax({
             url : "../rest/sports/trainers",
@@ -68,6 +45,16 @@ function getFacilities(facilities){
             success: function(data)
             {
                 getTrainers(data);
+            }
+        });
+
+        $.ajax({
+            url : "../rest/sports/getFacility",
+            headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+            type: "GET",
+            success: function(facility)
+            {
+                getFacility(facility);
             }
         });
     })
@@ -82,3 +69,12 @@ function getFacilities(facilities){
         let obj  = document.getElementById("trainer");
         obj.innerHTML = i;
         }
+
+        function getFacility(facility){
+            let i = "";
+                i = i + "<option value="+ facility.name +">"+facility.name+"</option>"
+
+        
+            let obj  = document.getElementById("facility");
+            obj.innerHTML = i;
+            }

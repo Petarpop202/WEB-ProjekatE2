@@ -47,7 +47,7 @@ public class CustomersDAO {
 		managers = new HashMap<String, Manager>();
 		trainers = new HashMap<String, Coach>();
 		getAdmin(path);
-		getAllCustomers(putanje[4]);
+		getAllCustomers(putanje[0]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		String put1 = path + "\\data\\Memberships.csv";
@@ -70,9 +70,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[4], korisnik);
+		upisKorisnikaUFajl(putanje[0], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[5], korisnik);
+		upisUUsers(putanje[1], korisnik);
 		return korisnik;
 	}
 	
@@ -369,7 +369,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[5]);
+		writeAllUsers(putanje[1]);
 		return k;
 	}
 	
@@ -519,9 +519,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[6]);
+		writeAllMemberships(putanje[2]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[4]);
+		upisSvihKorisnikaUFajl(putanje[0]);
 		return member;
 	}
 	
@@ -625,9 +625,9 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[7], manager);
+		upisMenadzeraUFajl(putanje[3], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[5], manager);
+		upisUUsers(putanje[1], manager);
 		return manager;
 	}
 	
@@ -669,7 +669,7 @@ public class CustomersDAO {
 		coach.setDeleted(false);
 		coach.setRole(RoleEnum.COACH);
 		upisUUsers(put2, coach);
-		upisUUsers(putanje[5], coach);
+		upisUUsers(putanje[1], coach);
 		return coach;
 	}
 	

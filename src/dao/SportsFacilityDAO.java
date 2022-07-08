@@ -561,11 +561,6 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return sf;
 	}
 	
-	private Manager getManager(String username) {
-		if(managers.containsKey(username))
-			return managers.get(username);
-		return null;
-	}
 	
 	
 	public Collection<Manager> GetAllAvlManager(){
@@ -587,7 +582,6 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		Training tr = new Training(name,t,sf,duration,c,description,picture);
 
 		upisTreningaUFajl(put0, tr);
-		upisTreningaUFajl(putanje[3], tr);
 
 		return tr;
 	}
@@ -693,10 +687,8 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		Training.TypeEnum t = getTrainingTypeSr(type);
 		Training tr = new Training(trainingName,t,duration,c,description);
 		Training training = trainings.get(tr.getName());
-		
-		if (!tr.getName().equals(training.getName())) {
-			training.setName(tr.getName());
-		}
+
+
 		if (!tr.getTrainer().equals(training.getTrainer())) {
 			training.setTrainer(tr.getTrainer());
 		}
@@ -709,9 +701,9 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		if (!tr.getType().equals(training.getType())) {
 			training.setType(tr.getType());
 		}
-		
+
 		writeAllTrainings(put0);
-		writeAllTrainings(putanje[3]);
+
 		return training;
 		
 	}
@@ -732,7 +724,19 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			upis.append(training.getDescription());
 			upis.append(",");
 			upis.append(training.getPicture());
-
+			upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
+	
+	public Manager getManager(String username) {
+		if(managers.containsKey(username))
+			return managers.get(username);
+		return null;
+	}
+		
+		
 	public Collection<CheckedTraining> getCheckedTrainingsOfCustomer(String username, String putanja) {
 		Collection<CheckedTraining> history = new ArrayList<CheckedTraining>();
 		for(CheckedTraining th : checkedTrainings.values()) {

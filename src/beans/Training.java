@@ -36,6 +36,11 @@ public class Training {
 		Description = description;
 	}
 	
+	public Training() {
+		// TODO Auto-generated constructor stub
+	}
+
+	
 	
 	public String getName() {
 		return Name;

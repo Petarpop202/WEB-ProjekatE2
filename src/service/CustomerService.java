@@ -74,7 +74,7 @@ public class CustomerService {
 	}
 	
 	@POST
-	@Path("/trainer")
+	@Path("/manager")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response addManager(Manager manager) {

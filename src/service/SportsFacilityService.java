@@ -175,5 +175,22 @@ public class SportsFacilityService {
 		return Response.status(500).entity("Greska pri otkazivanju!").build();
 				
 	}
+	
+	@GET
+	@Path("/getFacility")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response dobaviFacility(@Context HttpServletRequest request) {
+		JWTSession jwtKontroler = (JWTSession) ctx.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) ctx.getAttribute("CustomersDAO");
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		User ulogovani = jwtKontroler.proveriJWT(request, korisnikDAO);
+		Manager manager = sportsFacilityDAO.getManager(ulogovani.getUsername());
+		if (ulogovani == null) {
+			return Response.status(401).entity("Sesija vam je istekla!").build();
+		} else {
+			SportsFacility sf = manager.getFacility();
+			return Response.ok(sf).build();
+		}
+	}
 
 }

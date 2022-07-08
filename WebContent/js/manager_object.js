@@ -26,9 +26,10 @@ $(document).ready(function () {
     })
 
 
-    $.ajax({
+    $.get({
         url : "../rest/sports/trainers",
-        type: "GET",
+        contentType:"application/json",
+        dataType:"json",
         success: function(data)
         {
             getTrainers(data);
@@ -101,7 +102,7 @@ n.innerHTML = i;
                                 
                             <div class="modal-body mx-3">
                                     <div class="md-form mb-5 text-primary"><i class="fas fa-user prefix grey-text"></i><label data-error="wrong" data-success="right" for="name">Naziv treninga</label>
-                                    <input type="text" value="`+data.name+`" id="name" name="trainingName" class="form-control validate">
+                                    <input type="text" value="`+data.name+`" id="name" name="trainingName" class="form-control validate" disabled>
                             </div>
                                 
                             <div class="md-form mb-5 text-primary">
@@ -175,7 +176,7 @@ n.innerHTML = i;
                 dataType:"json",
                 success: function(odgovor) {
                     alert("Uspesno izmenjen trening!")
-                    window.location.assign("http://localhost:8080/FitnessCentar/html/manager_training_page.html");
+                    window.location.assign("http://localhost:8080/FitnessCentar/html/manager_object_page.html");
                 },
                 error: function(odgovor) {
                     alert(odgovor.responseText);
