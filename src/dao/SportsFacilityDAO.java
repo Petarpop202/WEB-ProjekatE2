@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -686,9 +687,55 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 	public Collection<CheckedTraining> getCheckedTrainingsOfCustomer(String username, String putanja) {
 		Collection<CheckedTraining> history = new ArrayList<CheckedTraining>();
 		for(CheckedTraining th : checkedTrainings.values()) {
-			if(th.getCustomer().getUsername().equals(username))
+			if(th.getCustomer().getUsername().equals(username) && th.getActive())
 				history.add(th);
 		}
 		return history;
+	}
+	
+	public Collection<CheckedTraining> getCheckedTrainingsOfCoach(String username, String putanja) {
+		Collection<CheckedTraining> history = new ArrayList<CheckedTraining>();
+		for(CheckedTraining th : checkedTrainings.values()) {
+			if(th.getTrainer().getUsername().equals(username) && th.getActive())
+				history.add(th);
+		}
+		return history;
+	}
+
+	public CheckedTraining deleteChecked(String name, String path) throws IOException {
+		CheckedTraining ct;
+		LocalDate today = LocalDate.now();
+		LocalDate date1 = LocalDate.parse(name);
+		if(checkedTrainings.containsKey(name))
+			ct = checkedTrainings.get(name);
+		else return null;
+		if(date1.compareTo(today) > 2) {
+			ct.setActive(false);
+			path += "\\data\\CheckedTrainings.csv";
+			writeAllChecked(path);
+			return ct;
+		}
+		return null;
+	}
+
+	private void writeAllChecked(String path) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(path));
+		for(CheckedTraining his : checkedTrainings.values()) {
+			upis.append(his.getTraining().getName());
+			upis.append(",");
+			upis.append(his.getCheckedDate());
+			upis.append(",");
+			upis.append(his.getTrainingDate());
+			upis.append(",");
+			upis.append(his.getCustomer().getUsername());
+			upis.append(",");
+			upis.append(his.getTrainer().getUsername());
+			upis.append(",");
+			upis.append(his.getActive().toString());
+			upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+		
 	}
 }

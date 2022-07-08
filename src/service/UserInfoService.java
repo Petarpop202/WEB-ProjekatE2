@@ -180,4 +180,17 @@ public class UserInfoService {
 				return Response.ok(trainings).build();
 	}
 	
+	@GET
+	@Path("/coachCheckedTrainings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCoachCheckedTrainings(@Context HttpServletRequest zahtev) {
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sfD = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		String putanja = kontekst.getRealPath("");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		Collection<CheckedTraining> trainings = sfD.getCheckedTrainingsOfCoach(ulogovani.getUsername(),putanja);
+				return Response.ok(trainings).build();
+	}
+	
 }

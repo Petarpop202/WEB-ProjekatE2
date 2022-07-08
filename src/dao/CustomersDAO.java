@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class CustomersDAO {
 	 "C:\\Users\\petar\\Desktop\\FitnessCentarWeb\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv"};
 
 	
-	public CustomersDAO(String path) {
+	public CustomersDAO(String path){
 		admininstrator = new User();
 		korisnici = new HashMap<String, Customer>();
 		memberships = new HashMap<String, Membership>();
@@ -49,11 +50,15 @@ public class CustomersDAO {
 		getAllCustomers(putanje[4]);
 		getAllManagers(path);
 		getAllTrainers(path);
-		path += "\\data\\Memberships.csv";
-		getAllMemberships(path);
-		
+		String put1 = path + "\\data\\Memberships.csv";
+		getAllMemberships(put1);
+		checkMemberships(path);
 	}
 	
+
+
+
+
 
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
 		String put1 = putanja + "\\data\\Customers.csv";
@@ -492,7 +497,6 @@ public class CustomersDAO {
 	public Membership dodajMembership(Membership member, String putanja) throws IOException {
 		String put1 = putanja + "\\data\\Memberships.csv";
 		String put2 = putanja + "\\data\\Customers.csv";
-		//member.getCustomer().setMembership(member);
 		
 		if(member.getTypeStr().equals("Dnevna")) {
 			member.setType(TypeEnum.DAY);
@@ -675,6 +679,59 @@ public class CustomersDAO {
 				coaches.add(c);
 		}
 		return coaches;
+	}
+	
+
+	private void checkMemberships(String path){
+		for(Membership m : memberships.values()) {
+			Customer c = korisnici.get(m.getCustomer().getUsername());
+			Double pts = 0.0;
+			String d = m.getMemberDate();
+			LocalDate today = LocalDate.now();
+			LocalDate date1 = LocalDate.parse(d);
+			if(date1.compareTo(today) <= 0) {
+				if(m.getType() == Membership.TypeEnum.DAY)
+				{
+					if(m.getTermins() == 0) {
+						pts = (m.getPrice()/1000.0 ) * 1;
+						c.setPoints(c.getPoints() + pts.intValue());
+					}
+					else {
+						pts = (m.getPrice()/1000) *133 * 4;
+						c.setPoints(c.getPoints() - pts.intValue());
+					} 
+					
+				}
+				if(m.getType() == Membership.TypeEnum.MONTH)
+				{
+					if(m.getTermins() < 15) {
+						pts = (m.getPrice()/1000.0 ) * 20;
+						c.setPoints(c.getPoints() + pts.intValue());
+					}
+					else {
+						pts = (m.getPrice()/1000) *133 * 4;
+						c.setPoints(c.getPoints() - pts.intValue());
+					} 
+					
+				}
+				if(m.getType() == Membership.TypeEnum.YEAR)
+				{
+					c.setPoints(c.getPoints() + 100);
+				}
+				m.setStatus(false);
+				m.setTermins(0);
+				try {
+					String put1 = path + "\\data\\Memberships.csv";
+					writeAllMemberships(put1);
+					String put2 = path + "\\data\\Customers.csv";
+					upisSvihKorisnikaUFajl(put2);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+				
+		}
 	}
 	
 }
