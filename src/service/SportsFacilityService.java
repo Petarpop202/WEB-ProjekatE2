@@ -1,5 +1,6 @@
 package service;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
+import beans.CheckedTraining;
 import beans.Coach;
 import beans.Customer;
 import beans.Manager;
@@ -135,6 +137,7 @@ public class SportsFacilityService {
 				return Response.ok(facility).build();
 	}
 	
+
 	
 	@PUT
 	@Path("/editTraining")
@@ -153,5 +156,24 @@ public class SportsFacilityService {
 			}
 	}
 	
-	
+
+	@PUT
+	@Path("/delete")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response brisanjePodataka(@QueryParam("date") String date) {
+		String putanja = ctx.getRealPath("");
+		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		try {
+			CheckedTraining ct = dao.deleteChecked(date,putanja);
+			if(ct != null)
+				return Response.ok(ct).build();
+			return Response.status(400).entity("Nije moguce otkazati trening !").build();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return Response.status(500).entity("Greska pri otkazivanju!").build();
+				
+	}
+
 }

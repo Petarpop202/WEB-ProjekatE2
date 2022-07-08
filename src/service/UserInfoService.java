@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
+import beans.CheckedTraining;
 import beans.Customer;
 import beans.Manager;
 import beans.Membership;
@@ -102,7 +103,7 @@ public class UserInfoService {
 	@Path("/doTraining")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response prijaviTrening(@Context HttpServletRequest zahtev, @QueryParam("name") String name) {
+	public Response prijaviTrening(@Context HttpServletRequest zahtev, @QueryParam("name") String name , @QueryParam("date") String date) {
 		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
 		SportsFacilityDAO dao = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
 		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
@@ -114,11 +115,11 @@ public class UserInfoService {
 		Customer c = korisnikDAO.dobaviKorisnika(ulogovani.getUsername());
 		try {
 			Training tr = dao.getTraining(name);
-			TrainingHistory th = dao.checkTraining(c,tr,putanja);
-			if (tr == null) {
+			CheckedTraining th = dao.checkTraining(c,tr,date,putanja);
+			if (th == null) {
 				return Response.status(400).entity("Greska prilikom kupovine!").build();
 			}
-			return Response.ok(tr).build();
+			return Response.ok(th).build();
 		} catch (Exception e) {
 			return Response.status(500).entity("Greska pri kupovini!").build();
 		}
@@ -163,6 +164,32 @@ public class UserInfoService {
 		String putanja = kontekst.getRealPath("");
 		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
 		Collection<TrainingHistory> trainings = sfD.getTrainingHistoriesOfCustomer(ulogovani.getUsername(), putanja);
+				return Response.ok(trainings).build();
+	}
+	
+	@GET
+	@Path("/userCheckedTrainings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserCheckedTrainings(@Context HttpServletRequest zahtev) {
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sfD = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		String putanja = kontekst.getRealPath("");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		Collection<CheckedTraining> trainings = sfD.getCheckedTrainingsOfCustomer(ulogovani.getUsername(),putanja);
+				return Response.ok(trainings).build();
+	}
+	
+	@GET
+	@Path("/coachCheckedTrainings")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCoachCheckedTrainings(@Context HttpServletRequest zahtev) {
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sfD = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		String putanja = kontekst.getRealPath("");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		Collection<CheckedTraining> trainings = sfD.getCheckedTrainingsOfCoach(ulogovani.getUsername(),putanja);
 				return Response.ok(trainings).build();
 	}
 	

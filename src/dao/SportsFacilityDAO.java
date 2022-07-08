@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import beans.CheckedTraining;
 import beans.Coach;
 import beans.Customer;
 import beans.Location;
@@ -32,7 +34,9 @@ private HashMap<String, Location> locations;
 private HashMap<String, Training> trainings;
 public HashMap<String, Manager> managers;
 public HashMap<String, Coach> trainers;
-public HashMap<String, TrainingHistory> trainingHistories;
+private HashMap<String, TrainingHistory> trainingHistories;
+private HashMap<String, CheckedTraining> checkedTrainings;
+
 
 
 private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
@@ -73,15 +77,47 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		trainings = new HashMap<String, Training>();
 		managers = new HashMap<String, Manager>();
 		trainingHistories = new HashMap<String, TrainingHistory>();
+		checkedTrainings = new HashMap<String, CheckedTraining>();
 
 		getAllLocations(path);
 		getAllSportFacilities(path);
 		getAllTrainings(path);
 		getAllManagers(path);
+		getAllCheckedTrainings(path);
 		getAllTrainingHistories(path);
-
 	}
 	
+	private void getAllCheckedTrainings(String path) {
+		BufferedReader reader = null;
+		try {
+			File file = new File(path + "data\\CheckedTrainings.csv");
+			reader = new BufferedReader(new FileReader(file));
+			String linija = "";
+			while ((linija = reader.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Training training= getTraining(parametri[0]);
+				String checked = parametri[1];
+				String trainingDate = parametri[2];
+				CustomersDAO cd = new CustomersDAO(path);
+				Customer custom = cd.dobaviKorisnika(parametri[3]);
+				Coach coach = cd.getCoach(parametri[4]);
+				Boolean active = Boolean.parseBoolean(parametri[5]);
+				CheckedTraining t = new CheckedTraining(training,checked,trainingDate,custom,coach,active);
+				checkedTrainings.put(trainingDate,t);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if ( reader != null ) {
+				try {
+					reader.close();
+				}
+				catch (Exception e) { }
+			}
+		}
+		
+	}
+
 	private void getAllTrainingHistories(String path) {
 		BufferedReader reader = null;
 		try {
@@ -592,19 +628,45 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return history;
 	}
 
-	public TrainingHistory checkTraining(Customer ulogovani, Training tr,String path) {
-		LocalDate date = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		TrainingHistory his = new TrainingHistory(date.format(formatter).toString(),tr,ulogovani,tr.getTrainer());
-		trainingHistories.put(tr.getName(),his);
+	public CheckedTraining checkTraining(Customer ulogovani, Training tr,String date,String path) throws IOException {
+		CustomersDAO cd = new CustomersDAO(path);
+		ulogovani.setMembership(cd.getMembership(ulogovani));
+		if(ulogovani.getMembership().getTermins() > 0) {
+			LocalDate dateNow = LocalDate.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+			CheckedTraining his = new CheckedTraining(tr,dateNow.format(formatter).toString(),date,ulogovani,tr.getTrainer(),true);
+			checkedTrainings.put(date,his);
+			cd.getMembership(ulogovani).setTermins(cd.getMembership(ulogovani).getTermins() - 1);
+			String put1 = path + "\\data\\Memberships.csv";
+			cd.writeAllMemberships(put1);
+			try {
+				writeChecked(his,path);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return his;}
+		return null;
+	}
+
+	private void writeChecked(CheckedTraining his, String putanja) throws IOException {
+		putanja += "\\data\\CheckedTrainings.csv";	
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(his.getTraining().getName());
+		upis.append(",");
+		upis.append(his.getCheckedDate());
+		upis.append(",");
+		upis.append(his.getTrainingDate());
+		upis.append(",");
+		upis.append(his.getCustomer().getUsername());
+		upis.append(",");
+		upis.append(his.getTrainer().getUsername());
+		upis.append(",");
+		upis.append(his.getActive().toString());
+		upis.append("\n");
+		upis.flush();
+		upis.close();
 		
-		try {
-			writeHistory(his,path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return his;
 	}
 
 	private void writeHistory(TrainingHistory his, String path) throws IOException {
@@ -621,6 +683,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		upis.flush();
 		upis.close();
 	}
+
 
 	public Training izmeniTrening(String trainingName, String duration, String description, String trainer, String type,
 			String putanja) throws IOException {
@@ -669,17 +732,60 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			upis.append(training.getDescription());
 			upis.append(",");
 			upis.append(training.getPicture());
+
+	public Collection<CheckedTraining> getCheckedTrainingsOfCustomer(String username, String putanja) {
+		Collection<CheckedTraining> history = new ArrayList<CheckedTraining>();
+		for(CheckedTraining th : checkedTrainings.values()) {
+			if(th.getCustomer().getUsername().equals(username) && th.getActive())
+				history.add(th);
+		}
+		return history;
+	}
+	
+	public Collection<CheckedTraining> getCheckedTrainingsOfCoach(String username, String putanja) {
+		Collection<CheckedTraining> history = new ArrayList<CheckedTraining>();
+		for(CheckedTraining th : checkedTrainings.values()) {
+			if(th.getTrainer().getUsername().equals(username) && th.getActive())
+				history.add(th);
+		}
+		return history;
+	}
+
+	public CheckedTraining deleteChecked(String name, String path) throws IOException {
+		CheckedTraining ct;
+		LocalDate today = LocalDate.now();
+		LocalDate date1 = LocalDate.parse(name);
+		if(checkedTrainings.containsKey(name))
+			ct = checkedTrainings.get(name);
+		else return null;
+		if(date1.compareTo(today) > 2) {
+			ct.setActive(false);
+			path += "\\data\\CheckedTrainings.csv";
+			writeAllChecked(path);
+			return ct;
+		}
+		return null;
+	}
+
+	private void writeAllChecked(String path) throws IOException {
+		Writer upis = new BufferedWriter(new FileWriter(path));
+		for(CheckedTraining his : checkedTrainings.values()) {
+			upis.append(his.getTraining().getName());
+			upis.append(",");
+			upis.append(his.getCheckedDate());
+			upis.append(",");
+			upis.append(his.getTrainingDate());
+			upis.append(",");
+			upis.append(his.getCustomer().getUsername());
+			upis.append(",");
+			upis.append(his.getTrainer().getUsername());
+			upis.append(",");
+			upis.append(his.getActive().toString());
 			upis.append("\n");
 		}
 		upis.flush();
 		upis.close();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-}
+		
+ }
+
