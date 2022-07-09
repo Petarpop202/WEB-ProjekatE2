@@ -48,6 +48,37 @@
 					
 				</div>
 			</div>
+
+			<div class="container pt-3 pb-3">
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+					
+					<label class="mr-3 mt-2">Opcije za pretragu:</label>
+					  <select id="options"  class="btn btn-outline-secondary dropdown-toggle text-white mr-3" aria-label=".form-select-lg example" >
+					  <option selected>Ime</option>
+					  <option value="Prezime">Prezime</option>
+					  <option value="Korisnicko ime">Korisnicno ime</option>
+					  <option value="Broj bodova">Broj bodova</option>
+
+					</select>
+
+					<select id="sortOptions"  class="btn btn-outline-secondary dropdown-toggle text-white mr-3" aria-label=".form-select-lg example" >
+						<option selected>Rastuci</option>
+						<option value="Opadajuci">Opadajuci</option>
+					  </select>
+					
+					
+				</div>
+				
+					<input type="text" name="searchBox" id="searchh" class="form-control" placeholder="Pretraga">
+
+					<button class="btn btn-outline-primary ml-3 text-white" id="sortBtn">Sortiraj</button>
+
+					<button type="submit" class="btn btn-outline-primary ml-3 text-white" id="searchBtn">Pretrazi</button>
+		
+		
+	  </div>
+	</div>
 			<h3 class="mt-5 ml-5" style="color: primary;">Spisak svih korisnika u sistemu</h3>
 
 			<table class="table table-dark table-striped mt-5 ml-5 mr-5" style="width:1400px;" id="tabela">
