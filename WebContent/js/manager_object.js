@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-
+    let s;
     $.get({
         url: "../rest/info/managerFacility",
         headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
@@ -25,17 +25,6 @@ $(document).ready(function () {
         }
     })
 
-
-    $.get({
-        url : "../rest/sports/trainers",
-        contentType:"application/json",
-        dataType:"json",
-        success: function(data)
-        {
-            getTrainers(data);
-        }
-    })
-
  });
 
 
@@ -49,7 +38,7 @@ $(document).ready(function () {
 
  function createCards(objekat){
     let i ="";
-    let z = 1;
+    let z = 0;
     for(let data of objekat){
     i = i + `<div class="col-sm mt-5 d-flex justify-content-center">
     <div class="card border-success" style="width: 19rem;">
@@ -59,7 +48,7 @@ $(document).ready(function () {
             <p class="card-text">`+data.description+`</p>
             <p class="card-text">String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje</p>
             <div class="float-start">
-                <a href="" data-toggle="modal" data-target="#modalEditContent`+z+`" class="btn btn-primary">Izmeni</a>
+                <a href="" data-toggle="modal" data-target="#modalEditContent" onclick="loadEditPage('`+data.name+`','`+data.duration+`','`+data.description+`')" class="btn btn-primary">Izmeni</a>
                 <a href="" class="btn btn-primary">Izbrisi</a>
                 <p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje: `+data.duration+`min</p>
             </div>
@@ -87,12 +76,11 @@ n.innerHTML = i;
  }
 
 
- function loadEditPage(objekti){
-    let i = 1;
+ function loadEditPage(name,duration,description){
+    let i = 0;
     let h = "";
     let n = document.getElementById("edit");
-    for(let data of objekti){
-    h = h + `<div class="modal fade" id="modalEditContent`+i+`" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    h = h + `<div class="modal fade" id="modalEditContent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content bg-dark text-white">
                             <div class="modal-header text-center">
@@ -102,7 +90,7 @@ n.innerHTML = i;
                                 
                             <div class="modal-body mx-3">
                                     <div class="md-form mb-5 text-primary"><i class="fas fa-user prefix grey-text"></i><label data-error="wrong" data-success="right" for="name">Naziv treninga</label>
-                                    <input type="text" value="`+data.name+`" id="name" name="trainingName" class="form-control validate" disabled>
+                                    <input type="text" value="`+name+`" id="name" name="trainingName" class="form-control validate" disabled>
                             </div>
                                 
                             <div class="md-form mb-5 text-primary">
@@ -127,7 +115,7 @@ n.innerHTML = i;
                             <div class="md-form mb-5 text-primary">
                                 <i class="fas fa-envelope prefix grey-text"></i>
                                 <label data-error="wrong" data-success="right" for="duration">Trajanje</label>
-                                <input type="text" value="`+data.duration+`" name="duration" class="form-control validate">
+                                <input type="text" value="`+duration+`" name="duration" class="form-control validate">
                             </div>
 
 
@@ -135,7 +123,7 @@ n.innerHTML = i;
                             <div class="md-form mb-5 text-primary">
                                 <i class="fas fa-envelope prefix grey-text"></i>
                                 <label data-error="wrong" data-success="right" for="description">Opis</label>
-                                <input type="text" value="`+data.description+`" name="description" class="form-control validate">
+                                <input type="text" value="`+description+`" name="description" class="form-control validate">
                             </div>
                             
                         </div>
@@ -145,8 +133,8 @@ n.innerHTML = i;
                     </div>
                 </div>`;
                     i++;
-                }
                 n.innerHTML = h;
+                putTrainers();
 }
 
 
@@ -155,10 +143,9 @@ n.innerHTML = i;
         for(let t of trainers){
             i = i + "<option value="+ t.username +">"+t.name+" "+t.surname+"</option>"
         }
-    
         let obj  = document.getElementById("trainer");
         obj.innerHTML = i;
-        }
+    }
 
         function EditStart(){
             let trainingName = $('input[name="trainingName"]').val();
@@ -189,4 +176,14 @@ n.innerHTML = i;
     }
 
 
-
+    function putTrainers(){
+        $.get({
+            url : "../rest/sports/trainers",
+            contentType:"application/json",
+            dataType:"json",
+            success: function(data)
+            {
+                getTrainers(data);
+            }
+        })
+    }

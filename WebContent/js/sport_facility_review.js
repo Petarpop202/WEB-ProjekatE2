@@ -5,9 +5,23 @@
 
  $(document).ready(function () {
     const url = new URLSearchParams(window.location.search);
+    let s;
 
     if(url.has('name')) {
     var id = url.get('name');
+
+    $.ajax({
+        url : "../rest/info/getUser",
+        headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+        contentType:"application/json",
+        type: "GET",
+        success: function(data)
+        {
+            if(data.role == "ADMIN" || data.role == "MANAGER")
+                loadAllComments(id);
+            else loadComments(id);
+        }
+    });
 
     $.get({
         url: "../rest/sports/get?name=" + id,
@@ -28,7 +42,6 @@
             editForms(treninzi);
         }
     })
-
 
 
     }
@@ -79,8 +92,8 @@ function profile(){
     location.assign("profile_page.html");
 }
 
-function zakazi(id){
-    let date = $('input#datum').val();
+function zakazi(id,z){
+    let date = $('input#datum'+z+'').val();
 
     $.post({
         url: "../rest/info/doTraining?name="+id+"&date="+date,
@@ -88,11 +101,15 @@ function zakazi(id){
         contentType: "application/json",
         success: function(odgovor) {
             alert("Uspesna prijava")
+            if(odgovor){
+                commentSection();}
         },
         error: function(odgovor) {
             document.getElementById("eril").removeAttribute("hidden");
         }
     });
+
+
 }
 
 function editForms(treninzi){
@@ -129,19 +146,156 @@ function editForms(treninzi){
 
             <div class="md-form mb-5 text-primary">
             <label data-error="wrong" data-success="right" for="date">Zeljeni datum</label>
-            <input type="text" class="datepickeri form-control" id="datum" name="date"
+            <input type="text" class="datepickeri form-control" id="datum`+z+`" name="date"
             min="`+dateTime+`" onfocus="(this.type='date')">
             <label id="erd" style="color: red;">Izaberite datum</label>
         </div>
             </div>
-            <div class="modal-footer d-flex justify-content-center"><button type="submit" id="edit" name="edit" onclick="zakazi('`+data.name+`')" class="btn btn-deep-orange text-white">Zakazi</button>
+            <div class="modal-footer d-flex justify-content-center"><button type="submit" data-toggle="modal" id="edit" name="edit" onclick="zakazi('`+data.name+`',`+z+`)" class="btn btn-deep-orange text-white">Zakazi</button>
             <label class="text-lg-right" id="eril" style="color: red;" hidden>Nemate vise termina !</label>
             </div>
             </div>
         </div>
+
+
+        <div id="e" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" hidden>
+        <div class="modal-content bg-dark text-white">
+                <div class="modal-header text-center">
+                <h4 class="modal-title w-100 font-weight-bold text-primary">Komentar na objekat</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body mx-3">
+
+            <div class="md-form mb-5 text-primary">
+                <label data-error="wrong" data-success="right" for="name">Komentar</label>
+                <input type="text" id="name" name="text" class="form-control validate">
+            </div>
+
+            <div class="md-form mb-5 text-primary">
+            <div>
+                <label data-error="wrong" data-success="right" for="username">Ocena</label>
+            </div>
+            <select class="form-select" name="rate">
+                <option value=1 selected>1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
+        </div>
+
+    </div>
+    <div class="modal-footer d-flex justify-content-center"><button type="submit" id="edit" name="edit" class="btn btn-deep-orange text-white" onclick="sendComment()">Posalji</button>
+    </div>
+    </div>
+</div>
+
+
         </div>`;
         z++;
     }
     let n = document.getElementById("form");
     n.innerHTML = i;
+}
+
+function loadComments(id){
+
+    let komentari;
+    $.get({
+        url: "../rest/sports/acceptedComments?name=" + id,
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data){
+            ispis(data);
+        }
+    })
+
+}
+
+function loadAllComments(id){
+
+    let komentari;
+    $.get({
+        url: "../rest/sports/allComments?name=" + id,
+        contentType: "application/json",
+        dataType: "json",
+        success: function(data){
+            ispis(data);
+        }
+    })
+    
+    
+}
+
+function ispis(komentari){
+    let i = "";
+
+    for(let k of komentari){
+        if(k.accepted){
+        i = i + `<div id="first-comment">
+        <div class="comment__card">
+          <h3 class="comment__title">`+k.customer.name+` `+k.customer.surname+`</h3>
+          <p>`+k.text+`</p>
+          <div class="comment__card-footer">
+            <div>Ocena: `+k.rate+`</div>
+          </div>
+        </div>
+        </div>`;}
+        else {
+            i = i + `<div id="first-comment">
+        <div class="comment__card">
+          <h3 class="comment__title">`+k.customer.name+` `+k.customer.surname+`</h3>
+          <p>`+k.text+`</p>
+          <div class="comment__card-footer">
+            <button class="btn btn-primary" onclick="acceptComment('`+k.text+`')">Odobri</button>
+            <div>Ocena: `+k.rate+`</div>
+          </div>
+        </div>
+        </div>`;
+        }
+    }
+    let n = document.getElementById("comments");
+    n.innerHTML = i;
+}
+
+function commentSection(){
+
+    let n = document.getElementById("e");
+    n.removeAttribute("hidden");
+}
+
+function sendComment(){
+    let text = $('input[name="text"]').val();
+    let rate = $('select[name="rate"]').find(":selected").val();
+
+    const url = new URLSearchParams(window.location.search);
+    var id = url.get('name');
+
+    $.post({
+        url: "../rest/info/addComment?text="+text+"&rate="+rate+"&name="+id,
+        headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+        contentType:"application/json",
+        dataType:"json",
+        success: function(objekat){
+            
+        }
+    })
+}
+
+function acceptComment(text){
+    $.ajax({
+        type: "PUT",
+        url: "../rest/info/acceptComment?text="+text,
+
+        contentType:"application/json",
+        dataType:"json",
+        success: function(odgovor) {
+            alert("Uspesno odobren komentar!")
+        },
+        error: function(odgovor) {
+            alert(odgovor.responseText);
+        }
+    });
 }

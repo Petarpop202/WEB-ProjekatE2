@@ -18,6 +18,7 @@ import java.util.List;
 
 import beans.CheckedTraining;
 import beans.Coach;
+import beans.Commentar;
 import beans.Customer;
 import beans.Location;
 import beans.Manager;
@@ -364,7 +365,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		return null;
 	}
-
+	
 	public Location getLocation(String Address) {
 		if (locations.containsKey(Address)) {
 			return locations.get(Address);
@@ -470,7 +471,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[1], facility);
+		upisObjektaUFajl(putanje[5], facility);
 		return facility;
 	}
 	
@@ -553,11 +554,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[0], l);
+		upisLokacijeUFajl(putanje[4], l);
 		upisObjektaUFajl(put1, sf);
-		upisObjektaUFajl(putanje[1], sf);
+		upisObjektaUFajl(putanje[5], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[2]);
+		upisSvihMenadzeraUFajl(putanje[6]);
 		return sf;
 	}
 	
@@ -622,7 +623,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return history;
 	}
 
-	public CheckedTraining checkTraining(Customer ulogovani, Training tr,String date,String path) throws IOException {
+	public Boolean checkTraining(Customer ulogovani, Training tr,String date,String path) throws IOException {
 		CustomersDAO cd = new CustomersDAO(path);
 		ulogovani.setMembership(cd.getMembership(ulogovani));
 		if(ulogovani.getMembership().getTermins() > 0) {
@@ -639,8 +640,21 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return his;}
+			if(commentCheck(ulogovani,tr,path))
+				return true;
+			else return false;
+		}
 		return null;
+	}
+
+	private boolean commentCheck(Customer ulogovani, Training tr, String path) {
+		CustomersDAO cd = new CustomersDAO(path);
+		cd.getAllComments(path);
+		for(Commentar c : cd.commentars.values()) {
+			if((c.getCustomer().getUsername().equals(ulogovani.getUsername()) && c.getFacility().getName().equals(tr.getFacility().getName())))
+				return false;
+		}
+		return true;
 	}
 
 	private void writeChecked(CheckedTraining his, String putanja) throws IOException {
@@ -789,6 +803,26 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		upis.flush();
 		upis.close();
+	}
+	
+	public Collection<SportsFacility> sortirajObjekte(String kriterijum, Collection<SportsFacility> facilities){
+		if (kriterijum.equals("Ime")) {
+			((List<SportsFacility>) facilities).sort((SportsFacility k1, SportsFacility k2)->k1.getName().compareTo(k2.getName()));
+		} else if (kriterijum.equals("Lokacija")) {
+			((List<SportsFacility>) facilities).sort((SportsFacility k1, SportsFacility k2)->k1.getLocation().getAddress().compareTo(k2.getLocation().getAddress()));
+		}else if(kriterijum.equals("Ocena")) {
+			((List<SportsFacility>) facilities).sort((SportsFacility k1, SportsFacility k2)->k2.getRate().compareTo(k1.getRate()));
+		}
+		return (Collection<SportsFacility>) facilities;
+	}
+
+	public Collection<SportsFacility> filtrirajObjekte(Collection<SportsFacility> facilities2) {
+		Collection<SportsFacility> filtered = new ArrayList<SportsFacility>();
+			for(SportsFacility sf : facilities2) {
+				if(sf.getStatus())
+					filtered.add(sf);
+			}
+		return filtered;
 	}
 		
  }

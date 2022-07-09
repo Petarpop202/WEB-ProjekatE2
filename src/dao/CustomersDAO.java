@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import beans.Coach;
+import beans.Commentar;
 import beans.Customer;
 import beans.CustomerType;
 import beans.Manager;
@@ -27,6 +28,7 @@ public class CustomersDAO {
 	private HashMap<String, Membership> memberships;
 	private HashMap<String, Manager> managers; 
 	private HashMap<String, Coach> trainers;
+	public HashMap<String, Commentar> commentars;
 	private User admininstrator;
 	
 	private String[] putanje = {
@@ -46,8 +48,9 @@ public class CustomersDAO {
 		memberships = new HashMap<String, Membership>();
 		managers = new HashMap<String, Manager>();
 		trainers = new HashMap<String, Coach>();
+		commentars = new HashMap<String, Commentar>();
 		getAdmin(path);
-		getAllCustomers(putanje[0]);
+		getAllCustomers(putanje[4]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		String put1 = path + "\\data\\Memberships.csv";
@@ -56,8 +59,36 @@ public class CustomersDAO {
 	}
 	
 
-
-
+	public void getAllComments(String path) {
+		BufferedReader citac = null;
+		String putanja = path + "\\data\\Comments.csv";
+		try {
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				Customer custom = dobaviKorisnika(parametri[0]);
+				SportsFacilityDAO sfd = new SportsFacilityDAO(path);
+				SportsFacility sf = sfd.getFacility(parametri[1]);
+				String text = parametri[2];
+				Integer rate = Integer.parseInt(parametri[3]);
+				Boolean accepted = Boolean.parseBoolean(parametri[4]);
+				Commentar c = new Commentar(custom,sf,text,rate,accepted);
+				commentars.put(text,c);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+			
+		}
+	}
 
 
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
@@ -70,9 +101,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[0], korisnik);
+		upisKorisnikaUFajl(putanje[4], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[1], korisnik);
+		upisUUsers(putanje[5], korisnik);
 		return korisnik;
 	}
 	
@@ -113,9 +144,9 @@ public class CustomersDAO {
 			return new CustomerType(CustomerType.TypeEnum.BRONZE,0.0,50.0);
 		}
 		else if(t == "SILVER") {
-			return new CustomerType(CustomerType.TypeEnum.SILVER,15.0,100.0);
+			return new CustomerType(CustomerType.TypeEnum.SILVER,10.0,100.0);
 		}
-		else return new CustomerType(CustomerType.TypeEnum.GOLD,30.0,10000.0);
+		else return new CustomerType(CustomerType.TypeEnum.GOLD,20.0,10000.0);
 	}
 	
 	private Membership.TypeEnum getType(String status) {
@@ -241,6 +272,23 @@ public class CustomersDAO {
 		upis.append(getCustomerTypeToString(korisnik.getType()));
 		upis.append(",");
 		upis.append(korisnik.getDeleted().toString());
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+	}
+	
+	private void upisKomentara(String putanja, Commentar comment) throws IOException {
+		putanja += "\\data\\Comments.csv";
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(comment.getCustomer().getUsername());
+		upis.append(",");
+		upis.append(comment.getFacility().getName());
+		upis.append(",");
+		upis.append(comment.getText());
+		upis.append(",");
+		upis.append(comment.getRate().toString());
+		upis.append(",");
+		upis.append(comment.getAccepted().toString());
 		upis.append("\n");
 		upis.flush();
 		upis.close();
@@ -468,26 +516,26 @@ public class CustomersDAO {
 			upis.append("\n");
 			}
 		User korisnik = admininstrator;
-		upis.append(korisnik.getName());
-		upis.append(",");
-		upis.append(korisnik.getSurname());
-		upis.append(",");
-		upis.append(korisnik.getUsername());
-		upis.append(",");
-		upis.append(korisnik.getPassword());
-		upis.append(",");
-		upis.append(korisnik.getGender().toString());
-		upis.append(",");
-		upis.append(korisnik.getDate());
-		upis.append(",");
-		upis.append(getRoleTypeToString(korisnik.getRole()));
-		upis.append(",");
-		upis.append(korisnik.getDeleted().toString());
-		upis.append("\n");
-		upis.flush();
-		upis.close();
+			upis.append(korisnik.getName());
+			upis.append(",");
+			upis.append(korisnik.getSurname());
+			upis.append(",");
+			upis.append(korisnik.getUsername());
+			upis.append(",");
+			upis.append(korisnik.getPassword());
+			upis.append(",");
+			upis.append(korisnik.getGender().toString());
+			upis.append(",");
+			upis.append(korisnik.getDate());
+			upis.append(",");
+			upis.append(getRoleTypeToString(korisnik.getRole()));
+			upis.append(",");
+			upis.append(korisnik.getDeleted().toString());
+			upis.append("\n");
+			upis.flush();
+			upis.close();
 	}
-	
+
 	public Membership getMembership(User u) {
 		if(memberships.containsKey(u.getUsername()))
 			return memberships.get(u.getUsername());
@@ -500,17 +548,17 @@ public class CustomersDAO {
 		
 		if(member.getTypeStr().equals("Dnevna")) {
 			member.setType(TypeEnum.DAY);
-			member.getCustomer().setType(getCustomerType("BRONZE"));
+			//member.getCustomer().setType(getCustomerType("BRONZE"));
 		}
 		else if(member.getTypeStr().equals("Mesecna")) {
 			member.setType(TypeEnum.MONTH);
-			member.getCustomer().setType(getCustomerType("SILVER"));
-			member.getCustomer().setPoints(50);
+			//member.getCustomer().setType(getCustomerType("SILVER"));
+			//member.getCustomer().setPoints(50);
 		}
 		else {
 			member.setType(TypeEnum.YEAR);
-			member.getCustomer().setType(getCustomerType("GOLD"));
-			member.getCustomer().setPoints(100);
+			//member.getCustomer().setType(getCustomerType("GOLD"));
+			//member.getCustomer().setPoints(100);
 		}
 		if (memberships.containsKey(member.getCustomer().getUsername())) {
 			memberships.remove(member.getCustomer().getUsername());
@@ -519,18 +567,18 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[2]);
+		writeAllMemberships(putanje[6]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[0]);
+		upisSvihKorisnikaUFajl(putanje[4]);
 		return member;
 	}
-	
+
 	public User adminProfile(String username) {
 		if(username.equals("admin"))
 			return admininstrator;
 		return null;
 	}
-	
+
 	public Collection<User> getAllUsers() {
 		Collection<User> users = new ArrayList<User>();
 		for(Customer c : korisnici.values()) {
@@ -581,11 +629,11 @@ public class CustomersDAO {
 			return trainers.get(username);
 		return null;
 	}
-	
+
 	public Collection<Coach> findAllCoaches(){
 		return trainers.values();
 	}
-	
+
 	private void upisMenadzeraUFajl(String putanja, Manager manager) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
 		upis.append(manager.getName());
@@ -611,8 +659,7 @@ public class CustomersDAO {
 		upis.flush();
 		upis.close();
 	}
-	
-	
+
 
 	public Manager addManager(Manager manager, String putanja) throws IOException {
 		String put1 = putanja + "\\data\\Managers.csv";
@@ -625,19 +672,19 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[3], manager);
+		upisMenadzeraUFajl(putanje[7], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[1], manager);
+		upisUUsers(putanje[5], manager);
 		return manager;
 	}
-	
+
 	public SportsFacility getManagerFacility(Manager m, String path) {
 		SportsFacilityDAO sf = new SportsFacilityDAO(path);
 		return sf.managers.get(m.getUsername()).getFacility();
 	}
 
-	
-	
+
+
 	private void upisTreneraUFajl(String putanja, Coach coach) throws IOException {
 		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
 		upis.append(coach.getName());
@@ -669,10 +716,10 @@ public class CustomersDAO {
 		coach.setDeleted(false);
 		coach.setRole(RoleEnum.COACH);
 		upisUUsers(put2, coach);
-		upisUUsers(putanje[1], coach);
+		upisUUsers(putanje[5], coach);
 		return coach;
 	}
-	
+
 	public Collection<Coach> getCoaches() {
 		Collection<Coach> coaches = new ArrayList<Coach>();
 		for(Coach c : findAllCoaches()) {
@@ -680,7 +727,7 @@ public class CustomersDAO {
 		}
 		return coaches;
 	}
-	
+
 
 	private void checkMemberships(String path){
 		for(Membership m : memberships.values()) {
@@ -716,7 +763,14 @@ public class CustomersDAO {
 				}
 				if(m.getType() == Membership.TypeEnum.YEAR)
 				{
-					c.setPoints(c.getPoints() + 100);
+					if(m.getTermins() < 244) {
+						pts = (m.getPrice()/1000.0 ) * 20;
+						c.setPoints(c.getPoints() + pts.intValue());
+					}
+					else {
+						pts = (m.getPrice()/1000) *133 * 4;
+						c.setPoints(c.getPoints() - pts.intValue());
+					} 
 				}
 				m.setStatus(false);
 				m.setTermins(0);
@@ -733,5 +787,72 @@ public class CustomersDAO {
 				
 		}
 	}
+
+
+	public Collection<Commentar> getComments(String putanja, String name) {
+		getAllComments(putanja);
+		Collection<Commentar> comments = new ArrayList<Commentar>();
+		for(Commentar c : commentars.values()) {
+			if(c.getFacility().getName().equals(name) && c.getAccepted()) {
+				comments.add(c);
+			}
+		}
+		return comments;
+	}
 	
+	public Collection<Commentar> getCommentsAdmin(String putanja, String name){
+		getAllComments(putanja);
+		Collection<Commentar> comments = new ArrayList<Commentar>();
+		for(Commentar c : commentars.values()) {
+			if(c.getFacility().getName().equals(name)) {
+				comments.add(c);
+			}
+		}
+		return comments;
+	}
+	
+	public Commentar addComment(Customer cust, String text, String rate, SportsFacility sf, String path) {
+		Integer r = Integer.parseInt(rate);
+		Commentar c = new Commentar(cust,sf,text,r,false);
+		try {
+			upisKomentara(path,c);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return c;
+	}
+	
+	private void writeAllComments(String putanja) throws IOException {
+		putanja += "\\data\\Comments.csv";
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		for(Commentar comment : commentars.values()) {
+		upis.append(comment.getCustomer().getUsername());
+		upis.append(",");
+		upis.append(comment.getFacility().getName());
+		upis.append(",");
+		upis.append(comment.getText());
+		upis.append(",");
+		upis.append(comment.getRate().toString());
+		upis.append(",");
+		upis.append(comment.getAccepted().toString());
+		upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
+
+
+	public Commentar acceptComment(String putanja, String text) {
+		getAllComments(putanja);
+		Commentar c = commentars.get(text);
+		c.setAccepted(true);
+		try {
+			writeAllComments(putanja);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return c;
+	}
 }

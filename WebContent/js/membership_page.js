@@ -1,6 +1,7 @@
 
 $(document).ready(function () {
-    setTime();
+    
+    
     $.ajax({
         url : "../rest/info/getMember",
         headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
@@ -8,8 +9,9 @@ $(document).ready(function () {
         type: "GET",
         success: function(data)
         {
-	 let n = document.getElementById("nameMain");	
-	if(data != ""){
+        setInfo(data);
+	    let n = document.getElementById("nameMain");	
+	    if(data != ""){
             if(data.status)
                  s = "Aktivna";
             else s = "Neaktivna";
@@ -26,27 +28,9 @@ $(document).ready(function () {
        		
         }
     });
+
 })
 
-function setTime(){
-    var today = new Date();
-    var date =(today. getDate() + 1) +'-'+(today. getMonth() + 1)+'-'+ today. getFullYear();
-    var dateTime = date;
-    let n = document.getElementById("day");
-    n.innerHTML = 'Datum isteka: '+dateTime;
-
-    var today = new Date();
-    var date =today. getDate() +'-'+(today. getMonth() + 2)+'-'+ today. getFullYear();
-    var dateTime = date;
-    let nm = document.getElementById("month");
-    nm.innerHTML = 'Datum isteka: '+dateTime;
-
-    var today = new Date();
-    var date =today. getDate() +'-'+(today. getMonth() + 1)+'-'+ (today. getFullYear() + 1);
-    var dateTime = date;
-    let ny = document.getElementById("year");
-    ny.innerHTML = 'Datum isteka: '+dateTime;
-}
 
 function profile(){
     location.assign("profile_page.html");
@@ -108,7 +92,7 @@ function buyYear(){
         success: function(data)
         {
             let price = 30000.0;
-            let termins = 1000;
+            let termins = 365;
             let type = "Godisnja";
             setMember(date,date1,price,termins,type,data);
         },
@@ -141,4 +125,165 @@ function setMember(date,date1,price,termins,type,data){
             
         }
     });
+}
+
+function setInfo(data){
+
+    var today = new Date();
+    var date =(today. getDate() + 1) +'-'+(today. getMonth() + 1)+'-'+ today. getFullYear();
+    var dateTime = date;
+    let nd = 'Datum isteka: '+dateTime;
+
+    var today = new Date();
+    var date =today. getDate() +'-'+(today. getMonth() + 2)+'-'+ today. getFullYear();
+    var dateTime = date;
+    let nm = 'Datum isteka: '+dateTime;
+
+    var today = new Date();
+    var date =today. getDate() +'-'+(today. getMonth() + 1)+'-'+ (today. getFullYear() + 1);
+    var dateTime = date;
+    let ny= 'Datum isteka: '+dateTime;
+
+    let n = document.getElementById("info");
+    let d = 0;
+    let m = 0;
+    let y = 0;
+    if(data.customer.type.type == "BRONZE"){
+        i = 700;
+        m = 3000;
+        y = 20000;
+    }          
+    else if(data.customer.type.type == "SILVER"){
+        i = 630;
+        m = 2700;
+        y = 18000;
+    }
+    else {
+        i = 560;
+        m = 2400;
+        y = 16000;
+    };
+    n.innerHTML = `<div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
+    <img src="../img/bronze.jpg" class="card-img" style="height: 250px;" alt="...">
+    <div class="card-img-overlay">
+    <h4 class="card-title text-center">Dnvena</h4>
+    <h5 class="text-center">Cena: `+i+` din</h5>
+      <p class="card-text">Kupovinom ove clanarine ostvarujete 1 termin u teretani za 1 dan.</p>
+
+      <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipFormDay">Kupi</a>
+    </div>
+  </div>
+
+  <div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
+    <img src="../img/silver.jpg" class="card-img" style="height: 250px;" alt="...">
+    <div class="card-img-overlay">
+        <h4 class="card-title text-center">Mesecna</h4>
+        <h5 class="text-center">Cena: `+m+` din</h5>
+      <p class="card-text">Kupovinom ove clanarine ostvarujete 20 termina u teretani za 1 mesec.</p>
+      <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipFormMonth">Kupi</a>
+    </div>
+  </div>
+
+  <div class="card bg-dark text-white mr-3 text-center" style="width: 18rem;">
+    <img src="../img/gold.jpg" class="card-img" style="height: 250px;" alt="...">
+    <div class="card-img-overlay">
+      <h4 class="card-title text-center">Godisnja</h4>
+      <h5 class="text-center">Cena: `+y+` din</h5>
+      <p class="card-text">Kupovinom ove clanarine ostvarujete 365 termina u teretani za 1 godinu.</p>
+      <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#modalMembershipFormYear">Kupi</a>
+    </div>
+  </div>
+`;
+
+let l = document.getElementById("jump");
+l.innerHTML = `<div class="modal fade" id="modalMembershipFormMonth" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark text-white">
+    <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold text-primary">Mesecna</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body mx-3">
+
+      <div class="text-normal">
+          <h6>Broj termina: 20</h6>
+          <h6 id="month">`+nm+`</h6>
+          <h6 for="kod">Promo kod:</h6>
+          <input type="text" id="kod" name="kod" size="50"><br>
+
+
+        <h6>Cena: `+m+`</h6>
+      </h6>
+  </div>
+    </div>
+    <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" id="buyButton" class="btn btn-default text-white" onclick="buyMonth()">Kupi</button>
+    </div>
+    </div>
+</div>
+</div>
+
+<div class="modal fade" id="modalMembershipFormDay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark text-white">
+    <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold text-primary">Dnevna</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body mx-3">
+
+      <div class="text-normal">
+          <h6>Broj termina: 1</h6>
+          <h6 id="day">`+nd+`</h6>
+          <h6 for="kod">Promo kod:</h6>
+          <input type="text" id="kod" name="kod" size="50"><br>
+
+
+        <h6>Cena: `+d+`</h6>
+      </h6>
+  </div>
+    </div>
+    <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" id="buyButton" class="btn btn-default text-white" onclick="buyDay()">Kupi</button>
+    </div>
+    </div>
+</div>
+</div>
+
+
+<div class="modal fade" id="modalMembershipFormYear" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark text-white">
+    <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold text-primary">Godisnja</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body mx-3">
+
+      <div class="text-normal">
+          <h6>Broj termina: 365</h6>
+          <h6 id="year">`+ny+`</h6>
+          <h6 for="kod">Promo kod:</h6>
+          <input type="text" id="kod" name="kod" size="50"><br>
+
+
+        <h6>Cena: `+y+`</h6>
+      </h6>
+  </div>
+    </div>
+    <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" id="buyButton" class="btn btn-default text-white" onclick="buyYear()">Kupi</button>
+    </div>
+    </div>
+</div>
+</div>`;
 }

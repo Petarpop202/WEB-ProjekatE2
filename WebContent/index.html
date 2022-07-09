@@ -54,7 +54,7 @@
 							
 							<label class="mr-3 mt-2">Opcije za pretragu:</label>
 							  <select id="options"  class="btn btn-outline-secondary dropdown-toggle text-white mr-3" aria-label=".form-select-lg example" >
-							  <option selected>Naziv</option>
+							  <option selected>Ime</option>
 							  <option value="Tip">Tip</option>
 							  <option value="Lokacija">Lokacija</option>
 							  <option value="Ocena">Ocena</option>
@@ -62,7 +62,9 @@
 							
 							
 						</div>
-						
+						<div><button onclick="sortiraj()" class="btn btn-primary">Sortiraj</button></div>
+						<div><button onclick="filtriraj()" class="btn btn-primary ml-3 mr-3">Aktivni</button></div>
+
 							<input type="text" name="searchBox" id="searchh" class="form-control" placeholder="Pretraga">
 							
 							<select id="types"  class="btn btn-outline-secondary dropdown-toggle text-white ml-3"  aria-label=".form-select-lg example">
@@ -81,9 +83,11 @@
 							</select>
 
 							<button type="submit" class="btn btn-outline-primary ml-3 text-white" id="searchBtn">Pretrazi</button>
-				
-				
 			  </div>
+			</div>
+
+			<div class="container pt-3 pb-3">
+				
 			</div>
 			
 			<div class="container pt-3">

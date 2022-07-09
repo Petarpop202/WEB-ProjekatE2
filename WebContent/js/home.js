@@ -203,3 +203,41 @@
 			});
 		})
 
+		function sortiraj(){
+			let opt = document.getElementById("options").value;
+
+			$.get({
+				url: "rest/searchFacility/sort?name="+opt,
+				contentType:"application/json",
+				dataType:"json", 
+				success:function(korisnici){
+					let i = "";
+					for (let s of korisnici) {
+						i = i + '<div class="col-sm mt-5 d-flex justify-content-center"><div class="card" style="width: 19rem;"><img src="img/'+ s.picture +'.jpg" class="card-img-top" alt="..."><div class="card-body p-4 rounded-bottom" ><h5 class="card-title font-weight-bold">'+ s.name +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h7>'+s.typeStr+'</h7></h5><p class="card-text">'+ s.location.address +'</p><p class="card-text">'+ s.statusStr  + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + s.workTime +'</p><div class="float-start"><a href="html/sport_facilitiy_review.html?name='+s.name+'" class="btn btn-primary">Pregledaj</a><p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ocena:&nbsp;' + s.rate +'</p></div></div></div></div>';
+					}
+					ispis(i);
+				},
+				error:function(){
+					alert("Greska!");
+				}
+			});
+		}
+
+		function filtriraj(){
+			$.get({
+				url: "rest/searchFacility/filtered",
+				contentType:"application/json",
+				dataType:"json", 
+				success:function(korisnici){
+					let i = "";
+					for (let s of korisnici) {
+						i = i + '<div class="col-sm mt-5 d-flex justify-content-center"><div class="card" style="width: 19rem;"><img src="img/'+ s.picture +'.jpg" class="card-img-top" alt="..."><div class="card-body p-4 rounded-bottom" ><h5 class="card-title font-weight-bold">'+ s.name +'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h7>'+s.typeStr+'</h7></h5><p class="card-text">'+ s.location.address +'</p><p class="card-text">'+ s.statusStr  + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + s.workTime +'</p><div class="float-start"><a href="html/sport_facilitiy_review.html?name='+s.name+'" class="btn btn-primary">Pregledaj</a><p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ocena:&nbsp;' + s.rate +'</p></div></div></div></div>';
+					}
+					ispis(i);
+				},
+				error:function(){
+					alert("Greska!");
+				}
+			});
+		}
+
