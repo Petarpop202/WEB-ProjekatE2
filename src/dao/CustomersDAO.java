@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 import beans.Coach;
 import beans.Customer;
@@ -55,10 +56,22 @@ public class CustomersDAO {
 		checkMemberships(path);
 	}
 	
-
-
-
-
+	public Collection<Manager> findAllManagers() {
+		return managers.values();
+	}
+	
+	public Collection<Customer> findAllCustomers() {
+		Collection<Customer> cust = new ArrayList<Customer>();
+		for(Customer c : korisnici.values()) {
+			cust.add(c);
+		}
+		return cust;
+	}
+	
+	public Collection<Coach> findAllTrainers() {
+		return trainers.values();
+	}
+	
 
 	public Customer dodajKorisnika(Customer korisnik, String putanja) throws IOException {
 		String put1 = putanja + "\\data\\Customers.csv";
@@ -557,10 +570,10 @@ public class CustomersDAO {
 			u.setDeleted(true);
 			try {
 				upisSvihKorisnikaUFajl(put1);
-				upisSvihKorisnikaUFajl(putanje[4]);
+				upisSvihKorisnikaUFajl(putanje[0]);
 				String put2 = path + "\\data\\Users.csv";
 				writeAllUsers(put2);
-				writeAllUsers(putanje[5]);
+				writeAllUsers(putanje[1]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -732,6 +745,124 @@ public class CustomersDAO {
 			}
 				
 		}
+	}
+
+
+
+
+
+
+	public Collection<User> getSearchUsers(String name, String surname, String username, String opt) {
+		Collection<User> allUsers = getAllUsers();
+		Collection<User> suitableUsers = getAllUsers();
+		if(opt.equals("Ime"))
+		if(!name.trim().isEmpty()) {
+			suitableUsers.clear();
+			for (Customer customer : findAllCustomers()) {
+				if(customer.getName().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(customer);
+			}
+			for (Manager manager: findAllManagers()) {
+				if(manager.getName().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(manager);
+			}
+			for (Coach trainer : findAllTrainers()) {
+				if(trainer.getName().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(trainer);
+			}
+			
+			
+			allUsers.clear();
+			allUsers.addAll(suitableUsers);
+		}
+		
+		if(opt.equals("Prezime"))
+		if(!name.trim().isEmpty()) {
+			suitableUsers.clear();
+			for (Customer customer : findAllCustomers()) {
+				if(customer.getSurname().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(customer);
+			}
+			for (Manager manager: findAllManagers()) {
+				if(manager.getSurname().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(manager);
+			}
+			for (Coach trainer : findAllTrainers()) {
+				if(trainer.getSurname().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(trainer);
+			}
+			
+			
+			allUsers.clear();
+			allUsers.addAll(suitableUsers);
+		}
+		
+		
+		if(opt.equals("Korisnicko ime"))
+		if(!name.trim().isEmpty()) {
+			suitableUsers.clear();
+			for (Customer customer : findAllCustomers()) {
+				if(customer.getUsername().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(customer);
+			}
+			for (Manager manager: findAllManagers()) {
+				if(manager.getUsername().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(manager);
+			}
+			for (Coach trainer : findAllTrainers()) {
+				if(trainer.getUsername().toLowerCase().contains(name.toLowerCase()))
+					suitableUsers.add(trainer);
+			}
+			
+			
+			allUsers.clear();
+			allUsers.addAll(suitableUsers);
+		}
+		
+		return suitableUsers;
+	}
+	
+	/*public Collection<SportsFacility> sortirajObjekte(String kriterijum, Collection<SportsFacility> facilities){
+        if (kriterijum.equals("Ime")) {
+            ((List<SportsFacility>) facilities).sort((SportsFacility k1, SportsFacility k2)->k1.getName().compareTo(k2.getName()));
+        } else if (kriterijum.equals("Lokacija")) {
+            ((List<SportsFacility>) facilities).sort((SportsFacility k1, SportsFacility k2)->k1.getLocation().getAddress().compareTo(k2.getLocation().getAddress()));
+        }else if(kriterijum.equals("Ocena")) {
+            ((List<SportsFacility>) facilities).sort((SportsFacility k1, SportsFacility k2)->k2.getRate().compareTo(k1.getRate()));
+        }
+        return (Collection<SportsFacility>) facilities;
+    }*/
+
+	public Collection<User> getSortUsers(Collection<User> users, String opt, String sortOpt) {
+		if(opt.equals("Ime") && sortOpt.equals("Rastuci")) {
+			((List<User>) users).sort((User k1, User k2)->k1.getName().compareTo(k2.getName()));
+		} else if(opt.equals("Prezime") && sortOpt.equals("Rastuci")) {
+			((List<User>) users).sort((User k1, User k2)->k1.getSurname().compareTo(k2.getSurname()));
+		} else if(opt.equals("Korisnicko ime") && sortOpt.equals("Rastuci")) {
+			((List<User>) users).sort((User k1, User k2)->k1.getUsername().compareTo(k2.getUsername()));
+		}
+		
+		if(opt.equals("Ime") && sortOpt.equals("Opadajuci")) {
+			((List<User>) users).sort((User k1, User k2)->k2.getName().compareTo(k1.getName()));
+		} else if(opt.equals("Prezime") && sortOpt.equals("Opadajuci")) {
+			((List<User>) users).sort((User k1, User k2)->k2.getSurname().compareTo(k1.getSurname()));
+		} else if(opt.equals("Korisnicko ime") && sortOpt.equals("Opadajuci")) {
+			((List<User>) users).sort((User k1, User k2)->k2.getUsername().compareTo(k1.getUsername()));
+		}
+		
+		if(opt.equals("Broj bodova")) {
+			users.removeAll(users);
+			Collection<Customer> korisnicii = findAllCustomers();
+			if(sortOpt.equals("Rastuci"))
+				((List<Customer>) korisnicii).sort((Customer k1, Customer k2)->k1.getPoints().compareTo(k2.getPoints()));
+			else if(sortOpt.equals("Opadajuci"))
+				((List<Customer>) korisnicii).sort((Customer k1, Customer k2)->k2.getPoints().compareTo(k1.getPoints()));
+			for(Customer c : korisnicii) {
+				users.add(c);
+			}
+
+		}
+		return users;
 	}
 	
 }
