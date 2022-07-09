@@ -5,16 +5,18 @@ public class Commentar {
 	private SportsFacility Facility;
 	private String Text;
 	private Integer Rate;
+	private Boolean Accepted;
 	
 	public Commentar() {
 		super();
 	}
-	public Commentar(beans.Customer customer, SportsFacility facility, String text, Integer rate) {
+	public Commentar(beans.Customer customer, SportsFacility facility, String text, Integer rate,Boolean accepted) {
 		super();
 		Customer = customer;
 		Facility = facility;
 		Text = text;
 		Rate = rate;
+		Accepted = accepted;
 	}
 	public Customer getCustomer() {
 		return Customer;
@@ -39,6 +41,12 @@ public class Commentar {
 	}
 	public void setRate(Integer rate) {
 		Rate = rate;
+	}
+	public Boolean getAccepted() {
+		return Accepted;
+	}
+	public void setAccepted(Boolean accepted) {
+		Accepted = accepted;
 	}
 	
 	

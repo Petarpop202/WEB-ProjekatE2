@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import JWTController.JWTSession;
 import beans.CheckedTraining;
 import beans.Coach;
+import beans.Commentar;
 import beans.Customer;
 import beans.Manager;
 import beans.SportsFacility;
@@ -193,6 +194,26 @@ public class SportsFacilityService {
 		}
 	}
 	
+	@GET
+	@Path("/acceptedComments")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getComments(@Context HttpServletRequest zahtev, @QueryParam("name") String name) {
+		CustomersDAO dao = (CustomersDAO) ctx.getAttribute("CustomersDAO");
+		String putanja = ctx.getRealPath("");
+		Collection<Commentar> comments = dao.getComments(putanja,name);
+				return Response.ok(comments).build();
+	}
+	
+	@GET
+	@Path("/allComments")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllComments(@Context HttpServletRequest zahtev, @QueryParam("name") String name) {
+		CustomersDAO dao = (CustomersDAO) ctx.getAttribute("CustomersDAO");
+		String putanja = ctx.getRealPath("");
+		Collection<Commentar> comments = dao.getCommentsAdmin(putanja,name);
+				return Response.ok(comments).build();
+   }
+   
 	@PUT
 	@Path("/deleteTraining")
 	@Produces(MediaType.APPLICATION_JSON)

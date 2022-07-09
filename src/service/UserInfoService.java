@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.Response;
 
 import JWTController.JWTSession;
 import beans.CheckedTraining;
+import beans.Commentar;
 import beans.Customer;
 import beans.Manager;
 import beans.Membership;
@@ -117,7 +119,7 @@ public class UserInfoService {
 		Customer c = korisnikDAO.dobaviKorisnika(ulogovani.getUsername());
 		try {
 			Training tr = dao.getTraining(name);
-			CheckedTraining th = dao.checkTraining(c,tr,date,putanja);
+			Boolean th = dao.checkTraining(c,tr,date,putanja);
 			if (th == null) {
 				return Response.status(400).entity("Greska prilikom kupovine!").build();
 			}
@@ -195,6 +197,41 @@ public class UserInfoService {
 				return Response.ok(trainings).build();
 	}
 	
+	@POST
+	@Path("/addComment")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addComent(@Context HttpServletRequest zahtev, @QueryParam("text") String text, @QueryParam("rate")String rate, @QueryParam("name") String name) {
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sfD = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		String putanja = kontekst.getRealPath("");
+		SportsFacility sf = sfD.getFacility(name);
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		Customer cust = korisnikDAO.dobaviKorisnika(ulogovani.getUsername());
+		try {
+			Commentar c = korisnikDAO.addComment(cust,text,rate,sf,putanja);
+			if (c == null) {
+				return Response.status(400).entity("Greska prilikom kupovine!").build();
+			}
+			return Response.ok(c).build();
+		} catch (Exception e) {
+			return Response.status(500).entity("Greska pri kupovini!").build();
+		}
+	}
+	
+	@PUT
+	@Path("/acceptComment")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response odobravanjeKomentara(@QueryParam("text") String text) {
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		String putanja = kontekst.getRealPath("");
+		Commentar c = korisnikDAO.acceptComment(putanja,text);
+			if(c != null)
+				return Response.ok().build();
+		return Response.status(401).entity("Greska prilikom odobravanja!").build();
+}
+
 	@GET
 	@Path("/searchUsers")
 	@Consumes(MediaType.APPLICATION_JSON)
