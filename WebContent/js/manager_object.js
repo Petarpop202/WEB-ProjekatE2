@@ -51,6 +51,9 @@ $(document).ready(function () {
     let i ="";
     let z = 1;
     for(let data of objekat){
+    if(data.isDeleted)
+        i="";
+    else
     i = i + `<div class="col-sm mt-5 d-flex justify-content-center">
     <div class="card border-success" style="width: 19rem;">
         <img src="../img/`+data.picture+`.jpg" class="card-img-top" alt="...">
@@ -60,7 +63,7 @@ $(document).ready(function () {
             <p class="card-text">String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje</p>
             <div class="float-start">
                 <a href="" data-toggle="modal" data-target="#modalEditContent`+z+`" class="btn btn-primary">Izmeni</a>
-                <a href="" class="btn btn-primary">Izbrisi</a>
+                <button onclick="deleteContent('`+data.name+`')"  class="btn btn-primary">Izbrisi</button>
                 <p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje: `+data.duration+`min</p>
             </div>
         </div>
@@ -71,6 +74,21 @@ z++;
 let n = document.getElementById("sadrzaj");
 n.innerHTML = i;
  }
+
+function deleteContent(name){
+    $.ajax({
+        type: "PUT",
+        url: "../rest/sports/deleteTraining?name="+name,
+        contentType:"application/json",
+        dataType:"json",
+        success: function(odgovor) {
+            alert("Uspesno izbrisan trening!")
+            window.location.reload();
+        },
+        error: function(odgovor) {
+        }
+    });
+}
 
  function createTrainers(objekat){
     let i = '<tr><th>#</th><th>Ime</th><th>Prezime</th><th>Korisnicko ime</th><th>Datum rodjenja</th><th>Pol</th></tr>';

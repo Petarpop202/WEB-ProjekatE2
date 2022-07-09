@@ -329,7 +329,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 				Coach Trainer = cd.getCoach(parametri[4]);
 				String Description = parametri[5];
 				String Picture = parametri[6];
-				Training t = new Training(Name,Type,Facility,duration,Trainer,Description,Picture);
+				Training t = new Training(Name,Type,Facility,duration,Trainer,Description,Picture, Boolean.parseBoolean(parametri[7]));
 				trainings.put(Name, t);
 			}
 		} catch (Exception e) {
@@ -344,10 +344,12 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 	}
 	
+	
+	
 	public Collection<Training> getFacilityTrainings(String name){
 		Collection<Training> trainingsFacility = new ArrayList<Training>();
 		for(Training t : findAllTrainings()) {
-			if(t.getFacility().getName().equals(name))
+			if(t.getFacility().getName().equals(name) && !t.getIsDeleted())
 				trainingsFacility.add(t);
 		}
 		return trainingsFacility;
@@ -579,7 +581,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		SportsFacility sf = getFacility(facility);
 		CustomersDAO cd = new CustomersDAO(putanja);
 		Coach c = cd.getCoach(trainer);
-		Training tr = new Training(name,t,sf,duration,c,description,picture);
+		Training tr = new Training(name,t,sf,duration,c,description,picture,false);
 
 		upisTreningaUFajl(put0, tr);
 
@@ -601,6 +603,8 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		upis.append(training.getDescription());
 		upis.append(",");
 		upis.append(training.getPicture());
+		upis.append(",");
+		upis.append(training.getIsDeleted().toString());
 		upis.append("\n");
 		upis.flush();
 		upis.close();
@@ -724,6 +728,8 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			upis.append(training.getDescription());
 			upis.append(",");
 			upis.append(training.getPicture());
+			upis.append(",");
+			upis.append(training.getIsDeleted().toString());
 			upis.append("\n");
 		}
 		upis.flush();
@@ -789,6 +795,22 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		upis.flush();
 		upis.close();
+	}
+
+	public Training deleteTraining(String name, String putanja) {
+		Training tr = trainings.get(name);
+		if(tr != null) {
+			String put1 = putanja + "\\data\\Trainings.csv";
+			tr.setIsDeleted(true);
+			try {
+				writeAllTrainings(put1);
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return tr;
 	}
 		
  }
