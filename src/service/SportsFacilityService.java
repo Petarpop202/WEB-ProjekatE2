@@ -212,6 +212,18 @@ public class SportsFacilityService {
 		String putanja = ctx.getRealPath("");
 		Collection<Commentar> comments = dao.getCommentsAdmin(putanja,name);
 				return Response.ok(comments).build();
+   }
+   
+	@PUT
+	@Path("/deleteTraining")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response brisanjeTreninga(@QueryParam("name") String name) {
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		String putanja = ctx.getRealPath("");
+		Training tr = sportsFacilityDAO.deleteTraining(name,putanja);
+			if(tr != null)
+				return Response.ok().build();
+		return Response.status(401).entity("Sesija vam je istekla").build();
 	}
 
 }

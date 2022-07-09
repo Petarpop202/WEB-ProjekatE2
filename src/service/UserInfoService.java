@@ -1,5 +1,7 @@
 package service;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Collection;
 
 import javax.annotation.PostConstruct;
@@ -228,6 +230,33 @@ public class UserInfoService {
 			if(c != null)
 				return Response.ok().build();
 		return Response.status(401).entity("Greska prilikom odobravanja!").build();
+}
+
+	@GET
+	@Path("/searchUsers")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response pretraziKorisnike(@QueryParam("name") String name, @QueryParam("surname") String surname, @QueryParam("username") String username, @QueryParam("opt") String opt) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		Collection<User> korisnici = korisnikDAO.getSearchUsers(name, surname, username, opt);
+		if (korisnici == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		return Response.ok(korisnici).build();
+	}
+	
+	@GET
+	@Path("/sortUsers")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response sortirajKorisnike(@QueryParam("opt") String opt, @QueryParam("sortOptions") String sortOptions) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		Collection<User> users = korisnikDAO.getAllUsers();
+		Collection<User> korisnici = korisnikDAO.getSortUsers(users, opt, sortOptions);
+		if (korisnici == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		return Response.ok(korisnici).build();
 	}
 	
 }

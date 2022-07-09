@@ -13,10 +13,11 @@ public class Training {
 	private Coach Trainer;
 	private String Description;
 	private String Picture;
+	private Boolean IsDeleted;
 	
 	
 	public Training(String name, TypeEnum type, SportsFacility facility, String duration, Coach trainer,
-			String description, String picture) {
+			String description, String picture, Boolean isDeleted) {
 		super();
 		Name = name;
 		Type = type;
@@ -25,9 +26,12 @@ public class Training {
 		Trainer = trainer;
 		Description = description;
 		Picture = picture;
+		IsDeleted = isDeleted;
 	}
 	
 	
+
+
 	public Training(String trainingName, TypeEnum t, String duration, Coach trainer, String description) {
 		Name = trainingName;
 		Type = t;
@@ -84,6 +88,15 @@ public class Training {
 	public void setPicture(String picture) {
 		Picture = picture;
 	}
+	
+	public Boolean getIsDeleted() {
+		return IsDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		IsDeleted = isDeleted;
+	}
+
 	
 	
 }
