@@ -59,6 +59,10 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return trainings.values();
 	}
 	
+	public Collection<CheckedTraining> findAllCheckedTrainings(){
+		return checkedTrainings.values();
+	}
+	
 	public Collection<Manager> findAllManagers(){
 		return managers.values();
 	}
@@ -356,6 +360,14 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return trainingsFacility;
 	}
 	
+	public Collection<CheckedTraining> GetAllCheckedTraining(){
+		Collection<CheckedTraining> trainingsFacility = new ArrayList<CheckedTraining>();
+		for(CheckedTraining t : findAllCheckedTrainings()) {
+				trainingsFacility.add(t);
+		}
+		return trainingsFacility;
+	}
+	
 	
 	private Training.TypeEnum getTrainingType(String status) {
 		if (status.equals("GROUP")) {
@@ -473,7 +485,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[5], facility);
+		upisObjektaUFajl(putanje[1], facility);
 		return facility;
 	}
 	
@@ -846,6 +858,41 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		return tr;
 	}
+
+	public Collection<CheckedTraining> getSearchTrainings(String username, String name, String endDate, String startDate, String opt, String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Coach trainer = cd.getCoach(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCoach(trainer.getUsername(), putanja);
+		Collection<CheckedTraining> suitableTrainings = getCheckedTrainingsOfCoach(trainer.getUsername(), putanja);
+		LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+		
+		if(opt.equals("Naziv objekta")) {
+		if(!name.trim().isEmpty()) {
+			suitableTrainings.clear();
+			for (CheckedTraining training : findAllCheckedTrainings()) {
+				if(training.getTraining().getFacility().getName().toLowerCase().contains(name.toLowerCase()))
+					suitableTrainings.add(training);
+			}
+			allTrainings.clear();
+			allTrainings.addAll(suitableTrainings);
+		}
+	} else {
+		if(!startDate.trim().isEmpty() || !endDate.trim().isEmpty()) {
+			suitableTrainings.clear();
+			for (CheckedTraining training : findAllCheckedTrainings()) {
+				LocalDate temp = LocalDate.parse(training.getTrainingDate());	
+				if(temp.compareTo(end) < 0 && temp.compareTo(start) > 0)  
+					suitableTrainings.add(training);
+			}
+			allTrainings.clear();
+			allTrainings.addAll(suitableTrainings);
+		}
+	}
+
+		return suitableTrainings;
+	}
+		
 		
  }
 
