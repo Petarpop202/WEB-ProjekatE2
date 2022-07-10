@@ -310,4 +310,21 @@ public class UserInfoService {
 		else return Response.ok(korisnici).build();
 	}
 	
+	
+	@GET
+	@Path("/searchTrainings")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response pretraziTreninge(@Context HttpServletRequest zahtev, @QueryParam("name") String name, @QueryParam("endDate") String endDate, @QueryParam("startDate") String startDate, @QueryParam("opt") String opt) throws ParseException, IOException{
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		String putanja = kontekst.getRealPath("");
+		Collection<CheckedTraining> treninzi = sportsFacilityDAO.getSearchTrainings(ulogovani.getUsername(), name, endDate, startDate, opt, putanja);
+		if (treninzi == null) {
+			return Response.status(400).entity("Greska pri pretrazi treninga!").build();
+		}
+		return Response.ok(treninzi).build();
+	}
 }

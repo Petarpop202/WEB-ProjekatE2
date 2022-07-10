@@ -29,17 +29,20 @@ $(document).ready(function () {
 
     $("#searchBtn").click(function(event){
         let name = $('input[name="searchBox"]').val();
-        let surname = $('input[name="searchBox"]').val();
-        let username = $('input[name="searchBox"]').val();
+        let startDate = $('input#pocetniDatum').val();
+        let endDate = $('input#krajnjiDatum').val();
         let opt = document.getElementById("options").value;
         let url;
         
-            url = "../rest/info/searchTrainings?name=" + name + "&surname=" + surname + "&username=" + username + "&opt=" + opt;
+            url = "../rest/info/searchTrainings?name=" + name + "&endDate=" + endDate + "&startDate=" + startDate + "&opt=" + opt;
     
                 $.get({
+                    
                     url: url,
+                    headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
                     contentType:"application/json",
                     dataType:"json", 
+                    
                     success: function(data)
                     {
                         let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum</th></tr>';
