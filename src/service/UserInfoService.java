@@ -259,4 +259,22 @@ public class UserInfoService {
 		return Response.ok(korisnici).build();
 	}
 	
+	@GET
+	@Path("/filterUsers")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response filtrirajKorisnike(@QueryParam("name") String name) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		Collection<User> users = korisnikDAO.getAllUsers();
+		Collection<Customer> customers = korisnikDAO.findAllCustomers();
+		Collection<Customer> kupci = korisnikDAO.filtrirajKupce(name, customers);
+		Collection<User> korisnici = korisnikDAO.filtrirajKorisnike(name, users);
+		if (korisnici == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		if(name.equals("Zlatni") || name.equals("Srebrni") || name.equals("Bronzani"))
+			return Response.ok(kupci).build();
+		else return Response.ok(korisnici).build();
+	}
+	
 }

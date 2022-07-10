@@ -556,11 +556,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[4], l);
+		upisLokacijeUFajl(putanje[0], l);
 		upisObjektaUFajl(put1, sf);
-		upisObjektaUFajl(putanje[5], sf);
+		upisObjektaUFajl(putanje[1], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[6]);
+		upisSvihMenadzeraUFajl(putanje[2]);
 		return sf;
 	}
 	

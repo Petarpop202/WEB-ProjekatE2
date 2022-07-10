@@ -51,7 +51,7 @@ public class CustomersDAO {
 		trainers = new HashMap<String, Coach>();
 		commentars = new HashMap<String, Commentar>();
 		getAdmin(path);
-		getAllCustomers(putanje[4]);
+		getAllCustomers(putanje[0]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		String put1 = path + "\\data\\Memberships.csv";
@@ -119,9 +119,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[4], korisnik);
+		upisKorisnikaUFajl(putanje[0], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[5], korisnik);
+		upisUUsers(putanje[1], korisnik);
 		return korisnik;
 	}
 	
@@ -585,9 +585,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[6]);
+		writeAllMemberships(putanje[2]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[4]);
+		upisSvihKorisnikaUFajl(putanje[0]);
 		return member;
 	}
 
@@ -690,9 +690,9 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[7], manager);
+		upisMenadzeraUFajl(putanje[3], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[5], manager);
+		upisUUsers(putanje[1], manager);
 		return manager;
 	}
 
@@ -734,7 +734,7 @@ public class CustomersDAO {
 		coach.setDeleted(false);
 		coach.setRole(RoleEnum.COACH);
 		upisUUsers(put2, coach);
-		upisUUsers(putanje[5], coach);
+		upisUUsers(putanje[1], coach);
 		return coach;
 	}
 
@@ -976,4 +976,56 @@ public class CustomersDAO {
 		}
 		return c;
 	}
+
+
+	public Collection<User> filtrirajKorisnike(String name,Collection<User> users) {
+		Collection<User> filtered = new ArrayList<User>();
+		if(name.equals("Kupac")) {
+			for(User u : users) {
+				if(u.getRole().equals(RoleEnum.CUSTOMER))
+					filtered.add(u);
+			}
+		} else if(name.equals("Admin")) {
+			for(User u : users) {
+				if(u.getRole().equals(RoleEnum.ADMIN))
+					filtered.add(u);
+			}
+		} else if(name.equals("Menadzer")) {
+			for(User u : users) {
+				if(u.getRole().equals(RoleEnum.MANAGER))
+					filtered.add(u);
+			}
+		} else 
+			for(User u : users) {
+			if(u.getRole().equals(RoleEnum.COACH))
+				filtered.add(u);
+		}
+		return filtered;
+	}
+
+
+	public Collection<Customer> filtrirajKupce(String name, Collection<Customer> customers) {
+		Collection<Customer> filtered = new ArrayList<Customer>();
+		if(name.equals("Zlatni")) {
+			for(Customer c : customers) {
+				if(c.getType().getType().equals(CustomerType.TypeEnum.GOLD)) {
+					filtered.add(c);
+				}
+			}
+		} else if(name.equals("Srebrni")) {
+			for(Customer c : customers) {
+				if(c.getType().getType().equals(CustomerType.TypeEnum.SILVER)) {
+					filtered.add(c);
+				}
+			}
+		} else {
+			for(Customer c : customers) {
+				if(c.getType().getType().equals(CustomerType.TypeEnum.BRONZE)) {
+					filtered.add(c);
+				}
+			}
+		}
+		return filtered;
+	}
+	
 }
