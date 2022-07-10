@@ -66,10 +66,10 @@ public class SportsFacilitySearchService {
 	@Path("/filtered")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response filtrirajObjekte() throws ParseException, IOException{
+	public Response filtrirajObjekte(@QueryParam("name") String name) throws ParseException, IOException{
 		SportsFacilityDAO korisnikDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
 		Collection<SportsFacility> facilities = korisnikDAO.GetAll();
-		Collection<SportsFacility> korisnici = korisnikDAO.filtrirajObjekte(facilities);
+		Collection<SportsFacility> korisnici = korisnikDAO.filtrirajObjekte(facilities,name);
 		if (korisnici == null) {
 			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
 		}

@@ -20,6 +20,7 @@ import beans.CustomerType;
 import beans.Manager;
 import beans.Membership;
 import beans.Membership.TypeEnum;
+import beans.PromoCode;
 import beans.SportsFacility;
 import beans.User;
 import beans.User.RoleEnum;
@@ -30,6 +31,7 @@ public class CustomersDAO {
 	private HashMap<String, Manager> managers; 
 	private HashMap<String, Coach> trainers;
 	public HashMap<String, Commentar> commentars;
+	private HashMap<String, PromoCode> codes;
 	private User admininstrator;
 	
 	private String[] putanje = {
@@ -50,15 +52,63 @@ public class CustomersDAO {
 		managers = new HashMap<String, Manager>();
 		trainers = new HashMap<String, Coach>();
 		commentars = new HashMap<String, Commentar>();
+		codes = new HashMap<String, PromoCode>();
 		getAdmin(path);
-		getAllCustomers(putanje[0]);
+		getAllCustomers(putanje[4]);
 		getAllManagers(path);
 		getAllTrainers(path);
+		getAllCodes(path);
 		String put1 = path + "\\data\\Memberships.csv";
 		getAllMemberships(put1);
 		checkMemberships(path);
 	}
 	
+	public void getAllCodes(String path) {
+		BufferedReader citac = null;
+		String putanja = path + "\\data\\Codes.csv";
+		try {
+			File fajl = new File(putanja);
+			citac = new BufferedReader(new FileReader(fajl));
+			String linija = "";
+			while((linija = citac.readLine()) != null) {
+				String[] parametri = linija.split(",");
+				String id = parametri[0];
+				String code = parametri[1];
+				Integer uses = Integer.parseInt(parametri[2]);
+				String expiration = parametri[3];
+				Double discount = Double.parseDouble(parametri[4]);
+				PromoCode pc = new PromoCode(id,code,uses,expiration,discount);
+				codes.put(id, pc);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			if ( citac != null ) {
+				try {
+					citac.close();
+				}
+				catch (Exception e) { }
+			}
+			
+		}
+	}
+	
+	private void writePromoCode(String putanja, PromoCode code) throws IOException {
+		putanja += "\\data\\Codes.csv";
+		Writer upis = new BufferedWriter(new FileWriter(putanja, true));
+		upis.append(code.getId());
+		upis.append(",");
+		upis.append(code.getCode());
+		upis.append(",");
+		upis.append(code.getUses().toString());
+		upis.append(",");
+		upis.append(code.getExpiraton());
+		upis.append(",");
+		upis.append(code.getDiscount().toString());
+		upis.append("\n");
+		upis.flush();
+		upis.close();
+	}
 
 	public void getAllComments(String path) {
 		BufferedReader citac = null;
@@ -119,9 +169,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[0], korisnik);
+		upisKorisnikaUFajl(putanje[4], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[1], korisnik);
+		upisUUsers(putanje[5], korisnik);
 		return korisnik;
 	}
 	
@@ -435,7 +485,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[1]);
+		writeAllUsers(putanje[5]);
 		return k;
 	}
 	
@@ -585,9 +635,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[2]);
+		writeAllMemberships(putanje[6]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[0]);
+		upisSvihKorisnikaUFajl(putanje[5]);
 		return member;
 	}
 
@@ -623,10 +673,10 @@ public class CustomersDAO {
 			u.setDeleted(true);
 			try {
 				upisSvihKorisnikaUFajl(put1);
-				upisSvihKorisnikaUFajl(putanje[0]);
+				upisSvihKorisnikaUFajl(putanje[4]);
 				String put2 = path + "\\data\\Users.csv";
 				writeAllUsers(put2);
-				writeAllUsers(putanje[1]);
+				writeAllUsers(putanje[5]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -690,9 +740,9 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[3], manager);
+		upisMenadzeraUFajl(putanje[7], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[1], manager);
+		upisUUsers(putanje[5], manager);
 		return manager;
 	}
 
@@ -734,7 +784,7 @@ public class CustomersDAO {
 		coach.setDeleted(false);
 		coach.setRole(RoleEnum.COACH);
 		upisUUsers(put2, coach);
-		upisUUsers(putanje[1], coach);
+		upisUUsers(putanje[5], coach);
 		return coach;
 	}
 
@@ -977,6 +1027,60 @@ public class CustomersDAO {
 		return c;
 	}
 
+	public PromoCode addCode(String code, String uses, String expiration, String discount, String putanja) {
+		
+		Integer i = codes.size();
+		String id = (i++).toString();
+		PromoCode pc = new PromoCode(id,code,Integer.parseInt(uses),expiration,Double.parseDouble(discount));
+		try {
+			codes.put(id, pc);
+			writePromoCode(putanja,pc);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return pc;
+	}
+
+	public PromoCode checkCode(String code,String path) {
+		LocalDate today = LocalDate.now();
+		LocalDate date1;
+		for(PromoCode pc : codes.values()) {
+			date1 = LocalDate.parse(pc.getExpiraton());
+			if(pc.getCode().equals(code))
+				if(pc.getUses() > 0)
+					if(today.compareTo(date1) < 0) {
+						pc.setUses(pc.getUses() - 1);
+						try {
+							writeAllCodes(path);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						return pc;
+					}
+		}
+		return null;
+	}
+
+	private void writeAllCodes(String path) throws IOException {
+		path += "\\data\\Codes.csv";
+		Writer upis = new BufferedWriter(new FileWriter(path));
+		for(PromoCode code : codes.values()) {
+		upis.append(code.getId());
+		upis.append(",");
+		upis.append(code.getCode());
+		upis.append(",");
+		upis.append(code.getUses().toString());
+		upis.append(",");
+		upis.append(code.getExpiraton());
+		upis.append(",");
+		upis.append(code.getDiscount().toString());
+		upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+	}
 
 	public Collection<User> filtrirajKorisnike(String name,Collection<User> users) {
 		Collection<User> filtered = new ArrayList<User>();

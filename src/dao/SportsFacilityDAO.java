@@ -407,7 +407,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 	
 		Collection<SportsFacility> allfacilities = GetAll();
 		Collection<SportsFacility> suitableFacilities = GetAll();
-		if(opt.equals("Naziv"))
+
 		if(!name.trim().isEmpty()) {
 			suitableFacilities.clear();
 			for (SportsFacility facility : findAll())
@@ -418,10 +418,25 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			allfacilities.addAll(suitableFacilities);
 		}
 		
-		if(opt.equals("Lokacija"))
+		
+			if(!type.trim().isEmpty()) {
+				suitableFacilities.clear();
+				for (SportsFacility facility : allfacilities) {
+					SportsFacility.TypeEnum typeSport = getTypeSr(type);
+					if(typeSport == facility.getType()) {
+						suitableFacilities.add(facility);
+					}
+				}
+				
+				
+				allfacilities.clear();
+				allfacilities.addAll(suitableFacilities);
+			}
+		
+		
 		if(!location.trim().isEmpty()) {
 			suitableFacilities.clear();
-			for (SportsFacility facility : findAll())
+			for (SportsFacility facility : allfacilities)
 				if(facility.getLocation().getAddress().toString().toLowerCase().contains(location.toLowerCase().trim()))
 					suitableFacilities.add(facility);
 				
@@ -429,28 +444,15 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			allfacilities.addAll(suitableFacilities);
 		}
 		
-		if(opt.equals("Tip"))
-		if(!type.trim().isEmpty()) {
-			suitableFacilities.clear();
-			for (SportsFacility facility : findAll()) {
-				SportsFacility.TypeEnum typeSport = getTypeSr(type);
-				if(typeSport == facility.getType()) {
-					suitableFacilities.add(facility);
-				}
-			}
-			
-			allfacilities.clear();
-			allfacilities.addAll(suitableFacilities);
-		}
-		
+		if(!rate.trim().isEmpty()) {
 		int gradeFilter = Integer.parseInt(rate);
 		double minGrade = (gradeFilter == 1) ? 1. : gradeFilter - 0.5;
 		double maxGrade = (gradeFilter == 5) ? 5. : gradeFilter + 0.5;
 		
-		if(opt.equals("Ocena"))
-		if(!type.trim().isEmpty()) {
+		
+		
 			suitableFacilities.clear();
-			for (SportsFacility facility : findAll()) {
+			for (SportsFacility facility : allfacilities) {
 				if(facility.getRate() > minGrade && facility.getRate() < maxGrade) 
 					suitableFacilities.add(facility);
 			}
@@ -834,10 +836,31 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return (Collection<SportsFacility>) facilities;
 	}
 
-	public Collection<SportsFacility> filtrirajObjekte(Collection<SportsFacility> facilities2) {
+	public Collection<SportsFacility> filtrirajObjekte(Collection<SportsFacility> facilities2,String name) {
 		Collection<SportsFacility> filtered = new ArrayList<SportsFacility>();
+		if(name.equals("Aktivni"))
 			for(SportsFacility sf : facilities2) {
 				if(sf.getStatus())
+					filtered.add(sf);
+			}
+		else if(name.equals("Teretana"))
+			for(SportsFacility sf : facilities2) {
+				if(sf.getType() == SportsFacility.TypeEnum.GYM)
+					filtered.add(sf);
+			}
+		else if(name.equals("Plesni studio"))
+			for(SportsFacility sf : facilities2) {
+				if(sf.getType() == SportsFacility.TypeEnum.DANCESTUDIO)
+					filtered.add(sf);
+			}
+		else if(name.equals("Bazen"))
+			for(SportsFacility sf : facilities2) {
+				if(sf.getType() == SportsFacility.TypeEnum.POOL)
+					filtered.add(sf);
+			}
+		else if(name.equals("Sportski centar"))
+			for(SportsFacility sf : facilities2) {
+				if(sf.getType() == SportsFacility.TypeEnum.SPORTSCENTER)
 					filtered.add(sf);
 			}
 		return filtered;

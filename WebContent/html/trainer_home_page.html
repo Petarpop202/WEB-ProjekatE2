@@ -50,43 +50,53 @@
 			</div>
 
 
+			
 			<div class="container pt-3 pb-3">
-						<div class="input-group mb-3">
-							<div class="input-group-prepend">
-							
-							<label class="mr-3 mt-2">Opcije za pretragu:</label>
-							  <select id="options"  class="btn btn-outline-secondary dropdown-toggle text-white mr-3" aria-label=".form-select-lg example" >
-							  <option selected>Naziv</option>
-							  <option value="Tip">Tip</option>
-							  <option value="Lokacija">Lokacija</option>
-							  <option value="Ocena">Ocena</option>
-							</select>
-							
-							
-						</div>
-						
-							<input type="text" name="searchBox" id="searchh" class="form-control" placeholder="Pretraga">
-							
-							<select id="types"  class="btn btn-outline-secondary dropdown-toggle text-white ml-3"  aria-label=".form-select-lg example">
-							  <option selected>Teretana</option>
-							  <option value="Plesni studio">Plesni studio</option>
-							  <option value="Bazen">Bazen</option>
-							  <option value="Sportski centar">Sportski centar</option>
-							</select>
-							
-							<select id="rate"  class="btn btn-outline-secondary dropdown-toggle text-white ml-3" aria-label=".form-select-lg example" >
-							  <option value="1">1</option>
-							  <option value="2">2</option>
-							  <option value="3">3</option>
-							  <option value="4">4</option>
-							  <option selected>5</option>
-							</select>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+					
+					<label class="mr-3 mt-2">Pretraga:</label>
+					  <select id="options"  class="btn btn-outline-secondary dropdown-toggle text-white mr-3" aria-label=".form-select-lg example" >
+					  <option selected>Ime</option>
+					  <option value="Lokacija">Lokacija</option>
+					  <option value="Ocena">Ocena</option>
+					</select>
+					
+					
+				</div>
+				<div><button onclick="sortiraj()" class="btn btn-primary">Sortiraj</button></div>
 
-							<button type="submit" class="btn btn-outline-primary ml-3 text-white" id="searchBtn">Pretrazi</button>
-				
-				
-			  </div>
-			</div>	
+					<input type="text" name="searchBoxn" id="searchhn" class="form-control ml-3 mr-3" placeholder="Naziv">
+					<input type="text" name="searchBoxl" id="searchhl" class="form-control" placeholder="Lokacija">
+					
+					<select id="types"  class="btn btn-outline-secondary dropdown-toggle text-white ml-3"  aria-label=".form-select-lg example">
+					  <option selected></option>
+					  <option value="Teretana">Teretana</option>
+					  <option value="Plesni studio">Plesni studio</option>
+					  <option value="Bazen">Bazen</option>
+					  <option value="Sportski centar">Sportski centar</option>
+					</select>
+					
+					<select id="rate"  class="btn btn-outline-secondary dropdown-toggle text-white ml-3" aria-label=".form-select-lg example" >
+					  <option value="1">1</option>
+					  <option value="2">2</option>
+					  <option value="3">3</option>
+					  <option value="4">4</option>
+					  <option value="5">5</option>
+					  <option selected></option>
+					</select>
+
+					<button type="submit" class="btn btn-outline-primary ml-3 text-white" id="searchBtn">Pretrazi</button>
+	  </div>
+	</div>
+	<div class="container pt-3 pb-3">
+		<label class="mr-3 mt-2">Filtriraj:</label>
+		<button onclick="filtriraj('Teretana')" class="btn btn-primary ml-3">Teretana</button>
+		<button onclick="filtriraj('Plesni studio')" class="btn btn-primary">Plesni studio</button>
+		<button onclick="filtriraj('Bazen')" class="btn btn-primary">Bazen</button>
+		<button onclick="filtriraj('Sportski centar')" class="btn btn-primary">Sportski centar</button>
+		<button onclick="filtriraj('Aktivni')" class="btn btn-primary">Aktivni</button>
+	</div>
 
 
 			<div class="container pt-3">
