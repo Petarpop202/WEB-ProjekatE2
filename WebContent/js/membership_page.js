@@ -212,10 +212,13 @@ aria-hidden="true">
           <h6>Broj termina: 20</h6>
           <h6 id="month">`+nm+`</h6>
           <h6 for="kod">Promo kod:</h6>
-          <input type="text" id="kod" name="kod" size="50"><br>
+          <input type="text" id="kod" name="kodm" size="50"><br>
+          <label id="scsm" style="color: green;" hidden>Kod je ispravan</label>
+          <label id="errm" style="color: red;" hidden>Kod je istekao ili ne vazi</label>
+          <button class="btn btn-primary" onclick="checkMonth()">Proveri kod</button>
 
 
-        <h6>Cena: `+m+`</h6>
+        <h6 id="mm">Cena: `+m+`</h6>
       </h6>
   </div>
     </div>
@@ -242,10 +245,13 @@ aria-hidden="true">
           <h6>Broj termina: 1</h6>
           <h6 id="day">`+nd+`</h6>
           <h6 for="kod">Promo kod:</h6>
-          <input type="text" id="kod" name="kod" size="50"><br>
+          <input type="text" id="kod" name="kodd" size="50"><br>
+          <label id="scsd" style="color: green;" hidden>Kod je ispravan</label>
+          <label id="errd" style="color: red;" hidden>Kod je istekao ili ne vazi</label>
+          <button class="btn btn-primary" onclick="checkDay()">Probveri kod</button>
 
 
-        <h6>Cena: `+d+`</h6>
+        <h6 id="dd">Cena: `+d+`</h6>
       </h6>
   </div>
     </div>
@@ -273,10 +279,13 @@ aria-hidden="true">
           <h6>Broj termina: 365</h6>
           <h6 id="year">`+ny+`</h6>
           <h6 for="kod">Promo kod:</h6>
-          <input type="text" id="kod" name="kod" size="50"><br>
+          <input type="text" id="kod" name="kody" size="50"><br>
+          <label id="scsy" style="color: green;" hidden></label>
+          <label id="erry" style="color: red;" hidden>Kod je istekao ili ne vazi</label>
+          <button class="btn btn-primary" onclick="checkYear()">Proveri kod</button>
 
 
-        <h6>Cena: `+y+`</h6>
+        <h6 id="yy">Cena: `+y+`</h6>
       </h6>
   </div>
     </div>
@@ -286,4 +295,139 @@ aria-hidden="true">
     </div>
 </div>
 </div>`;
+}
+
+function checkYear(){
+	let code = $('input[name="kody"]').val();
+	
+	 $.ajax({
+        url : "../rest/info/checkCode?code="+code,
+        contentType:"application/json",
+        type: "GET",
+        success: function(data)
+        {
+			upisCeneY(data.discount);
+            let n = document.getElementById("scsy");
+            n.removeAttribute("hidden");
+            n.innerHTML = 'Ostvarili ste '+data.discount+'% popusta !';
+        },
+        error: function(odgovor) {
+            let n = document.getElementById("erry");
+            n.removeAttribute("hidden");
+        }
+    });
+}
+
+function checkDay(){
+	let code = $('input[name="kodd"]').val();
+	
+	 $.ajax({
+        url : "../rest/info/checkCode?code="+code,
+        contentType:"application/json",
+        type: "GET",
+        success: function(data)
+        {
+			upisCeneD(data.discount);
+            let n = document.getElementById("scsd");
+            n.removeAttribute("hidden");
+            n.innerHTML = 'Ostvarili ste '+data.discount+'% popusta !';
+        },
+        error: function(odgovor) {
+            let n = document.getElementById("errd");
+            n.removeAttribute("hidden");
+        }
+    });
+}
+
+function checkMonth(){
+	let code = $('input[name="kodm"]').val();
+	
+	 $.ajax({
+        url : "../rest/info/checkCode?code="+code,
+        contentType:"application/json",
+        type: "GET",
+        success: function(data)
+        {
+			upisCeneM(data.discount);
+            let n = document.getElementById("scsm");
+            n.removeAttribute("hidden");
+            n.innerHTML = 'Ostvarili ste '+data.discount+'% popusta !';
+        },
+        error: function(odgovor) {
+            let n = document.getElementById("errm");
+            n.removeAttribute("hidden");
+        }
+    });
+}
+
+function upisCeneY(d){
+	$.ajax({
+        url : "../rest/info/getMember",
+        headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+        contentType:"application/json",
+        type: "GET",
+        success: function(data)
+        {
+        if(data.customer.type.type == "BRONZE"){
+	        y = 20000;
+   		 }          
+    	else if(data.customer.type.type == "SILVER"){
+	        y = 18000;
+    	}
+    	else {
+       	 	y = 16000;
+   		 };
+       		let res = (1-(d/100))*y;
+       		let n = document.getElementById("yy");
+       		n.innerHTML = 'Nova cena: '+res+'din';
+        }
+    });
+}
+
+function upisCeneM(d){
+	$.ajax({
+        url : "../rest/info/getMember",
+        headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+        contentType:"application/json",
+        type: "GET",
+        success: function(data)
+        {
+        if(data.customer.type.type == "BRONZE"){
+	        y = 3000;
+   		 }          
+    	else if(data.customer.type.type == "SILVER"){
+	        y = 2700;
+    	}
+    	else {
+       	 	y = 2400;
+   		 };
+       		let res = (1-(d/100))*y;
+       		let n = document.getElementById("mm");
+       		n.innerHTML = 'Nova cena: '+res+'din';
+        }
+    });
+}
+
+function upisCeneD(d){
+	$.ajax({
+        url : "../rest/info/getMember",
+        headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+        contentType:"application/json",
+        type: "GET",
+        success: function(data)
+        {
+        if(data.customer.type.type == "BRONZE"){
+	        y = 700;
+   		 }          
+    	else if(data.customer.type.type == "SILVER"){
+	        y = 630;
+    	}
+    	else {
+       	 	y = 560;
+   		 };
+       		let res = (1-(d/100))*y;
+       		let n = document.getElementById("dd");
+       		n.innerHTML = 'Nova cena: '+res+'din';
+        }
+    });
 }

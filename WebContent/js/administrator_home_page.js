@@ -192,6 +192,31 @@
 				
 			});
 		})
+
+		$(window).ready(function() {
+			$("#create").click(function (event) {
+				event.preventDefault();
+				createCode();
+				
+			});
+		})
+
+		function createCode(){
+			let code = $('input[name="code"]').val();
+			let uses = $('input[name="uses"]').val();
+			let discount = $('input[name="discount"]').val();
+			let expire = $('input#expire').val();
+
+			$.post({
+				url: "../rest/info/addCode?code="+code+"&uses="+uses+"&expiration="+expire+"&discount="+discount,
+				contentType: "application/json",
+				success: function(odgovor) {
+					alert("Kod je uspesno kreiran!")		
+				},
+				error: function(odgovor) {
+				}
+			});
+		}
 		
 		
 		
