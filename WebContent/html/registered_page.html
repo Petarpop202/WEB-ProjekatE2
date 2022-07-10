@@ -69,7 +69,7 @@
 					
 					
 				</div>
-				
+
 					<input type="text" name="searchBox" id="searchh" class="form-control" placeholder="Pretraga">
 
 					<button class="btn btn-outline-primary ml-3 text-white" id="sortBtn">Sortiraj</button>
@@ -78,7 +78,37 @@
 		
 		
 	  </div>
+
 	</div>
+
+	<div class="container pt-3 pb-3">
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+			
+			<label class="mr-3 mt-2">Filtriraj prema ulozi:</label>
+			<button class="btn btn-outline-primary ml-3 text-white" onclick="filtriraj('Kupac')" id="kupacBtn">Kupac</button>
+			<button class="btn btn-outline-primary ml-3 text-white" onclick="filtriraj('Menadzer')" id="menadzerBtn">Menadzer</button>
+			<button class="btn btn-outline-primary ml-3 text-white" onclick="filtriraj('Admin')" id="adminBtn">Admin</button>
+			<button class="btn btn-outline-primary ml-3 text-white" onclick="filtriraj('Trener')" id="trenerBtn">Trener</button>
+			</div>
+		</div>	
+	</div>
+
+
+	<div class="container pt-3 pb-3">
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+			
+			<label class="mr-3 mt-2">Filtriraj prema tipu:</label>
+			<button class="btn btn-outline-primary ml-3 text-white" onclick="filtriraj('Zlatni')" id="zlatniBtn">Zlatni</button>
+			<button class="btn btn-outline-primary ml-3 text-white" onclick="filtriraj('Srebrni')" id="srebrniBtn">Srebrni</button>
+			<button class="btn btn-outline-primary ml-3 text-white" onclick="filtriraj('Bronzani')" id="bronzaniBtn">Bronzani</button>
+			</div>
+		</div>	
+	</div>
+
+
+
 			<h3 class="mt-5 ml-5" style="color: primary;">Spisak svih korisnika u sistemu</h3>
 
 			<table class="table table-dark table-striped mt-5 ml-5 mr-5" style="width:1400px;" id="tabela">
