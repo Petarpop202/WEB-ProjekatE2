@@ -26,6 +26,50 @@ $(document).ready(function () {
             s.innerHTML = z;
         }
     });
+
+    $("#searchBtn").click(function(event){
+        let name = $('input[name="searchBox"]').val();
+        let surname = $('input[name="searchBox"]').val();
+        let username = $('input[name="searchBox"]').val();
+        let opt = document.getElementById("options").value;
+        let url;
+        
+            url = "../rest/info/searchTrainings?name=" + name + "&surname=" + surname + "&username=" + username + "&opt=" + opt;
+    
+                $.get({
+                    url: url,
+                    contentType:"application/json",
+                    dataType:"json", 
+                    success: function(data)
+                    {
+                        let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum</th></tr>';
+                        let z = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum</th><th>Otkazi trening</th></tr>';
+                        let h = 1;
+                        let l = 1;
+
+                        for(let s of data){
+                            if(s.training.type != "PERSONAL"){
+                            i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.trainingDate+'</td></tr>';
+                            h++;
+                        }
+                            else {z = z + '<tr><td>'+l+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.trainingDate+'</td><td><button class="btn btn-primary" onclick="otkaziTr(`'+s.trainingDate+'`)">Otkazi</button></td></tr>';
+                            l++;
+                        }
+                        }
+
+                        let n = document.getElementById("tabela");
+                        n.innerHTML = i;
+                        let s = document.getElementById("tabela1")
+                        s.innerHTML = z;
+
+                    },
+                    error:function(){
+                        alert("Greska!");
+                    }
+                });
+        event.preventDefault();
+});
+
 })
 
 function otkaziTr(data){
