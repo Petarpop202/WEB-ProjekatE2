@@ -175,8 +175,8 @@
 
 		$(document).ready(function(){
 			$("#searchBtn").click(function(event){
-				let name = $('input[name="searchBox"]').val();
-				let location = $('input[name="searchBox"]').val();
+				let name = $('input[name="searchBoxn"]').val();
+				let location = $('input[name="searchBoxl"]').val();
 				let type = document.getElementById("types").value;
 				let rate = document.getElementById("rate").value;
 				let opt = document.getElementById("options").value;
@@ -223,9 +223,9 @@
 			});
 		}
 
-		function filtriraj(){
+		function filtriraj(data){
 			$.get({
-				url: "rest/searchFacility/filtered",
+				url: "rest/searchFacility/filtered?name="+data,
 				contentType:"application/json",
 				dataType:"json", 
 				success:function(korisnici){

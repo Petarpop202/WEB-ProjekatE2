@@ -54,7 +54,7 @@ public class CustomersDAO {
 		commentars = new HashMap<String, Commentar>();
 		codes = new HashMap<String, PromoCode>();
 		getAdmin(path);
-		getAllCustomers(putanje[0]);
+		getAllCustomers(putanje[4]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		getAllCodes(path);
@@ -169,9 +169,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[0], korisnik);
+		upisKorisnikaUFajl(putanje[4], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[1], korisnik);
+		upisUUsers(putanje[5], korisnik);
 		return korisnik;
 	}
 	
@@ -635,9 +635,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[2]);
+		writeAllMemberships(putanje[6]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[0]);
+		upisSvihKorisnikaUFajl(putanje[5]);
 		return member;
 	}
 
@@ -740,9 +740,9 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[3], manager);
+		upisMenadzeraUFajl(putanje[7], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[1], manager);
+		upisUUsers(putanje[5], manager);
 		return manager;
 	}
 
@@ -784,7 +784,7 @@ public class CustomersDAO {
 		coach.setDeleted(false);
 		coach.setRole(RoleEnum.COACH);
 		upisUUsers(put2, coach);
-		upisUUsers(putanje[1], coach);
+		upisUUsers(putanje[5], coach);
 		return coach;
 	}
 
