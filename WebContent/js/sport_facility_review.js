@@ -147,7 +147,7 @@ function editForms(treninzi){
             <div class="md-form mb-5 text-primary">
             <label data-error="wrong" data-success="right" for="date">Zeljeni datum</label>
             <input type="text" class="datepickeri form-control" id="datum`+z+`" name="date"
-            min="`+dateTime+`" onfocus="(this.type='date')">
+            min="2022-07-12" onfocus="(this.type='date')">
             <label id="erd" style="color: red;">Izaberite datum</label>
         </div>
             </div>

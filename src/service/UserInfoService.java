@@ -24,6 +24,7 @@ import beans.Commentar;
 import beans.Customer;
 import beans.Manager;
 import beans.Membership;
+import beans.PromoCode;
 import beans.SportsFacility;
 import beans.Training;
 import beans.TrainingHistory;
@@ -259,4 +260,35 @@ public class UserInfoService {
 		return Response.ok(korisnici).build();
 	}
 	
+	@POST
+	@Path("/addCode")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response addCode(@Context HttpServletRequest zahtev, @QueryParam("code") String code, @QueryParam("uses")String uses, @QueryParam("expiration") String expiration, @QueryParam("discount") String discount) {
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		String putanja = kontekst.getRealPath("");
+		try {
+			PromoCode pc = korisnikDAO.addCode(code,uses,expiration,discount,putanja);
+			if (pc == null) {
+				return Response.status(400).entity("Greska prilikom kupovine!").build();
+			}
+			return Response.ok(pc).build();
+		} catch (Exception e) {
+			return Response.status(500).entity("Greska pri kupovini!").build();
+		}
+	}
+	
+	@GET
+	@Path("/checkCode")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response proveriKod(@QueryParam("code") String code) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		String putanja = kontekst.getRealPath("");
+		PromoCode pc = korisnikDAO.checkCode(code,putanja);
+		if (pc == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		return Response.ok(pc).build();
+	}
 }
