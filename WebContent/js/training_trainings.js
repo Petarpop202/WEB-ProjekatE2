@@ -5,17 +5,17 @@ $(document).ready(function () {
         type: "GET",
         success: function(data)
         {
-            let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum</th></tr>';
-            let z = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum</th><th>Otkazi trening</th></tr>';
+            let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+            let z = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th><th>Otkazi trening</th></tr>';
             let h = 1;
             let l = 1;
 
             for(let s of data){
                 if(s.training.type != "PERSONAL"){
-                i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.trainingDate+'</td></tr>';
+                i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
                 h++;
             }
-                else {z = z + '<tr><td>'+l+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.trainingDate+'</td><td><button class="btn btn-primary" onclick="otkaziTr(`'+s.trainingDate+'`)">Otkazi</button></td></tr>';
+                else {z = z + '<tr><td>'+l+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td><button class="btn btn-primary" onclick="otkaziTr(`'+s.trainingDate+'`)">Otkazi</button></td></tr>';
                 l++;
             }
             }
@@ -45,17 +45,17 @@ $(document).ready(function () {
                     
                     success: function(data)
                     {
-                        let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum</th></tr>';
-                        let z = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum</th><th>Otkazi trening</th></tr>';
+                        let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+                        let z = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th><th>Otkazi trening</th></tr>';
                         let h = 1;
                         let l = 1;
 
                         for(let s of data){
                             if(s.training.type != "PERSONAL"){
-                            i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.trainingDate+'</td></tr>';
+                            i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
                             h++;
                         }
-                            else {z = z + '<tr><td>'+l+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.trainingDate+'</td><td><button class="btn btn-primary" onclick="otkaziTr(`'+s.trainingDate+'`)">Otkazi</button></td></tr>';
+                            else {z = z + '<tr><td>'+l+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td><button class="btn btn-primary" onclick="otkaziTr(`'+s.trainingDate+'`)">Otkazi</button></td></tr>';
                             l++;
                         }
                         }
@@ -73,6 +73,50 @@ $(document).ready(function () {
         event.preventDefault();
 });
 
+$("#sortBtn").click(function(event){
+
+    let opt = document.getElementById("options").value;
+    let sortOptions = document.getElementById("sortOptions").value;
+    let url;
+    
+        url = "../rest/info/sortTrainings?opt=" + opt + "&sortOptions=" + sortOptions;
+
+            $.get({
+                url: url,
+                headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+                contentType:"application/json",
+                dataType:"json", 
+                
+                success: function(data)
+                {
+                    let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+                    let z = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th><th>Otkazi trening</th></tr>';
+                    let h = 1;
+                    let l = 1;
+
+                    for(let s of data){
+                        if(s.training.type != "PERSONAL"){
+                        i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
+                        h++;
+                    }
+                        else {z = z + '<tr><td>'+l+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td><button class="btn btn-primary" onclick="otkaziTr(`'+s.trainingDate+'`)">Otkazi</button></td></tr>';
+                        l++;
+                    }
+                    }
+
+                    let n = document.getElementById("tabela");
+                    n.innerHTML = i;
+                    let s = document.getElementById("tabela1")
+                    s.innerHTML = z;
+
+                },
+                error:function(){
+                    alert("Greska!");
+                }
+            });
+    event.preventDefault();
+});
+
 })
 
 function otkaziTr(data){
@@ -88,6 +132,45 @@ function otkaziTr(data){
             if(odgovor.status == 400)
             alert("Nije moguce otkazati trening manje od dva dana ranije !");
             else alert("Greska pri otkazivanju !");
+        }
+    });
+}
+
+function filtriraj(name){
+    let url;
+
+    url = "../rest/info/filterTrainings?name=" + name;
+    $.get({
+        url: url,
+        headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+        contentType:"application/json",
+        dataType:"json", 
+        
+        success: function(data)
+        {
+            let i = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+            let z = '<tr><th>#</th><th>Trening</th><th>Objekat</th><th>Datum prijave</th><th>Datum treninga</th><th>Otkazi trening</th></tr>';
+            let h = 1;
+            let l = 1;
+
+            for(let s of data){
+                if(s.training.type != "PERSONAL"){
+                i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
+                h++;
+            }
+                else {z = z + '<tr><td>'+l+'</td><td>'+s.training.name+'</td><td>'+s.training.facility.name+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td><button class="btn btn-primary" onclick="otkaziTr(`'+s.trainingDate+'`)">Otkazi</button></td></tr>';
+                l++;
+            }
+            }
+
+            let n = document.getElementById("tabela");
+            n.innerHTML = i;
+            let s = document.getElementById("tabela1")
+            s.innerHTML = z;
+
+        },
+        error:function(){
+            alert("Greska!");
         }
     });
 }

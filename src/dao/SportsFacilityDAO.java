@@ -20,6 +20,7 @@ import beans.CheckedTraining;
 import beans.Coach;
 import beans.Commentar;
 import beans.Customer;
+import beans.CustomerType;
 import beans.Location;
 import beans.Manager;
 import beans.SportsFacility;
@@ -916,6 +917,209 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return suitableTrainings;
 	}
 		
+	public Collection<CheckedTraining> getSortTrainings(String username, String opt, String sortOptions, String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Coach trainer = cd.getCoach(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCoach(trainer.getUsername(), putanja);
+
+		
+		if(opt.equals("Naziv objekta") && sortOptions.equals("Rastuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k1.getTraining().getFacility().getName().compareTo(k2.getTraining().getFacility().getName()));
+		} else if(opt.equals("Datum prijave treninga") && sortOptions.equals("Rastuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k1.getCheckedDate().compareTo(k2.getCheckedDate()));
+		}
+		
+		if(opt.equals("Naziv objekta") && sortOptions.equals("Opadajuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k2.getTraining().getFacility().getName().compareTo(k1.getTraining().getFacility().getName()));
+		} else if(opt.equals("Datum prijave treninga") && sortOptions.equals("Opadajuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k2.getCheckedDate().compareTo(k1.getCheckedDate()));
+		} 
+		
+		return allTrainings;
+	}
+
+	public Collection<CheckedTraining> filtrirajTreningeObjekat(String username, String name, String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Coach trainer = cd.getCoach(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCoach(trainer.getUsername(), putanja);
+
+		Collection<CheckedTraining> filtered = new ArrayList<CheckedTraining>();
+		if(name.equals("Bazen")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.POOL)) {
+					filtered.add(ct);
+				}
+			}
+		} else if(name.equals("Teretana")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.GYM)) {
+					filtered.add(ct);
+				}
+			}
+		} else if(name.equals("Plesni studio")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.DANCESTUDIO)) {
+					filtered.add(ct);
+				}
+			}
+		} else {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.SPORTSCENTER)) {
+					filtered.add(ct);
+				}
+			}
+		}
+		
+		return filtered;
+	}
+	
+	public Collection<CheckedTraining> filtrirajTreninge(String username, String name, String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Coach trainer = cd.getCoach(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCoach(trainer.getUsername(), putanja);
+
+		Collection<CheckedTraining> filtered = new ArrayList<CheckedTraining>();
+		if(name.equals("Grupni")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getType().equals(TypeEnum.GROUP)) {
+					filtered.add(ct);
+				}
+			}
+		} else if(name.equals("Teretana")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getType().equals(TypeEnum.GYM)) {
+					filtered.add(ct);
+				}
+			}
+		} else {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getType().equals(TypeEnum.PERSONAL)) {
+					filtered.add(ct);
+				}
+			}
+		} 
+		return filtered;
+	}
+
+	public Collection<CheckedTraining> getSearchTrainingsUser(String username, String name, String endDate,
+			String startDate, String opt, String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Customer customer = cd.dobaviKorisnika(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCustomer(customer.getUsername(), putanja);
+		Collection<CheckedTraining> suitableTrainings = getCheckedTrainingsOfCustomer(customer.getUsername(), putanja);
+		LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+		
+		if(opt.equals("Naziv objekta")) {
+		if(!name.trim().isEmpty()) {
+			suitableTrainings.clear();
+			for (CheckedTraining training : findAllCheckedTrainings()) {
+				if(training.getTraining().getFacility().getName().toLowerCase().contains(name.toLowerCase()))
+					suitableTrainings.add(training);
+			}
+			allTrainings.clear();
+			allTrainings.addAll(suitableTrainings);
+		}
+	} else {
+		if(!startDate.trim().isEmpty() || !endDate.trim().isEmpty()) {
+			suitableTrainings.clear();
+			for (CheckedTraining training : findAllCheckedTrainings()) {
+				LocalDate temp = LocalDate.parse(training.getTrainingDate());	
+				if(temp.compareTo(end) < 0 && temp.compareTo(start) > 0)  
+					suitableTrainings.add(training);
+			}
+			allTrainings.clear();
+			allTrainings.addAll(suitableTrainings);
+		}
+	}
+
+		return suitableTrainings;
+	}
+
+	public Collection<CheckedTraining> getSortTrainingsUser(String username, String opt, String sortOptions,
+			String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Customer customer = cd.dobaviKorisnika(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCustomer(customer.getUsername(), putanja);
+
+		
+		if(opt.equals("Naziv objekta") && sortOptions.equals("Rastuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k1.getTraining().getFacility().getName().compareTo(k2.getTraining().getFacility().getName()));
+		} else if(opt.equals("Datum prijave treninga") && sortOptions.equals("Rastuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k1.getCheckedDate().compareTo(k2.getCheckedDate()));
+		}
+		
+		if(opt.equals("Naziv objekta") && sortOptions.equals("Opadajuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k2.getTraining().getFacility().getName().compareTo(k1.getTraining().getFacility().getName()));
+		} else if(opt.equals("Datum prijave treninga") && sortOptions.equals("Opadajuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k2.getCheckedDate().compareTo(k1.getCheckedDate()));
+		} 
+		
+		return allTrainings;
+	}
+	
+	public Collection<CheckedTraining> filtrirajTreningeKorisnikaObjekat(String username, String name, String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Customer customer = cd.dobaviKorisnika(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCustomer(customer.getUsername(), putanja);
+
+		Collection<CheckedTraining> filtered = new ArrayList<CheckedTraining>();
+		if(name.equals("Bazen")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.POOL)) {
+					filtered.add(ct);
+				}
+			}
+		} else if(name.equals("Teretana")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.GYM)) {
+					filtered.add(ct);
+				}
+			}
+		} else if(name.equals("Plesni studio")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.DANCESTUDIO)) {
+					filtered.add(ct);
+				}
+			}
+		} else {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getFacility().getType().equals(SportsFacility.TypeEnum.SPORTSCENTER)) {
+					filtered.add(ct);
+				}
+			}
+		}
+		
+		return filtered;
+	}
+	
+	public Collection<CheckedTraining> filtrirajTreningeKorisnika(String username, String name, String putanja) {
+		CustomersDAO cd = new CustomersDAO(putanja);
+		Customer customer = cd.dobaviKorisnika(username);
+		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCustomer(customer.getUsername(), putanja);
+
+		Collection<CheckedTraining> filtered = new ArrayList<CheckedTraining>();
+		if(name.equals("Grupni")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getType().equals(TypeEnum.GROUP)) {
+					filtered.add(ct);
+				}
+			}
+		} else if(name.equals("TeretanaTr")) {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getType().equals(TypeEnum.GYM)) {
+					filtered.add(ct);
+				}
+			}
+		} else {
+			for(CheckedTraining ct : allTrainings) {
+				if(ct.getTraining().getType().equals(TypeEnum.PERSONAL)) {
+					filtered.add(ct);
+				}
+			}
+		} 
+		return filtered;
+	}
 		
  }
 

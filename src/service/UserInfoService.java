@@ -327,4 +327,104 @@ public class UserInfoService {
 		}
 		return Response.ok(treninzi).build();
 	}
+	
+	
+	
+	@GET
+	@Path("/sortTrainings")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response sortirajTreninge(@Context HttpServletRequest zahtev, @QueryParam("opt") String opt, @QueryParam("sortOptions") String sortOptions) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		String putanja = kontekst.getRealPath("");
+		Collection<CheckedTraining> korisnici = sportsFacilityDAO.getSortTrainings(ulogovani.getUsername(), opt, sortOptions, putanja);
+		if (korisnici == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		return Response.ok(korisnici).build();
+	}
+	
+	@GET
+	@Path("/filterTrainings")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response filtrirajTreninge(@Context HttpServletRequest zahtev, @QueryParam("name") String name) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		String putanja = kontekst.getRealPath("");
+
+		Collection<CheckedTraining> treninziObj = sportsFacilityDAO.filtrirajTreningeObjekat(ulogovani.getUsername(), name, putanja);
+		Collection<CheckedTraining> treninzi = sportsFacilityDAO.filtrirajTreninge(ulogovani.getUsername(), name, putanja);
+		
+		if (treninzi == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		if(name.equals("Teretana") || name.equals("Grupni") || name.equals("Personalni"))
+			return Response.ok(treninzi).build();
+		else return Response.ok(treninziObj).build();
+	}
+	
+	
+	@GET
+	@Path("/searchTrainingsUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response pretraziTreningeKorisnika(@Context HttpServletRequest zahtev, @QueryParam("name") String name, @QueryParam("endDate") String endDate, @QueryParam("startDate") String startDate, @QueryParam("opt") String opt) throws ParseException, IOException{
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		String putanja = kontekst.getRealPath("");
+		Collection<CheckedTraining> treninzi = sportsFacilityDAO.getSearchTrainingsUser(ulogovani.getUsername(), name, endDate, startDate, opt, putanja);
+		if (treninzi == null) {
+			return Response.status(400).entity("Greska pri pretrazi treninga!").build();
+		}
+		return Response.ok(treninzi).build();
+	}
+	
+	
+	
+	@GET
+	@Path("/sortTrainingsUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response sortirajTreningeKorisnika(@Context HttpServletRequest zahtev, @QueryParam("opt") String opt, @QueryParam("sortOptions") String sortOptions) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		String putanja = kontekst.getRealPath("");
+		Collection<CheckedTraining> korisnici = sportsFacilityDAO.getSortTrainingsUser(ulogovani.getUsername(), opt, sortOptions, putanja);
+		if (korisnici == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		return Response.ok(korisnici).build();
+	}
+	
+	@GET
+	@Path("/filterTrainingsUser")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response filtrirajTreningeKorisnik(@Context HttpServletRequest zahtev, @QueryParam("name") String name) throws ParseException, IOException{
+		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
+		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
+		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
+		String putanja = kontekst.getRealPath("");
+
+		Collection<CheckedTraining> treninziObj = sportsFacilityDAO.filtrirajTreningeKorisnikaObjekat(ulogovani.getUsername(), name, putanja);
+		Collection<CheckedTraining> treninzi = sportsFacilityDAO.filtrirajTreningeKorisnika(ulogovani.getUsername(), name, putanja);
+		
+		if (treninzi == null) {
+			return Response.status(400).entity("Greska pri pretrazi korisnika!").build();
+		}
+		if(name.equals("TeretanaTr") || name.equals("Grupni") || name.equals("Personalni"))
+			return Response.ok(treninzi).build();
+		else return Response.ok(treninziObj).build();
+	}
 }

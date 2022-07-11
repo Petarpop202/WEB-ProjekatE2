@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
+import beans.CheckedTraining;
 import beans.Coach;
 import beans.Commentar;
 import beans.Customer;
@@ -54,7 +55,7 @@ public class CustomersDAO {
 		commentars = new HashMap<String, Commentar>();
 		codes = new HashMap<String, PromoCode>();
 		getAdmin(path);
-		getAllCustomers(putanje[4]);
+		getAllCustomers(putanje[0]);
 		getAllManagers(path);
 		getAllTrainers(path);
 		getAllCodes(path);
@@ -169,9 +170,9 @@ public class CustomersDAO {
 		korisnik.setDeleted(false);
 		korisnici.put(korisnik.getUsername(), korisnik);
 		upisKorisnikaUFajl(put1, korisnik);
-		upisKorisnikaUFajl(putanje[4], korisnik);
+		upisKorisnikaUFajl(putanje[0], korisnik);
 		upisUUsers(put2, korisnik);
-		upisUUsers(putanje[5], korisnik);
+		upisUUsers(putanje[1], korisnik);
 		return korisnik;
 	}
 	
@@ -485,7 +486,7 @@ public class CustomersDAO {
 		putanja += "data\\Users.csv";
 		
 		writeAllUsers(putanja);
-		writeAllUsers(putanje[5]);
+		writeAllUsers(putanje[1]);
 		return k;
 	}
 	
@@ -697,6 +698,8 @@ public class CustomersDAO {
 			return trainers.get(username);
 		return null;
 	}
+	
+
 
 	public Collection<Coach> findAllCoaches(){
 		return trainers.values();
@@ -740,9 +743,9 @@ public class CustomersDAO {
 		manager.setRole(RoleEnum.MANAGER);
 		manager.setFacility(null);
 		upisMenadzeraUFajl(put1, manager);
-		upisMenadzeraUFajl(putanje[7], manager);
+		upisMenadzeraUFajl(putanje[3], manager);
 		upisUUsers(put2, manager);
-		upisUUsers(putanje[5], manager);
+		upisUUsers(putanje[1], manager);
 		return manager;
 	}
 
@@ -784,7 +787,7 @@ public class CustomersDAO {
 		coach.setDeleted(false);
 		coach.setRole(RoleEnum.COACH);
 		upisUUsers(put2, coach);
-		upisUUsers(putanje[5], coach);
+		upisUUsers(putanje[1], coach);
 		return coach;
 	}
 
@@ -1131,5 +1134,7 @@ public class CustomersDAO {
 		}
 		return filtered;
 	}
+
+
 	
 }
