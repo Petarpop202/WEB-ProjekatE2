@@ -50,6 +50,26 @@ $(document).ready(function () {
             getAvailableManagers(data);
         }
     });
+
+     
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+        new ol.layer.Tile({
+            source: new ol.source.OSM()
+        })
+        ],
+        view: new ol.View({
+        center: ol.proj.fromLonLat([ 19.836995967026883,45.25205154822084]),
+        zoom: 17
+        })
+    });
+
+    
+map.on('click', function(evt){
+    var coord = ol.proj.toLonLat(evt.coordinate);
+    reverseGeocode(coord);
+});
 })
 
 
@@ -157,6 +177,27 @@ $(window).ready(function() {
 })
 
 
+function reverseGeocode(coords) {
+    fetch('http://nominatim.openstreetmap.org/reverse?format=json&lon=' + coords[0] + '&lat=' + coords[1])
+      .then(function(response) {
+             return response.json();
+         }).then(function(json) {
+             insertAdress(json);
+         });
+ }
+
+ function insertAdress(lokacija){
+
+    let l = lokacija.address;
+    let br = "";
+    if(l.house_number == undefined)
+        br = "bb";
+    else br = l.house_number;
+    document.getElementById("address").value =  l.city+' '+l.road + ' ' + br;
+    document.getElementById("width").value = lokacija.lat;
+    document.getElementById("length").value = lokacija.lon;
+ }
+
 function logout(){
     $(document).ready(function() {
             $.get({
@@ -174,4 +215,3 @@ function logout(){
             })
     });
 }
-

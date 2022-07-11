@@ -169,7 +169,12 @@ function setInfo(data){
     let d = 0;
     let m = 0;
     let y = 0;
-    if(data.customer.type.type == "BRONZE"){
+    if(data == ""){
+        i = 700;
+        m = 3000;
+        y = 20000;
+    }
+    else if(data.customer.type.type == "BRONZE"){
         i = 700;
         m = 3000;
         y = 20000;

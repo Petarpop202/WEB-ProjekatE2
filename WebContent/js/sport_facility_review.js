@@ -1,9 +1,10 @@
-/**
- * 
- */
 
-
+ 
  $(document).ready(function () {
+
+
+
+
     const url = new URLSearchParams(window.location.search);
     let s;
 
@@ -29,7 +30,7 @@
         dataType:"json",
         success: function(objekat){
             reviewObj(objekat);
-            reviewLocation(objekat);
+           
         }
     })
 
@@ -47,6 +48,11 @@
     }
 
  });
+
+
+
+
+
 
  function reviewObj(objekat){
     let n = document.getElementById("main");
