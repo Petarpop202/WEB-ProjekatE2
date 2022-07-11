@@ -93,4 +93,6 @@ public class LogInService {
 		}
 		return Response.status(400).entity("Niste ulogovani").build();
 	}
+	
+
 }

@@ -168,3 +168,26 @@
 		}
 
 
+		function profile(){
+			$(document).ready(function() {
+					$.get({
+						url: "../rest/info/getUser",
+						headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+						contentType:"application/json",
+						dataType:"json",
+						success: function(korisnik){
+							if(korisnik.role == "CUSTOMER")
+									window.location.assign("http://localhost:8080/FitnessCentar/html/customer_home_page.html");
+									else if(korisnik.role == "ADMIN")
+									window.location.assign("http://localhost:8080/FitnessCentar/html/administrator_home_page.html");
+									else if(korisnik.role == "MANAGER")
+									window.location.assign("http://localhost:8080/FitnessCentar/html/manager_home_page.html");
+									else
+									window.location.assign("http://localhost:8080/FitnessCentar/html/trainer_home_page.html");
+						},
+						error: function(){
+							alert("Greska");
+						}
+					})
+			});
+		}

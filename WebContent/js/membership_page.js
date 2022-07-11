@@ -29,12 +29,15 @@ $(document).ready(function () {
         }
     });
 
+
 })
 
 
 function profile(){
     location.assign("profile_page.html");
 }
+
+
 function buyDay(){
     var today = new Date();
     var date = today. getFullYear() +'-0'+ (today. getMonth() + 1) +'-'+ today. getDate()  ;
@@ -99,6 +102,24 @@ function buyYear(){
         error: function(odgovor) {
             
         }
+    });
+}
+
+function logout(){
+    $(document).ready(function() {
+            $.get({
+                url: "../rest/login/logout",
+                headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+                contentType:"application/json",
+                dataType:"json",
+                success: function(korisnik){
+                    sessionStorage.removeItem("jwt");
+                    location.assign("../index.html");
+                },
+                error: function(){
+                    alert("Greska");
+                }
+            })
     });
 }
 
@@ -431,3 +452,4 @@ function upisCeneD(d){
         }
     });
 }
+
