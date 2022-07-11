@@ -73,7 +73,7 @@ $("#createTraining").click(function (event) {
 
         function getFacility(facility){
             let i = "";
-                i = i + "<option value="+ facility.name +">"+facility.name+"</option>"
+                i = i + "<option value="+"'"+ facility.name+"'"+">"+facility.name+"</option>"
 
         
             let obj  = document.getElementById("facility");
