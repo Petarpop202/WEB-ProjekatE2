@@ -40,7 +40,6 @@ private HashMap<String, TrainingHistory> trainingHistories;
 private HashMap<String, CheckedTraining> checkedTrainings;
 
 
-
 private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Locations.csv",
 		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\SportsFacility.csv",
 		"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\Managers.csv",
@@ -93,6 +92,62 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		getAllTrainingHistories(path);
 	}
 	
+	public void setRates(String path) {
+		
+		CustomersDAO cd = new CustomersDAO(path);
+		cd.getAllComments(path);
+		Double i;
+		Double sum;
+		for(SportsFacility sf : facilities.values()) {
+			i = 0.0;
+			sum = 0.0;
+			for(Commentar c : cd.commentars.values()) {
+				if(sf.getName().equals(c.getFacility().getName()) && c.getAccepted()) {
+					sum += c.getRate();
+					i++;
+				}
+			}
+			if(i == 0)
+				sf.setRate(0.0);
+			else {
+				Double res = (Math.round((sum/i)*100.0)/100.0);
+				sf.setRate(res);
+			}
+		}
+		try {
+			writeAllFacilities(path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void writeAllFacilities(String putanja) throws IOException {
+		putanja += "\\data\\SportsFacility.csv";
+		Writer upis = new BufferedWriter(new FileWriter(putanja));
+		for(SportsFacility facility : facilities.values()) {
+		upis.append(facility.getName());
+		upis.append(",");
+		upis.append(getTypeToString(facility.getType()));
+		upis.append(",");
+		upis.append(getContentStr(facility.getContent()));
+		upis.append(",");
+		upis.append(facility.getStatus().toString());
+		upis.append(",");
+		upis.append(facility.getLocation().getAddress());
+		upis.append(",");
+		upis.append(facility.getPicture());
+		upis.append(",");
+		upis.append(facility.getRate().toString());
+		upis.append(",");
+		upis.append(facility.getWorkTime());
+		upis.append("\n");
+		}
+		upis.flush();
+		upis.close();
+		
+	}
+
 	private void getAllCheckedTrainings(String path) {
 		BufferedReader reader = null;
 		try {
@@ -138,7 +193,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 				Customer custom = cd.dobaviKorisnika(parametri[2]);
 				Coach coach = cd.getCoach(parametri[3]);
 				TrainingHistory t = new TrainingHistory(Date,training,custom,coach);
-				trainingHistories.put(parametri[1],t);
+				trainingHistories.put(parametri[0],t);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -293,6 +348,17 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return null;
 	}
 	
+	private String getContentStr(SportsFacility.ContentEnum status) {
+		if (status == SportsFacility.ContentEnum.GROUP) {
+			return "GROUP";
+		}else if (status== SportsFacility.ContentEnum.PERSONAL ) {
+			return "PERSONAL";
+		}else if (status == SportsFacility.ContentEnum.SAUNA ) {
+			return "SAUNA";
+		}
+		return "nista";
+	}
+	
 	private void getAllLocations(String path) {
 		BufferedReader reader = null;
 		try {
@@ -335,7 +401,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 				Coach Trainer = cd.getCoach(parametri[4]);
 				String Description = parametri[5];
 				String Picture = parametri[6];
-				Training t = new Training(Name,Type,Facility,duration,Trainer,Description,Picture, Boolean.parseBoolean(parametri[7]));
+				Training t = new Training(Name,Type,Facility,duration,Trainer,Description,Picture, Boolean.parseBoolean(parametri[7]),Double.parseDouble(parametri[8]));
 				trainings.put(Name, t);
 			}
 		} catch (Exception e) {
@@ -488,7 +554,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		}
 		facilities.put(facility.getName(), facility);
 		upisObjektaUFajl(put, facility);
-		upisObjektaUFajl(putanje[1], facility);
+		upisObjektaUFajl(putanje[5], facility);
 		return facility;
 	}
 	
@@ -571,11 +637,11 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		facilities.put(name, sf);
 		locations.put(l.getAddress(), l);
 		upisLokacijeUFajl(put0, l);
-		upisLokacijeUFajl(putanje[0], l);
+		upisLokacijeUFajl(putanje[4], l);
 		upisObjektaUFajl(put1, sf);
-		upisObjektaUFajl(putanje[1], sf);
+		upisObjektaUFajl(putanje[5], sf);
 		upisSvihMenadzeraUFajl(put2);
-		upisSvihMenadzeraUFajl(putanje[2]);
+		upisSvihMenadzeraUFajl(putanje[6]);
 		return sf;
 	}
 	
@@ -591,13 +657,13 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		return managers;
 	}
 
-	public Training dodajTrening(String name, String type, String facility, String duration, String trainer, String description, String picture, String putanja) throws IOException {
+	public Training dodajTrening(String name, String type, String facility, String duration, String trainer, String description, String picture,String price, String putanja) throws IOException {
 		String put0 = putanja + "\\data\\Trainings.csv";
 		Training.TypeEnum t = getTrainingTypeSr(type);
 		SportsFacility sf = getFacility(facility);
 		CustomersDAO cd = new CustomersDAO(putanja);
 		Coach c = cd.getCoach(trainer);
-		Training tr = new Training(name,t,sf,duration,c,description,picture,false);
+		Training tr = new Training(name,t,sf,duration,c,description,picture,false,Double.parseDouble(price));
 
 		upisTreningaUFajl(put0, tr);
 
@@ -621,6 +687,8 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		upis.append(training.getPicture());
 		upis.append(",");
 		upis.append(training.getIsDeleted().toString());
+		upis.append(",");
+		upis.append(training.getPrice().toString());
 		upis.append("\n");
 		upis.flush();
 		upis.close();
@@ -647,14 +715,25 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 		ulogovani.setMembership(cd.getMembership(ulogovani));
 		if(ulogovani.getMembership().getTermins() > 0) {
 			LocalDate dateNow = LocalDate.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+			LocalDate dateTr = LocalDate.parse(date);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			CheckedTraining his = new CheckedTraining(tr,dateNow.format(formatter).toString(),date,ulogovani,tr.getTrainer(),true);
-			checkedTrainings.put(date,his);
+			
 			cd.getMembership(ulogovani).setTermins(cd.getMembership(ulogovani).getTermins() - 1);
 			String put1 = path + "\\data\\Memberships.csv";
 			cd.writeAllMemberships(put1);
 			try {
-				writeChecked(his,path);
+				if(dateTr.compareTo(dateNow) == 0)
+				{
+					TrainingHistory th = new TrainingHistory(date,tr,ulogovani,tr.getTrainer());
+					trainingHistories.put(date, th);
+					writeHistory(th,path);
+				}
+				else
+				{
+					checkedTrainings.put(date,his);
+					writeChecked(his,path);
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -759,6 +838,8 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			upis.append(training.getPicture());
 			upis.append(",");
 			upis.append(training.getIsDeleted().toString());
+			upis.append(",");
+			upis.append(training.getPrice().toString());
 			upis.append("\n");
 		}
 		upis.flush();
@@ -915,6 +996,19 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 	}
 
 		return suitableTrainings;
+	}
+
+	public Collection<Customer> getVisitors(SportsFacility sf, String path) {
+		HashMap<String, Customer> visitors = new HashMap<String, Customer>();
+		Collection<Customer> vis = new ArrayList<Customer>();
+		for(TrainingHistory th : trainingHistories.values()) {
+			if(th.getTraining().getFacility().getName().equals(sf.getName())) {
+				visitors.put(th.getCustomer().getUsername(), th.getCustomer());
+			}
+		}
+		for(Customer c : visitors.values())
+			vis.add(c);
+		return vis;
 	}
 		
 	public Collection<CheckedTraining> getSortTrainings(String username, String opt, String sortOptions, String putanja) {

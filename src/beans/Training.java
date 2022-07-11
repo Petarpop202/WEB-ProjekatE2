@@ -14,10 +14,11 @@ public class Training {
 	private String Description;
 	private String Picture;
 	private Boolean IsDeleted;
+	private Double Price;
 	
 	
 	public Training(String name, TypeEnum type, SportsFacility facility, String duration, Coach trainer,
-			String description, String picture, Boolean isDeleted) {
+			String description, String picture, Boolean isDeleted, Double price) {
 		super();
 		Name = name;
 		Type = type;
@@ -27,6 +28,7 @@ public class Training {
 		Description = description;
 		Picture = picture;
 		IsDeleted = isDeleted;
+		Price = price;
 	}
 	
 	
@@ -97,6 +99,12 @@ public class Training {
 		IsDeleted = isDeleted;
 	}
 
-	
-	
+	public Double getPrice() {
+		return Price;
+	}
+
+	public void setPrice(Double price) {
+		Price = price;
+	}
+
 }
