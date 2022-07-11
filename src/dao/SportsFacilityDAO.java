@@ -1096,7 +1096,7 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 	}
 
 	public Collection<CheckedTraining> getSearchTrainingsUser(String username, String name, String endDate,
-			String startDate, String opt, String putanja) {
+			String startDate,String startPrice, String endPrice, String opt, String putanja) {
 		CustomersDAO cd = new CustomersDAO(putanja);
 		Customer customer = cd.dobaviKorisnika(username);
 		Collection<CheckedTraining> allTrainings = getCheckedTrainingsOfCustomer(customer.getUsername(), putanja);
@@ -1114,12 +1114,25 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			allTrainings.clear();
 			allTrainings.addAll(suitableTrainings);
 		}
-	} else {
+	} else if(opt.equals("Datum prijave treninga")){
 		if(!startDate.trim().isEmpty() || !endDate.trim().isEmpty()) {
 			suitableTrainings.clear();
 			for (CheckedTraining training : findAllCheckedTrainings()) {
 				LocalDate temp = LocalDate.parse(training.getTrainingDate());	
 				if(temp.compareTo(end) < 0 && temp.compareTo(start) > 0)  
+					suitableTrainings.add(training);
+			}
+			allTrainings.clear();
+			allTrainings.addAll(suitableTrainings);
+		}
+	}
+	else {
+		if(!startPrice.trim().isEmpty() || !endPrice.trim().isEmpty()) {
+			suitableTrainings.clear();
+			Double startp = Double.parseDouble(startPrice);
+			Double endp = Double.parseDouble(endPrice);
+			for (CheckedTraining training : findAllCheckedTrainings()) {	
+				if(training.getTraining().getPrice() > startp && training.getTraining().getPrice() < endp)  
 					suitableTrainings.add(training);
 			}
 			allTrainings.clear();
@@ -1141,13 +1154,17 @@ private String[] putanje = {"D:\\David\\WEB\\WEB-ProjekatE2\\WebContent\\data\\L
 			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k1.getTraining().getFacility().getName().compareTo(k2.getTraining().getFacility().getName()));
 		} else if(opt.equals("Datum prijave treninga") && sortOptions.equals("Rastuci")) {
 			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k1.getCheckedDate().compareTo(k2.getCheckedDate()));
+		}else if(opt.equals("Cena treninga") && sortOptions.equals("Rastuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k1.getTraining().getPrice().compareTo(k2.getTraining().getPrice()));
 		}
 		
 		if(opt.equals("Naziv objekta") && sortOptions.equals("Opadajuci")) {
 			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k2.getTraining().getFacility().getName().compareTo(k1.getTraining().getFacility().getName()));
 		} else if(opt.equals("Datum prijave treninga") && sortOptions.equals("Opadajuci")) {
 			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k2.getCheckedDate().compareTo(k1.getCheckedDate()));
-		} 
+		} else if(opt.equals("Cena treninga") && sortOptions.equals("Opadajuci")) {
+			((List<CheckedTraining>) allTrainings).sort((CheckedTraining k1, CheckedTraining k2)->k2.getTraining().getPrice().compareTo(k1.getTraining().getPrice()));
+		}
 		
 		return allTrainings;
 	}

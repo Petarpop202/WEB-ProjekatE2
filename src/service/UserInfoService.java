@@ -376,13 +376,13 @@ public class UserInfoService {
 	@Path("/searchTrainingsUser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response pretraziTreningeKorisnika(@Context HttpServletRequest zahtev, @QueryParam("name") String name, @QueryParam("endDate") String endDate, @QueryParam("startDate") String startDate, @QueryParam("opt") String opt) throws ParseException, IOException{
+	public Response pretraziTreningeKorisnika(@Context HttpServletRequest zahtev, @QueryParam("name") String name, @QueryParam("endDate") String endDate, @QueryParam("startDate") String startDate, @QueryParam("startPrice") String startPrice,@QueryParam("endPrice") String endPrice, @QueryParam("opt") String opt) throws ParseException, IOException{
 		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
 		JWTSession jwtKontroler = (JWTSession) kontekst.getAttribute("JWTSession");
 		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
 		User ulogovani = jwtKontroler.proveriJWT(zahtev, korisnikDAO);
 		String putanja = kontekst.getRealPath("");
-		Collection<CheckedTraining> treninzi = sportsFacilityDAO.getSearchTrainingsUser(ulogovani.getUsername(), name, endDate, startDate, opt, putanja);
+		Collection<CheckedTraining> treninzi = sportsFacilityDAO.getSearchTrainingsUser(ulogovani.getUsername(), name, endDate, startDate,startPrice,endPrice, opt, putanja);
 		if (treninzi == null) {
 			return Response.status(400).entity("Greska pri pretrazi treninga!").build();
 		}
