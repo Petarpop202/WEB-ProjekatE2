@@ -5,10 +5,10 @@ $(document).ready(function () {
         type: "GET",
         success: function(data)
         {
-            let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+            let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th><th>Cena</th></tr>';
             let h = 1;
             for(let s of data){
-                i = i + '<tr><td>'+h+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.date+'</td><td>'+s.date+'</td></tr>';
+                i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.date+'</td><td>'+s.date+'</td><td>'+s.training.price+'</td></tr>';
                 h++;
             }
             let n = document.getElementById("tabela");
@@ -22,10 +22,10 @@ $(document).ready(function () {
         type: "GET",
         success: function(data)
         {
-            let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+            let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th><th>Cena</th></tr>';
             let h = 1;
             for(let s of data){
-                i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
+                i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td>'+s.training.price+'</td></tr>';
                 h++;
             }
             let n = document.getElementById("tabela1");
@@ -35,12 +35,14 @@ $(document).ready(function () {
 
     $("#searchBtn").click(function(event){
         let name = $('input[name="searchBox"]').val();
+        let startPrice = $('input[name="pocetnaCena"]').val();
+        let endPrice = $('input[name="krajnjaCena"]').val();
         let startDate = $('input#pocetniDatum').val();
         let endDate = $('input#krajnjiDatum').val();
         let opt = document.getElementById("options").value;
         let url;
         
-            url = "../rest/info/searchTrainingsUser?name=" + name + "&endDate=" + endDate + "&startDate=" + startDate + "&opt=" + opt;
+            url = "../rest/info/searchTrainingsUser?name=" + name + "&endDate=" + endDate + "&startDate=" + startDate + "&startPrice=" + startPrice + "&endPrice=" + endPrice +  "&opt=" + opt;
     
                 $.get({
                     
@@ -51,10 +53,10 @@ $(document).ready(function () {
                     
                     success: function(data)
                     {
-                        let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+                        let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th><th>Cena</th></tr>';
                         let h = 1;
                         for(let s of data){
-                            i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
+                            i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td>'+s.training.price+'</td></tr>';
                             h++;
                         }
                         let n = document.getElementById("tabela1");
@@ -80,10 +82,10 @@ $("#sortBtn").click(function(event){
                 
                 success: function(data)
         {
-            let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+            let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th><th>Cena</th></tr>';
             let h = 1;
             for(let s of data){
-                i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
+                i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td>'+s.training.price+'</td></tr>';
                 h++;
             }
             let n = document.getElementById("tabela1");
@@ -126,10 +128,10 @@ function filtriraj(name){
         
         success: function(data)
                     {
-                        let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th></tr>';
+                        let i = '<tr><th>#</th><th>Objekat</th><th>Trening</th><th>Trener</th><th>Datum prijave</th><th>Datum treninga</th><th>Cena</th></tr>';
                         let h = 1;
                         for(let s of data){
-                            i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td></tr>';
+                            i = i + '<tr><td>'+h+'</td><td>'+s.training.facility.name+'</td><td>'+s.training.name+'</td><td>'+s.trainer.name+' '+s.trainer.surname+'</td><td>'+s.checkedDate+'</td><td>'+s.trainingDate+'</td><td>'+s.training.price+'</td></tr>';
                             h++;
                         }
                         let n = document.getElementById("tabela1");
