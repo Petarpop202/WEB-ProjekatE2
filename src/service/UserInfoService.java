@@ -226,8 +226,10 @@ public class UserInfoService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response odobravanjeKomentara(@QueryParam("text") String text) {
 		CustomersDAO korisnikDAO = (CustomersDAO) kontekst.getAttribute("CustomersDAO");
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) kontekst.getAttribute("SportsFacilityDAO");
 		String putanja = kontekst.getRealPath("");
 		Commentar c = korisnikDAO.acceptComment(putanja,text);
+		sportsFacilityDAO.setRates(putanja);
 			if(c != null)
 				return Response.ok().build();
 		return Response.status(401).entity("Greska prilikom odobravanja!").build();

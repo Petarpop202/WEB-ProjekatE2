@@ -9,7 +9,9 @@ $(document).ready(function () {
         success: function(objekat){
             if(objekat == null)
             alert("NEMA OBJEKTA");
-            else createNaslov(objekat);
+            else {createNaslov(objekat);
+                  getVisitors(objekat);
+            }
         }
     })
 
@@ -49,7 +51,8 @@ $(document).ready(function () {
         <div class="card-body p-4 rounded-bottom" >
             <h5 class="card-title font-weight-bold">`+data.name+`&nbsp;&nbsp;&nbsp;&nbsp;</h5>
             <p class="card-text">`+data.description+`</p>
-            <p class="card-text">String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje</p>
+            <p class="card-text">`+data.trainer.name+`&nbsp;`+data.trainer.surname+`</p>
+            <p class="card-text">Doplata :`+data.price+`din</p>
             <div class="float-start">
             
                 <a href="" data-toggle="modal" data-target="#modalEditContent" onclick="loadEditPage('`+data.name+`','`+data.duration+`','`+data.description+`')" class="btn btn-primary">Izmeni</a>
@@ -207,3 +210,29 @@ function deleteContent(name){
             }
         })
     }
+
+    function getVisitors(objekat){
+        $.get({
+            url : "../rest/sports/visitors?name="+objekat.name,
+            contentType:"application/json",
+            dataType:"json",
+            success: function(data)
+            {
+                createVisitors(data);
+            }
+        })
+    }
+
+    function createVisitors(objekat){
+        let i = '<tr><th>#</th><th>Ime</th><th>Prezime</th><th>Korisnicko ime</th><th>Datum rodjenja</th><th>Pol</th></tr>';
+        let h = 1;
+        for(let s of objekat){
+            if(s.gender)
+                p = "Musko";
+            else p = "Zensko"
+            i = i + '<tr><td>'+h+'</td><td>'+s.name+'</td><td>'+s.surname+'</td><td>'+s.username+'</td><td>'+s.date+'</td><td>'+p+'</td></tr>';
+            h++;
+        }
+        let n = document.getElementById("tabela1");
+        n.innerHTML = i;
+     }

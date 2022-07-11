@@ -51,6 +51,8 @@ public class SportsFacilityService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFacilities(@Context HttpServletRequest zahtev) {
 		SportsFacilityDAO dao = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		String putanja = ctx.getRealPath("");
+		dao.setRates(putanja);
 				return Response.ok(dao.GetAll()).build();
 	}
 	
@@ -104,11 +106,11 @@ public class SportsFacilityService {
 	@POST
 	@Path("/training")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response dodajTrening(@QueryParam("name") String name, @QueryParam("type") String type, @QueryParam("facility") String facility, @QueryParam("duration") String duration, @QueryParam("trainer") String trainer, @QueryParam("description") String description, @QueryParam("picture") String picture) {
+	public Response dodajTrening(@QueryParam("name") String name, @QueryParam("type") String type, @QueryParam("facility") String facility, @QueryParam("duration") String duration, @QueryParam("trainer") String trainer, @QueryParam("description") String description, @QueryParam("picture") String picture, @QueryParam("price") String price) {
 		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
 		String putanja = ctx.getRealPath("");
 		try {
-			Training tr = ((SportsFacilityDAO) sportsFacilityDAO).dodajTrening(name,type,facility,duration,trainer,description,picture, putanja);
+			Training tr = ((SportsFacilityDAO) sportsFacilityDAO).dodajTrening(name,type,facility,duration,trainer,description,picture,price, putanja);
 			if (tr == null) {
 				return Response.status(400).entity("Trening sa datim imenom vec postoji!").build();
 			}
@@ -227,7 +229,16 @@ public class SportsFacilityService {
 		return Response.status(401).entity("Sesija vam je istekla").build();
 	}
 	
-	
+	@GET
+	@Path("/visitors")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getVisitors(@Context HttpServletRequest zahtev, @QueryParam("name") String name) {
+		SportsFacilityDAO sportsFacilityDAO = (SportsFacilityDAO) ctx.getAttribute("SportsFacilityDAO");
+		String path = ctx.getRealPath("");
+		SportsFacility sf = sportsFacilityDAO.getFacility(name);
+		Collection<Customer> visitors = sportsFacilityDAO.getVisitors(sf,path);
+				return Response.ok(visitors).build();
+	}
 
 
 }

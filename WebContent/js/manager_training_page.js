@@ -5,6 +5,7 @@ function create(document){
     let duration = $('input[name="duration"]').val();
     let trainer = document.getElementById("trainer").value;
     let description = $('input[name="description"]').val();
+    let price = $('input[name="price"]').val();
     var input = document.getElementById("picture");
     var file = input.value.split("\\");
     var one = file[file.length-1];
@@ -13,7 +14,7 @@ function create(document){
 
 
         $.post({
-            url: "../rest/sports/training?name=" + name + "&type="+ type + "&facility=" + facility + "&duration=" + duration + "&trainer=" + trainer + "&picture=" + picture + "&description=" + description,
+            url: "../rest/sports/training?name=" + name + "&type="+ type + "&facility=" + facility + "&duration=" + duration + "&trainer=" + trainer + "&picture=" + picture + "&description=" + description + "&price=" + price,
             contentType: "application/json",
 
             success: function(odgovor) {

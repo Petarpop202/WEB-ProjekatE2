@@ -69,7 +69,8 @@ function reviewTr(objekat){
             <div class="card-body p-4 rounded-bottom" >
                 <h5 class="card-title font-weight-bold">`+data.name+`&nbsp;&nbsp;&nbsp;&nbsp;</h5>
                 <p class="card-text">`+data.description+`</p>
-                <p class="card-text">String&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje</p>
+                <p class="card-text">`+data.trainer.name+`&nbsp;`+data.trainer.surname+`</p>
+                <p class="card-text">Doplata :`+data.price+`din</p>
                 <div class="float-start">
                     <a data-toggle="modal" data-target="#modalEditContent`+z+`" class="btn btn-primary">Prijavi</a>
                     <p style="display:inline" class="card-text text-center-end">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Trajanje: `+data.duration+`min</p>
@@ -147,7 +148,7 @@ function editForms(treninzi){
             <div class="md-form mb-5 text-primary">
             <label data-error="wrong" data-success="right" for="date">Zeljeni datum</label>
             <input type="text" class="datepickeri form-control" id="datum`+z+`" name="date"
-            min="2022-07-12" onfocus="(this.type='date')">
+            min="2022-07-11" onfocus="(this.type='date')">
             <label id="erd" style="color: red;">Izaberite datum</label>
         </div>
             </div>
