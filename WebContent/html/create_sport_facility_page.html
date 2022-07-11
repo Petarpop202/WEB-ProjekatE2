@@ -27,7 +27,7 @@
 		<body class="pt-3 bg-dark text-white">
 			<div class="container">
 				
-				<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+								<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 					<a class="navbar-brand font-weight-bold text-primary" href="#">FitnessCentar</a>
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 					  <span class="navbar-toggler-icon"></span>
@@ -35,16 +35,22 @@
 					<div class="collapse navbar-collapse" id="navbarNavDropdown">
 					  <ul class="navbar-nav">
 						<li class="nav-item active">
-						  <a class="nav-link" href="administrator_home_page.html">Pocetna</a>
+						  <a class="nav-link" href="administrator_home_page.html">Pocetna<span class="sr-only">(current)</span></a>
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="profile_page.html" onclick="profile()">Profil</a>
 						  </li>
 						  <li class="nav-item">
-							<a class="nav-link" href="create_sport_facility_page.html" onclick="createSportFacility()">Kreiraj objekat<span class="sr-only">(current)</span></a>
+							<a class="nav-link" href="create_sport_facility_page.html" onclick="createSportFacility()">Kreiraj objekat</a>
+						  </li>
+						  <li class="nav-item">
+							<a class="nav-link" href="" data-toggle="modal" data-target="#modalCreateTrainerForm">Kreiraj trenera</a>
 						  </li>
 						<li class="nav-item">
-							<a class="nav-link" href="">Korisnici<span class="sr-only">(current)</span></a>
+							<a class="nav-link" href="registered_page.html">Korisnici<span class="sr-only">(current)</span></a>
+						  </li>
+						<li class="nav-item">
+							<a class="nav-link" href="" data-toggle="modal" data-target="#modalCreateCode">Kreiraj promo kod<span class="sr-only">(current)</span></a>
 						  </li>
 						<li class="nav-item">
 						  <a class="nav-link" href="" data-toggle="modal" onclick="logout()">Odjavi se</a>
@@ -132,6 +138,125 @@
 					<div class="modal-content bg-dark text-white">
 					<div class="modal-header text-center">
 						<h4 class="modal-title w-100 font-weight-bold text-primary">Kreiraj novog menadzera</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body mx-3">
+						<div class="md-form mb-5 text-primary">
+						<i class="fas fa-user prefix grey-text"></i>
+						<label data-error="wrong" data-success="right" for="name2">Ime</label>
+						<input type="text" id="name2" name="name2" class="form-control validate">
+						
+						<label class="text-lg-right" id="eri" style="color: red;" hidden>Pogresan format imena!</label>
+						</div>
+
+						<div class="md-form mb-5 text-primary">
+						<i class="fas fa-envelope prefix grey-text"></i>
+						<label data-error="wrong" data-success="right" for="surname">Prezime</label>
+						<input type="text" id="surname" name="surname" class="form-control validate">
+						
+						<label id="erp" style="color: red;" hidden>Pogresan format prezimena!</label>
+						</div>
+
+						<div class="md-form mb-5 text-primary">
+						<i class="fas fa-envelope prefix grey-text"></i>
+						<label data-error="wrong" data-success="right" for="date">Datum rodjenja</label>
+						<input type="text" class="datepickeri form-control" id="datum" name="date"
+						min="1900-01-01" max="2003-12-31" onfocus="(this.type='date')">
+						<label id="erd" style="color: red;" hidden>Izaberite datum</label>
+						</div>
+
+						<div class="md-form mb-5 text-primary">
+							<i class="fas fa-envelope prefix grey-text"></i>
+							<div>
+							<label data-error="wrong" data-success="right" for="username">Pol</label>
+							</div>
+							
+							<select class="form-select" name="gender">
+							   <!-- proveriti ovo kako se pristupa ovome u js-u-->
+								 <option value=True selected>Muški</option>
+								 <option value="False">Ženski</option>
+							</select>
+						</div>
+
+						<div class="md-form mb-5 text-primary">
+							<i class="fas fa-envelope prefix grey-text"></i>
+							<label data-error="wrong" data-success="right" for="username">Korisnicko ime</label>
+							<input type="text" id="username" name="username" class="form-control validate">
+							
+							<label id="erk" style="color: red;" hidden>Pogresan format!</label>
+							</div>
+
+						<div class="md-form mb-4 text-primary">
+						<i class="fas fa-lock prefix grey-text"></i>
+						<label data-error="wrong" data-success="right" for="password">Lozinka</label>
+						<input type="password" id="pass" name="password" class="form-control validate">
+						
+						<label id="erl" style="color: red;" hidden>Pogresan format lozinke!</label>
+						</div>
+						
+						<div>
+							<label id="errorUser" style="color: red;" hidden>Korisnicko ime vec postoji!</label>
+						</div>
+					</div>
+					<div class="modal-footer d-flex justify-content-center">
+						<button type="submit" id="register"  class="btn btn-deep-orange text-white">Kreiraj</button>
+					</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal fade" id="modalCreateCode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content bg-dark text-white">
+					<div class="modal-header text-center">
+						<h4 class="modal-title w-100 font-weight-bold text-primary">Kreiraj promotivni kod</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body mx-3">
+						<div class="md-form mb-5 text-primary">
+						<i class="fas fa-user prefix grey-text"></i>
+						<label data-error="wrong" data-success="right" for="name2">Kod</label>
+						<input type="text" id="code" name="code" class="form-control validate">
+						</div>
+
+						<div class="md-form mb-5 text-primary">
+						<i class="fas fa-envelope prefix grey-text"></i>
+						<label data-error="wrong" data-success="right" for="date">Datum vazenja</label>
+						<input type="text" class="datepickeri form-control" id="expire" name="expire"
+						min="2022-07-10" onfocus="(this.type='date')">
+						</div>
+
+						<div class="md-form mb-5 text-primary">
+							<i class="fas fa-envelope prefix grey-text"></i>
+							<label data-error="wrong" data-success="right" for="username">Broj koriscenja</label>
+							<input type="text" id="uses" name="uses" class="form-control validate">
+							</div>
+						
+							<div class="md-form mb-5 text-primary">
+								<i class="fas fa-user prefix grey-text"></i>
+								<label data-error="wrong" data-success="right" for="name2">Popust (u procentima %)</label>
+								<input type="text" id="discount" name="discount" class="form-control validate">
+								</div>
+
+					<div class="modal-footer d-flex justify-content-center">
+						<button type="submit" id="create"  class="btn btn-deep-orange text-white">Kreiraj</button>
+					</div>
+					</div>
+				</div>
+			</div>
+			</div>
+
+
+
+			<div class="modal fade" id="modalCreateTrainerForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content bg-dark text-white">
+					<div class="modal-header text-center">
+						<h4 class="modal-title w-100 font-weight-bold text-primary">Kreiraj novog trenera</h4>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 						</button>

@@ -93,7 +93,26 @@ $("#sortBtn").click(function(event){
     event.preventDefault();
     });
 
+
 })
+
+function logout(){
+    $(document).ready(function() {
+            $.get({
+                url: "../rest/login/logout",
+                headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+                contentType:"application/json",
+                dataType:"json",
+                success: function(korisnik){
+                    sessionStorage.removeItem("jwt");
+                    location.assign("../index.html");
+                },
+                error: function(){
+                    alert("Greska");
+                }
+            })
+    });
+}
 
 function filtriraj(name){
     let url;
@@ -121,3 +140,4 @@ function filtriraj(name){
         }
     });
 }
+

@@ -656,9 +656,9 @@ public class CustomersDAO {
 		korisnici.put(member.getCustomer().getUsername(), member.getCustomer());
 		memberships.put(member.getCustomer().getUsername(), member);
 		writeAllMemberships(put1);
-		writeAllMemberships(putanje[6]);
+		writeAllMemberships(putanje[2]);
 		upisSvihKorisnikaUFajl(put2);
-		upisSvihKorisnikaUFajl(putanje[5]);
+		upisSvihKorisnikaUFajl(putanje[1]);
 		return member;
 	}
 
@@ -694,10 +694,10 @@ public class CustomersDAO {
 			u.setDeleted(true);
 			try {
 				upisSvihKorisnikaUFajl(put1);
-				upisSvihKorisnikaUFajl(putanje[4]);
+				upisSvihKorisnikaUFajl(putanje[0]);
 				String put2 = path + "\\data\\Users.csv";
 				writeAllUsers(put2);
-				writeAllUsers(putanje[5]);
+				writeAllUsers(putanje[1]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

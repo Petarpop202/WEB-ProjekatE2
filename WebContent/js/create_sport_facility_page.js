@@ -197,3 +197,21 @@ function reverseGeocode(coords) {
     document.getElementById("width").value = lokacija.lat;
     document.getElementById("length").value = lokacija.lon;
  }
+
+function logout(){
+    $(document).ready(function() {
+            $.get({
+                url: "../rest/login/logout",
+                headers:{'Authorization':'Bearer ' + sessionStorage.getItem('jwt')},
+                contentType:"application/json",
+                dataType:"json",
+                success: function(korisnik){
+                    sessionStorage.removeItem("jwt");
+                    location.assign("../index.html");
+                },
+                error: function(){
+                    alert("Greska");
+                }
+            })
+    });
+}
