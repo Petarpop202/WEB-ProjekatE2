@@ -1,7 +1,7 @@
 package beans;
 
 public class User {
-	enum RoleEnum {
+	public enum RoleEnum {
 		  ADMIN,
 		  MANAGER,
 		  COACH,
@@ -14,13 +14,15 @@ public class User {
 	private Boolean Gender;
 	private String Date;
 	private RoleEnum Role;
+	private String jwt;
+	private Boolean Deleted;
 	
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public User(String username, String password, String name, String surname, Boolean gender, String date,
-			RoleEnum role) {
+			RoleEnum role, Boolean deleted) {
 		super();
 		Username = username;
 		Password = password;
@@ -29,6 +31,7 @@ public class User {
 		Gender = gender;
 		Date = date;
 		Role = role;
+		Deleted = deleted;
 	}
 	public String getUsername() {
 		return Username;
@@ -72,6 +75,19 @@ public class User {
 	public void setRole(RoleEnum role) {
 		Role = role;
 	}
+	public String getJwt() {
+		return jwt;
+	}
+	public void setJwt(String jwt) {
+		this.jwt = jwt;
+	}
+	public Boolean getDeleted() {
+		return Deleted;
+	}
+	public void setDeleted(Boolean deleted) {
+		Deleted = deleted;
+	}
+	
 	
 	
 }

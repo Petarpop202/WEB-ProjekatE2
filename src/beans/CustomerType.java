@@ -1,7 +1,7 @@
 package beans;
 
 public class CustomerType {
-	enum TypeEnum{
+	public enum TypeEnum{
 		GOLD,
 		SILVER,
 		BRONZE
@@ -10,8 +10,9 @@ public class CustomerType {
 	private Double Discount;
 	private Double Points;
 	
-	
-	
+	public CustomerType() {
+		super();
+	}
 	public CustomerType(TypeEnum type, Double discount, Double points) {
 		super();
 		Type = type;

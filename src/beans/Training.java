@@ -1,7 +1,7 @@
 package beans;
 
 public class Training {
-	enum TypeEnum{
+	public enum TypeEnum{
 		GROUP,
 		PERSONAL,
 		GYM
@@ -13,10 +13,12 @@ public class Training {
 	private Coach Trainer;
 	private String Description;
 	private String Picture;
+	private Boolean IsDeleted;
+	private Double Price;
 	
 	
 	public Training(String name, TypeEnum type, SportsFacility facility, String duration, Coach trainer,
-			String description, String picture) {
+			String description, String picture, Boolean isDeleted, Double price) {
 		super();
 		Name = name;
 		Type = type;
@@ -25,7 +27,27 @@ public class Training {
 		Trainer = trainer;
 		Description = description;
 		Picture = picture;
+		IsDeleted = isDeleted;
+		Price = price;
 	}
+	
+	
+
+
+	public Training(String trainingName, TypeEnum t, String duration, Coach trainer, String description) {
+		Name = trainingName;
+		Type = t;
+		Duration = duration;
+		Trainer = trainer;
+		Description = description;
+	}
+	
+	public Training() {
+		// TODO Auto-generated constructor stub
+	}
+
+	
+	
 	public String getName() {
 		return Name;
 	}
@@ -69,5 +91,20 @@ public class Training {
 		Picture = picture;
 	}
 	
-	
+	public Boolean getIsDeleted() {
+		return IsDeleted;
+	}
+
+	public void setIsDeleted(Boolean isDeleted) {
+		IsDeleted = isDeleted;
+	}
+
+	public Double getPrice() {
+		return Price;
+	}
+
+	public void setPrice(Double price) {
+		Price = price;
+	}
+
 }

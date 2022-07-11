@@ -1,12 +1,11 @@
 package beans;
 
 public class Membership {
-	enum TypeEnum{
+	public enum TypeEnum{
 		YEAR,
 		MONTH,
 		DAY
 	}
-	private String Id;
 	private TypeEnum Type;
 	private String PayDate;
 	private String MemberDate;
@@ -14,13 +13,13 @@ public class Membership {
 	private Customer Customer;
 	private Boolean Status;
 	private Integer Termins;
+	private String TypeStr;
 	
 	
 	
-	public Membership(String id, TypeEnum type, String payDate, String memberDate, Double price,
-			beans.Customer customer, Boolean status, Integer termins) {
+	public Membership(TypeEnum type, String payDate, String memberDate, Double price,
+			Customer customer, Boolean status, Integer termins) {
 		super();
-		Id = id;
 		Type = type;
 		PayDate = payDate;
 		MemberDate = memberDate;
@@ -28,16 +27,27 @@ public class Membership {
 		Customer = customer;
 		Status = status;
 		Termins = termins;
+		if(Type == TypeEnum.DAY)
+			TypeStr = "Dnevna";
+		else if (Type == TypeEnum.MONTH)
+			TypeStr = "Mesecna";
+		else TypeStr = "Godisnja";
+	}
+	
+	public Membership(String typeStr, String payDate, String memberDate, Double price,
+			Customer customer, Boolean status, Integer termins) {
+		super();
+		PayDate = payDate;
+		MemberDate = memberDate;
+		Price = price;
+		Customer = customer;
+		Status = status;
+		Termins = termins;
+		TypeStr = typeStr;
 	}
 	public Membership() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
-	public String getId() {
-		return Id;
-	}
-	public void setId(String id) {
-		Id = id;
 	}
 	public TypeEnum getType() {
 		return Type;
@@ -80,6 +90,12 @@ public class Membership {
 	}
 	public void setTermins(Integer termins) {
 		Termins = termins;
+	}
+	public String getTypeStr() {
+		return TypeStr;
+	}
+	public void setTypeStr(String typeStr) {
+		TypeStr = typeStr;
 	}
 	
 	
